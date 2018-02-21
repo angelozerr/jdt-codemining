@@ -23,7 +23,7 @@
 		<repository>
 			<id>pluton</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/eclipse/updates/4.8milestones</url>
+			<url>http://download.eclipse.org/eclipse/updates/4.8-I-builds</url>
 		</repository>
 	</repositories>
 </project>
