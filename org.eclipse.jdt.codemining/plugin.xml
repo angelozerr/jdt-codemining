@@ -6,9 +6,9 @@
 		<propertyTester
 			id="org.eclipse.jdt.internal.ui.JavaPreferencesPropertyTester"
 			type="java.lang.Object"
-			namespace="org.eclipse.jdt.ui"
+			namespace="org.eclipse.jdt.codemining"
 			properties="hasPreference"
-			class="org.eclipse.jdt.internal.ui.preferences.JavaPreferencesPropertyTester">
+			class="org.eclipse.jdt.internal.ui.JavaPreferencesPropertyTester">
 		</propertyTester>
   </extension>
 
@@ -16,7 +16,7 @@
          point="org.eclipse.ui.workbench.texteditor.codeMiningProviders">
       <codeMiningProvider
          class="org.eclipse.jdt.internal.ui.javaeditor.codemining.JavaCodeMiningProvider"
-         id="codemining.java"
+         id="org.eclipse.jdt.ui.codemining.general"
          label="%JavaCodeMiningProvider.label">
 	     <enabledWhen>
 	        <and>
@@ -26,8 +26,9 @@
 	               </adapt>
 	           	</with>
 	           	<or>
-	           	   <test property="org.eclipse.jdt.ui.hasPreference" value="java.codemining.references.enabled"/>
-	           	   <test property="org.eclipse.jdt.ui.hasPreference" value="java.codemining.implementations.enabled"/>
+	           	   <!-- TODO: change to property="org.eclipse.jdt.ui.hasPreference" -->
+	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.references.enabled" forcePluginActivation="true"/>
+	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.implementations.enabled" forcePluginActivation="true"/>
 	           	</or>
            	</and>
          </enabledWhen>
@@ -38,8 +39,8 @@
          point="org.eclipse.ui.workbench.texteditor.codeMiningProviders">
       <codeMiningProvider
          class="org.eclipse.jdt.internal.ui.javaeditor.codemining.JavaMethodParameterCodeMiningProvider"
-         id="codemining.java.parameters"
-         label="Parameters info">         
+         id="org.eclipse.jdt.ui.codemining.method_parameter"
+         label="%JavaMethodParameterCodeMiningProvider.label">         
 	     <enabledWhen>
 	        <and>
                <with variable="editorInput">
@@ -47,7 +48,8 @@
                      <test property="org.eclipse.core.resources.contentTypeId" value="org.eclipse.jdt.core.javaSource" />
                   </adapt>
            	   </with>
-			  <test property="org.eclipse.jdt.ui.hasPreference" value="java.codemining.methodParameters.enabled"/>
+           	   <!-- TODO: change to property="org.eclipse.jdt.ui.hasPreference" -->
+			  <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.methodParameters.enabled" forcePluginActivation="true"/>
            	</and>
          </enabledWhen>
       </codeMiningProvider>
@@ -67,9 +69,10 @@
                   </adapt>
            	   </with>
            	   <or>
-	              <test property="org.eclipse.jdt.ui.hasPreference" value="java.codemining.junit.status.enabled"/>
-	              <test property="org.eclipse.jdt.ui.hasPreference" value="java.codemining.junit.run.enabled"/>
-                  <test property="org.eclipse.jdt.ui.hasPreference" value="java.codemining.junit.debug.enabled"/>	           	   
+           	   	  <!-- TODO: change to property="org.eclipse.jdt.ui.hasPreference" -->
+	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.junit.status.enabled" forcePluginActivation="true"/>
+	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.junit.run.enabled" forcePluginActivation="true"/>
+                  <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.junit.debug.enabled" forcePluginActivation="true"/>
 	           </or>
 	        </and>           	
          </enabledWhen>

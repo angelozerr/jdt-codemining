@@ -1,7 +1,6 @@
-package org.eclipse.jdt.internal.ui.preferences;
+package org.eclipse.jdt.internal.ui;
 
 import org.eclipse.core.expressions.PropertyTester;
-import org.eclipse.jdt.internal.ui.JavaPlugin;
 
 public class JavaPreferencesPropertyTester extends PropertyTester {
 
