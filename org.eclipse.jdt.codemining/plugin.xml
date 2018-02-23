@@ -85,7 +85,7 @@
             name="%codeMiningPageName"
             category="org.eclipse.jdt.ui.preferences.JavaEditorPreferencePage"
             class="org.eclipse.jdt.internal.ui.preferences.CodeMiningPreferencePage"
-            id="org.eclipse.jdt.ui.preferences.CodeAssistPreferencePage">
+            id="org.eclipse.jdt.ui.preferences.CodeMiningPreferencePage">
             <keywordReference id="org.eclipse.jdt.ui.codemining"/>
       </page>   
     </extension>   
