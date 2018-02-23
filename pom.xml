@@ -21,7 +21,7 @@
 
 	<repositories>
 		<repository>
-			<id>pluton</id>
+			<id>photon</id>
 			<layout>p2</layout>
 			<url>http://download.eclipse.org/eclipse/updates/4.8-I-builds</url>
 		</repository>
