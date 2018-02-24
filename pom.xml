@@ -17,6 +17,7 @@
 	</build>
 	<modules>
 		<module>org.eclipse.jdt.codemining</module>
+		<module>plugin_to_delete_when_m7</module>
 	</modules>
 
 	<repositories>

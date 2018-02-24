@@ -12,6 +12,7 @@ import org.eclipse.jface.text.codemining.LineContentCodeMining;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.Signature;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.IMethodBinding;
@@ -54,7 +55,9 @@ public class JavaMethodParameterCodeMining extends LineContentCodeMining {
 						IMethod method= Bindings.findMethod(calledMethodBinding, calledType);
 						if (method != null) {
 							String paramName= method.getParameterNames()[parameterIndex];
-							super.setLabel(paramName + ": "); //$NON-NLS-1$
+							String paramType= method.getParameterTypes()[parameterIndex];
+							paramType = Signature.getSimpleName(Signature.toString(Signature.getTypeErasure(paramType)));
+							super.setLabel(paramType + " | " + paramName + ": "); //$NON-NLS-1$
 						}
 					} catch (JavaModelException e) {
 						e.printStackTrace();
