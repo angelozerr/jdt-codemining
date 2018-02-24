@@ -27,8 +27,10 @@ public final class CodeMiningPreferencePage extends PreferencePage implements IW
 
 	public static final String PREF_SHOW_IMPLEMENTATIONS= "java.codemining.implementations.enabled"; //$NON-NLS-1$
 
-	private static final String PREF_SHOW_METHOD_PARAMETERS= "java.codemining.methodParameters.enabled"; //$NON-NLS-1$
+	public static final String PREF_SHOW_METHOD_PARAMETER_NAMES= "java.codemining.methodParameter.names.enabled"; //$NON-NLS-1$
 
+	public static final String PREF_SHOW_METHOD_PARAMETER_TYPES= "java.codemining.methodParameter.types.enabled"; //$NON-NLS-1$
+	
 	public static final String PREF_SHOW_JUNIT_STATUS = "java.codemining.junit.status.enabled"; //$NON-NLS-1$
 	
 	public static final String PREF_SHOW_JUNIT_RUN = "java.codemining.junit.run.enabled"; //$NON-NLS-1$
@@ -39,8 +41,10 @@ public final class CodeMiningPreferencePage extends PreferencePage implements IW
 
 	private SelectionButtonDialogField fShowImplementations;
 
-	private SelectionButtonDialogField fShowMethodParameters;
+	private SelectionButtonDialogField fShowMethodParameterNames;
 
+	private SelectionButtonDialogField fShowMethodParameterTypes;
+	
 	private SelectionButtonDialogField fShowJUnitStatus;
 	
 	private SelectionButtonDialogField fShowJUnitRun;
@@ -66,10 +70,14 @@ public final class CodeMiningPreferencePage extends PreferencePage implements IW
 		fShowImplementations.setDialogFieldListener(listener);
 		fShowImplementations.setLabelText(MyPreferencesMessages.CodeMiningPreferencePage_showImplementations_label);
 
-		fShowMethodParameters= new SelectionButtonDialogField(SWT.CHECK);
-		fShowMethodParameters.setDialogFieldListener(listener);
-		fShowMethodParameters.setLabelText(MyPreferencesMessages.CodeMiningPreferencePage_showMethodParameters_label);
+		fShowMethodParameterNames= new SelectionButtonDialogField(SWT.CHECK);
+		fShowMethodParameterNames.setDialogFieldListener(listener);
+		fShowMethodParameterNames.setLabelText(MyPreferencesMessages.CodeMiningPreferencePage_showMethodParameterNames_label);
 
+		fShowMethodParameterTypes= new SelectionButtonDialogField(SWT.CHECK);
+		fShowMethodParameterTypes.setDialogFieldListener(listener);
+		fShowMethodParameterTypes.setLabelText(MyPreferencesMessages.CodeMiningPreferencePage_showMethodParameterTypes_label);
+		
 		fShowJUnitStatus= new SelectionButtonDialogField(SWT.CHECK);
 		fShowJUnitStatus.setDialogFieldListener(listener);
 		fShowJUnitStatus.setLabelText(MyPreferencesMessages.CodeMiningPreferencePage_showJUnitStatus_label);
@@ -88,7 +96,8 @@ public final class CodeMiningPreferencePage extends PreferencePage implements IW
 		IPreferenceStore prefs= getPreferenceStore();
 		fShowReferences.setSelection(prefs.getBoolean(PREF_SHOW_REFERENCES));
 		fShowImplementations.setSelection(prefs.getBoolean(PREF_SHOW_IMPLEMENTATIONS));
-		fShowMethodParameters.setSelection(prefs.getBoolean(PREF_SHOW_METHOD_PARAMETERS));
+		fShowMethodParameterNames.setSelection(prefs.getBoolean(PREF_SHOW_METHOD_PARAMETER_NAMES));
+		fShowMethodParameterTypes.setSelection(prefs.getBoolean(PREF_SHOW_METHOD_PARAMETER_TYPES));
 		fShowJUnitStatus.setSelection(prefs.getBoolean(PREF_SHOW_JUNIT_STATUS));
 		fShowJUnitRun.setSelection(prefs.getBoolean(PREF_SHOW_JUNIT_RUN));
 		fShowJUnitDebug.setSelection(prefs.getBoolean(PREF_SHOW_JUNIT_DEBUG));
@@ -122,7 +131,8 @@ public final class CodeMiningPreferencePage extends PreferencePage implements IW
 
 		fShowReferences.doFillIntoGrid(result, nColumns);
 		fShowImplementations.doFillIntoGrid(result, nColumns);
-		fShowMethodParameters.doFillIntoGrid(result, nColumns);
+		fShowMethodParameterNames.doFillIntoGrid(result, nColumns);
+		fShowMethodParameterTypes.doFillIntoGrid(result, nColumns);
 		fShowJUnitStatus.doFillIntoGrid(result, nColumns);
 		fShowJUnitRun.doFillIntoGrid(result, nColumns);
 		fShowJUnitDebug.doFillIntoGrid(result, nColumns);
@@ -158,7 +168,8 @@ public final class CodeMiningPreferencePage extends PreferencePage implements IW
 		IPreferenceStore prefs= getPreferenceStore();
 		prefs.setValue(PREF_SHOW_REFERENCES, fShowReferences.isSelected());
 		prefs.setValue(PREF_SHOW_IMPLEMENTATIONS, fShowImplementations.isSelected());
-		prefs.setValue(PREF_SHOW_METHOD_PARAMETERS, fShowMethodParameters.isSelected());
+		prefs.setValue(PREF_SHOW_METHOD_PARAMETER_NAMES, fShowMethodParameterNames.isSelected());
+		prefs.setValue(PREF_SHOW_METHOD_PARAMETER_TYPES, fShowMethodParameterTypes.isSelected());
 		prefs.setValue(PREF_SHOW_JUNIT_STATUS, fShowJUnitStatus.isSelected());
 		prefs.setValue(PREF_SHOW_JUNIT_RUN, fShowJUnitRun.isSelected());
 		prefs.setValue(PREF_SHOW_JUNIT_DEBUG, fShowJUnitDebug.isSelected());
@@ -174,7 +185,8 @@ public final class CodeMiningPreferencePage extends PreferencePage implements IW
 		IPreferenceStore prefs= getPreferenceStore();
 		fShowReferences.setSelection(prefs.getDefaultBoolean(PREF_SHOW_REFERENCES));
 		fShowImplementations.setSelection(prefs.getDefaultBoolean(PREF_SHOW_IMPLEMENTATIONS));
-		fShowMethodParameters.setSelection(prefs.getDefaultBoolean(PREF_SHOW_METHOD_PARAMETERS));
+		fShowMethodParameterNames.setSelection(prefs.getDefaultBoolean(PREF_SHOW_METHOD_PARAMETER_NAMES));
+		fShowMethodParameterTypes.setSelection(prefs.getDefaultBoolean(PREF_SHOW_METHOD_PARAMETER_TYPES));
 		fShowJUnitStatus.setSelection(prefs.getDefaultBoolean(PREF_SHOW_JUNIT_STATUS));
 		fShowJUnitRun.setSelection(prefs.getDefaultBoolean(PREF_SHOW_JUNIT_RUN));
 		fShowJUnitDebug.setSelection(prefs.getDefaultBoolean(PREF_SHOW_JUNIT_DEBUG));
