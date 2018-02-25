@@ -1,6 +1,8 @@
 # jdt-codemining
 
-Eclipse plugin for JDT Java CodeMining (Experimental)
+[![Build Status](https://secure.travis-ci.org/angelozerr/jdt-codemining.png)](http://travis-ci.org/angelozerr/jdt-codemining)
+
+Eclipse plugin for `JDT Java CodeMining` (Experimental)
 
 JDT CodeMining is a an Eclipse plugin which requires Eclipse Photon M7 based on JFace Text which provides [CodeMining support](https://www.eclipse.org/eclipse/news/4.8/M5/#Platform-Dev). 
 
