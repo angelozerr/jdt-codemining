@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/jdt-codemining-feature_1.0.0.qualifier.jar" id="jdt-codemining-feature" version="1.0.0.qualifier">
+      <category name="JDT CodeMining"/>
+   </feature>
+   <category-def name="JDT CodeMining" label="JDT CodeMining">
+      <description>
+         JDT CodeMining
+      </description>
+   </category-def>
+</site>
