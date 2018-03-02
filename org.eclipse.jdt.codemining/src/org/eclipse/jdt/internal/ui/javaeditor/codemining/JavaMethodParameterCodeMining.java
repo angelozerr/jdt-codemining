@@ -34,7 +34,7 @@ public class JavaMethodParameterCodeMining extends LineContentCodeMining {
 
 	public JavaMethodParameterCodeMining(MethodInvocation method, Expression parameter, int parameterIndex,
 			CompilationUnit cu, ICodeMiningProvider provider, boolean showName, boolean showType) {
-		super(new Position(parameter.getStartPosition()), provider, null);
+		super(new Position(parameter.getStartPosition(), 1), provider, null);
 		this.cu = cu;
 		this.method = method;
 		this.parameterIndex = parameterIndex;
@@ -51,14 +51,14 @@ public class JavaMethodParameterCodeMining extends LineContentCodeMining {
 				if (decl != null) {
 					SingleVariableDeclaration elem = (SingleVariableDeclaration) decl.parameters().get(parameterIndex);
 					String paramName = elem.getName().getIdentifier();
-					super.setLabel(paramName + ": "); //$NON-NLS-1$
+					super.setLabel(" " + paramName + ": "); //$NON-NLS-1$
 				} else {
 					ITypeBinding calledTypeBinding = calledMethodBinding.getDeclaringClass();
 					IType calledType = (IType) calledTypeBinding.getJavaElement();
 					try {
 						IMethod method = Bindings.findMethod(calledMethodBinding, calledType);
 						if (method != null) {
-							StringBuilder label = new StringBuilder();
+							StringBuilder label = new StringBuilder(" ");
 							if (showType) {
 								String paramType = method.getParameterTypes()[parameterIndex];
 								paramType = Signature
@@ -72,8 +72,9 @@ public class JavaMethodParameterCodeMining extends LineContentCodeMining {
 								}
 								label.append(paramName);
 							}
-
 							super.setLabel(label.toString() + ": "); //$NON-NLS-1$
+						} else {
+							super.setLabel("");
 						}
 					} catch (JavaModelException e) {
 						e.printStackTrace();
