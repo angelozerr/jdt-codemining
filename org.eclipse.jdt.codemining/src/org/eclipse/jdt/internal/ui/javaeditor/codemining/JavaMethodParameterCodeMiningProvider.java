@@ -18,11 +18,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.internal.corext.dom.IASTSharedValues;
-import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.javaeditor.EditorUtility;
+import org.eclipse.jdt.ui.SharedASTProvider;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.codemining.AbstractCodeMiningProvider;
 import org.eclipse.jface.text.codemining.ICodeMining;
@@ -60,23 +58,9 @@ public class JavaMethodParameterCodeMiningProvider extends AbstractCodeMiningPro
 	}
 
 	private void collectLineContentCodeMinings(ITypeRoot unit, List<ICodeMining> minings) {
-		CompilationUnit cu = getCompilationUnitNode(unit, true);
+		CompilationUnit cu = SharedASTProvider.getAST(unit, SharedASTProvider.WAIT_YES, null);
 		CalleeJavaMethodParameterVisitor visitor = new CalleeJavaMethodParameterVisitor(cu, minings, this);
 		cu.accept(visitor);
-	}
-
-	static CompilationUnit getCompilationUnitNode(ITypeRoot typeRoot, boolean resolveBindings) {
-		try {
-			if (typeRoot.exists() && typeRoot.getBuffer() != null) {
-				ASTParser parser = ASTParser.newParser(IASTSharedValues.SHARED_AST_LEVEL);
-				parser.setSource(typeRoot);
-				parser.setResolveBindings(resolveBindings);
-				return (CompilationUnit) parser.createAST(null);
-			}
-		} catch (JavaModelException e) {
-			JavaPlugin.log(e);
-		}
-		return null;
 	}
 
 }
