@@ -51,7 +51,7 @@ public class JavaMethodParameterCodeMining extends LineContentCodeMining {
 				if (decl != null) {
 					SingleVariableDeclaration elem = (SingleVariableDeclaration) decl.parameters().get(parameterIndex);
 					String paramName = elem.getName().getIdentifier();
-					super.setLabel(" " + paramName + ":  "); //$NON-NLS-1$
+					super.setLabel(" " + paramName + ": "); //$NON-NLS-1$
 				} else {
 					ITypeBinding calledTypeBinding = calledMethodBinding.getDeclaringClass();
 					IType calledType = (IType) calledTypeBinding.getJavaElement();
@@ -72,7 +72,7 @@ public class JavaMethodParameterCodeMining extends LineContentCodeMining {
 								}
 								label.append(paramName);
 							}
-							super.setLabel(label.toString() + ":  "); //$NON-NLS-1$
+							super.setLabel(label.toString() + ": "); //$NON-NLS-1$
 						} else {
 							super.setLabel("");
 						}
