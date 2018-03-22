@@ -93,9 +93,12 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 				.setLabelText(MyPreferencesMessages.JavaEditorCodeMiningPreferencePage_showReferences_atLeastOne_label);
 
 		fShowImplementations = new SelectionButtonDialogField(SWT.CHECK);
-		fShowImplementations.setDialogFieldListener(listener);
+		fShowImplementations.setDialogFieldListener(field -> {
+			listener.dialogFieldChanged(field);
+			fShowImplementationsAtLeastOne.setEnabled(fShowImplementations.isSelected());
+		});
 		fShowImplementations.setLabelText(
-				MyPreferencesMessages.JavaEditorCodeMiningPreferencePage_showImplementations_atLeastOne_label);
+				MyPreferencesMessages.JavaEditorCodeMiningPreferencePage_showImplementations_label);
 		fShowImplementationsAtLeastOne = new SelectionButtonDialogField(SWT.CHECK);
 		fShowImplementationsAtLeastOne.setDialogFieldListener(listener);
 		fShowImplementationsAtLeastOne.setLabelText(
@@ -132,6 +135,7 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 		fShowReferencesAtLeastOne.setEnabled(fShowReferences.isSelected());
 		fShowImplementations.setSelection(prefs.getBoolean(PREF_SHOW_IMPLEMENTATIONS));
 		fShowImplementationsAtLeastOne.setSelection(prefs.getBoolean(PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE));
+		fShowImplementationsAtLeastOne.setEnabled(fShowImplementations.isSelected());
 		fShowMethodParameterNames.setSelection(prefs.getBoolean(PREF_SHOW_METHOD_PARAMETER_NAMES));
 		fShowMethodParameterTypes.setSelection(prefs.getBoolean(PREF_SHOW_METHOD_PARAMETER_TYPES));
 		fShowJUnitStatus.setSelection(prefs.getBoolean(PREF_SHOW_JUNIT_STATUS));
@@ -145,7 +149,7 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 	@Override
 	public void createControl(Composite parent) {
 		super.createControl(parent);
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), IJavaHelpContextIds.APPEARANCE_PREFERENCE_PAGE);
+		// PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), IJavaHelpContextIds.APPEARANCE_PREFERENCE_PAGE);
 	}
 
 	/*
