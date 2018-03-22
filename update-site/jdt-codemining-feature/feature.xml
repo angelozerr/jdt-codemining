@@ -3,9 +3,7 @@
       id="jdt-codemining-feature"
       label="%featureName"
       version="1.0.0.qualifier"
-      provider-name="%featureProvider"
-      license-feature="org.eclipse.license"
-      license-feature-version="1.0.0.qualifier">
+      provider-name="%featureProvider">
 
    <description>
       %description

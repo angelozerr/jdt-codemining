@@ -8,7 +8,7 @@
 			type="java.lang.Object"
 			namespace="org.eclipse.jdt.codemining"
 			properties="hasPreference"
-			class="org.eclipse.jdt.internal.ui.JavaPreferencesPropertyTester">
+			class="org.eclipse.jdt.internal.ui.preferences.JavaPreferencesPropertyTester">
 		</propertyTester>
   </extension>
 
@@ -87,8 +87,8 @@
       <page
             name="%codeMiningPageName"
             category="org.eclipse.jdt.ui.preferences.JavaEditorPreferencePage"
-            class="org.eclipse.jdt.internal.ui.preferences.CodeMiningPreferencePage"
-            id="org.eclipse.jdt.ui.preferences.CodeMiningPreferencePage">
+            class="org.eclipse.jdt.internal.ui.preferences.JavaEditorCodeMiningPreferencePage"
+            id="org.eclipse.jdt.ui.preferences.JavaEditorCodeMiningPreferencePage">
             <keywordReference id="org.eclipse.jdt.ui.codemining"/>
       </page>   
     </extension>   

@@ -2,16 +2,14 @@ package org.eclipse.jdt.internal.ui.javaeditor.codemining;
 
 import java.util.List;
 
-import org.eclipse.jface.text.codemining.ICodeMining;
-import org.eclipse.jface.text.codemining.ICodeMiningProvider;
-
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MethodInvocation;
-
 import org.eclipse.jdt.internal.corext.dom.HierarchicalASTVisitor;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
-import org.eclipse.jdt.internal.ui.preferences.CodeMiningPreferencePage;
+import org.eclipse.jdt.internal.ui.preferences.JavaEditorCodeMiningPreferencePage;
+import org.eclipse.jface.text.codemining.ICodeMining;
+import org.eclipse.jface.text.codemining.ICodeMiningProvider;
 
 public class CalleeJavaMethodParameterVisitor extends HierarchicalASTVisitor {
 
@@ -46,11 +44,11 @@ public class CalleeJavaMethodParameterVisitor extends HierarchicalASTVisitor {
 	}
 	
 	private boolean isShowName() {
-		return JavaPlugin.getDefault().getPreferenceStore().getBoolean(CodeMiningPreferencePage.PREF_SHOW_METHOD_PARAMETER_NAMES);
+		return JavaPlugin.getDefault().getPreferenceStore().getBoolean(JavaEditorCodeMiningPreferencePage.PREF_SHOW_METHOD_PARAMETER_NAMES);
 	}
 	
 	private boolean isShowType() {
-		return JavaPlugin.getDefault().getPreferenceStore().getBoolean(CodeMiningPreferencePage.PREF_SHOW_METHOD_PARAMETER_TYPES);
+		return JavaPlugin.getDefault().getPreferenceStore().getBoolean(JavaEditorCodeMiningPreferencePage.PREF_SHOW_METHOD_PARAMETER_TYPES);
 	}
 
 }

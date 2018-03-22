@@ -54,12 +54,15 @@ public class JavaReferenceCodeMining extends AbstractJavaCodeMining {
 	protected CompletableFuture<Void> doResolve(ITextViewer viewer, IProgressMonitor monitor) {
 		return CompletableFuture.runAsync(() -> {
 			try {
+				monitor.isCanceled();
 				long refCount= countReferences(getElement(), monitor);
 				super.setLabel(refCount + " " + (refCount > 1 ? "references" : "reference")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			} catch (JavaModelException e) {
 				// TODO: what should we done when there are some errors?
+				e.printStackTrace();
 			} catch (CoreException e) {
 				// TODO: what should we done when there are some errors?
+				e.printStackTrace();
 			}
 		});
 	}
