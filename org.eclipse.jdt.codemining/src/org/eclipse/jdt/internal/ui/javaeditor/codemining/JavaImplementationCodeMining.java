@@ -10,19 +10,18 @@
  */
 package org.eclipse.jdt.internal.ui.javaeditor.codemining;
 
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.codemining.ICodeMiningProvider;
-
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
 
 /**
  * Java implementation code mining.
@@ -31,15 +30,22 @@ import org.eclipse.jdt.core.JavaModelException;
  */
 public class JavaImplementationCodeMining extends AbstractJavaCodeMining {
 
-	public JavaImplementationCodeMining(IType element, IDocument document, ICodeMiningProvider provider) throws JavaModelException, BadLocationException {
+	private final boolean implementationsCodeMiningsAtLeastOne;
+
+	public JavaImplementationCodeMining(IType element, IDocument document, ICodeMiningProvider provider,
+			boolean implementationsCodeMiningsAtLeastOne) throws JavaModelException, BadLocationException {
 		super(element, document, provider, null);
+		this.implementationsCodeMiningsAtLeastOne = implementationsCodeMiningsAtLeastOne;
 	}
 
 	@Override
 	protected CompletableFuture<Void> doResolve(ITextViewer viewer, IProgressMonitor monitor) {
 		return CompletableFuture.runAsync(() -> {
 			try {
-				long implCount= countImplementations((IType) getElement(), monitor);
+				long implCount = countImplementations((IType) getElement(), monitor);
+				if (implCount == 00 && implementationsCodeMiningsAtLeastOne) {
+					throw new CancellationException();
+				}
 				super.setLabel(implCount + " " + (implCount > 1 ? "implementations" : "implementation")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			} catch (JavaModelException e) {
 				// TODO: what should we done when there are some errors?
@@ -50,13 +56,13 @@ public class JavaImplementationCodeMining extends AbstractJavaCodeMining {
 	/**
 	 * Return the count of implementation for the given java element type.
 	 * 
-	 * @param type the java element type.
+	 * @param type    the java element type.
 	 * @param monitor the monitor
 	 * @return the count of implementation for the given java element type.
 	 * @throws JavaModelException throws when Java error
 	 */
 	private static long countImplementations(IType type, IProgressMonitor monitor) throws JavaModelException {
-		IType[] results= type.newTypeHierarchy(monitor).getAllSubtypes(type);
+		IType[] results = type.newTypeHierarchy(monitor).getAllSubtypes(type);
 		return Stream.of(results).filter(t -> t.getAncestor(IJavaElement.COMPILATION_UNIT) != null).count();
 	}
 

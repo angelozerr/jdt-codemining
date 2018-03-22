@@ -52,9 +52,19 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider {
 				.getBoolean(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REFERENCES);
 	}
 
+	private boolean isReferencesCodeMiningsAtLeastOne() {
+		return PreferenceConstants.getPreferenceStore()
+				.getBoolean(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REFERENCES_AT_LEAST_ONE);
+	}
+
 	private boolean isImplementationsCodeMiningsEnabled() {
 		return PreferenceConstants.getPreferenceStore()
-				.getBoolean(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_IMPLEMNTATIONS);
+				.getBoolean(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS);
+	}
+
+	private boolean isImplementationsCodeMiningsAtLeastOne() {
+		return PreferenceConstants.getPreferenceStore()
+				.getBoolean(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE);
 	}
 
 	@Override
@@ -112,8 +122,8 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider {
 			}
 			if (isReferencesCodeMiningsEnabled()) {
 				try {
-					minings.add(
-							new JavaReferenceCodeMining(element, (JavaEditor) textEditor, viewer.getDocument(), this));
+					minings.add(new JavaReferenceCodeMining(element, (JavaEditor) textEditor, viewer.getDocument(),
+							this, isReferencesCodeMiningsAtLeastOne()));
 				} catch (BadLocationException e) {
 					// TODO: what should we done when there are some errors?
 				}
@@ -128,7 +138,8 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider {
 					IType type = (IType) element;
 					if (type.isInterface() || Flags.isAbstract(type.getFlags())) {
 						try {
-							minings.add(new JavaImplementationCodeMining(type, viewer.getDocument(), this));
+							minings.add(new JavaImplementationCodeMining(type, viewer.getDocument(), this,
+									isImplementationsCodeMiningsAtLeastOne()));
 						} catch (BadLocationException e) {
 							// TODO: what should we done when there are some errors?
 						}
