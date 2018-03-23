@@ -56,7 +56,9 @@ public class JUnitCodeMiningProvider extends AbstractCodeMiningProvider {
 		@Override
 		public void sessionFinished(ITestRunSession session) {
 			super.sessionFinished(session);
-			((ISourceViewerExtension5) viewer).updateCodeMinings();
+			if (viewer != null) {
+				((ISourceViewerExtension5) viewer).updateCodeMinings();
+			}
 		}
 
 		public ITestCaseElement findTestCase(IMethod method) {
