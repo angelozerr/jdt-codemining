@@ -43,9 +43,10 @@ import org.eclipse.jface.text.codemining.ICodeMiningProvider;
 public class JavaReferenceCodeMining extends AbstractJavaCodeMining {
 
 	private final boolean referencesCodeMiningsAtLeastOne;
-	
+
 	public JavaReferenceCodeMining(IJavaElement element, JavaEditor editor, IDocument document,
-			ICodeMiningProvider provider, boolean referencesCodeMiningsAtLeastOne) throws JavaModelException, BadLocationException {
+			ICodeMiningProvider provider, boolean referencesCodeMiningsAtLeastOne)
+			throws JavaModelException, BadLocationException {
 		super(element, document, provider, e -> new FindReferencesAction(editor).run(element));
 		this.referencesCodeMiningsAtLeastOne = referencesCodeMiningsAtLeastOne;
 	}
@@ -56,10 +57,12 @@ public class JavaReferenceCodeMining extends AbstractJavaCodeMining {
 			try {
 				monitor.isCanceled();
 				long refCount = countReferences(getElement(), monitor);
+				monitor.isCanceled();
 				if (refCount == 0 && referencesCodeMiningsAtLeastOne) {
-					throw new CancellationException();
+					super.setLabel("");					
+				} else {
+					super.setLabel(refCount + " " + (refCount > 1 ? "references" : "reference")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				}
-				super.setLabel(refCount + " " + (refCount > 1 ? "references" : "reference")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			} catch (JavaModelException e) {
 				// TODO: what should we done when there are some errors?
 				e.printStackTrace();

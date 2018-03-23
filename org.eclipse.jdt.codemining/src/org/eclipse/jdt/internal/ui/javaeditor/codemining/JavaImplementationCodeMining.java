@@ -43,10 +43,11 @@ public class JavaImplementationCodeMining extends AbstractJavaCodeMining {
 		return CompletableFuture.runAsync(() -> {
 			try {
 				long implCount = countImplementations((IType) getElement(), monitor);
-				if (implCount == 00 && implementationsCodeMiningsAtLeastOne) {
-					throw new CancellationException();
+				if (implCount == 0 && implementationsCodeMiningsAtLeastOne) {
+					super.setLabel("");
+				} else {
+					super.setLabel(implCount + " " + (implCount > 1 ? "implementations" : "implementation")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				}
-				super.setLabel(implCount + " " + (implCount > 1 ? "implementations" : "implementation")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			} catch (JavaModelException e) {
 				// TODO: what should we done when there are some errors?
 			}
