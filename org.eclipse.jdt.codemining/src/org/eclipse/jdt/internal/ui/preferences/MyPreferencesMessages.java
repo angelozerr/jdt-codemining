@@ -13,6 +13,7 @@ public class MyPreferencesMessages extends NLS {
 	public static String JavaEditorCodeMiningPreferencePage_showImplementations_atLeastOne_label;
 	public static String JavaEditorCodeMiningPreferencePage_showMethodParameterNames_label;
 	public static String JavaEditorCodeMiningPreferencePage_showMethodParameterTypes_label;
+	public static String JavaEditorCodeMiningPreferencePage_showEndStatement_label;
 	public static String JavaEditorCodeMiningPreferencePage_showJUnitStatus_label;
 	public static String JavaEditorCodeMiningPreferencePage_showJUnitRun_label;
 	public static String JavaEditorCodeMiningPreferencePage_showJUnitDebug_label;

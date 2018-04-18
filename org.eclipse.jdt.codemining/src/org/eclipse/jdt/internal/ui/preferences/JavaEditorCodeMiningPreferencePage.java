@@ -46,6 +46,8 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 
 	public static final String PREF_SHOW_METHOD_PARAMETER_TYPES = "java.codemining.methodParameter.types.enabled"; //$NON-NLS-1$
 
+	public static final String PREF_SHOW_END_STATEMENT = "java.codemining.endStatement.enabled"; //$NON-NLS-1$
+	
 	public static final String PREF_SHOW_JUNIT_STATUS = "java.codemining.junit.status.enabled"; //$NON-NLS-1$
 
 	public static final String PREF_SHOW_JUNIT_RUN = "java.codemining.junit.run.enabled"; //$NON-NLS-1$
@@ -63,6 +65,8 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 	private SelectionButtonDialogField fShowMethodParameterNames;
 
 	private SelectionButtonDialogField fShowMethodParameterTypes;
+	
+	private SelectionButtonDialogField fShowEndStatement;
 
 	private SelectionButtonDialogField fShowJUnitStatus;
 
@@ -114,6 +118,11 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 		fShowMethodParameterTypes
 				.setLabelText(MyPreferencesMessages.JavaEditorCodeMiningPreferencePage_showMethodParameterTypes_label);
 
+		fShowEndStatement = new SelectionButtonDialogField(SWT.CHECK);
+		fShowEndStatement.setDialogFieldListener(listener);
+		fShowEndStatement
+				.setLabelText(MyPreferencesMessages.JavaEditorCodeMiningPreferencePage_showEndStatement_label);
+
 		fShowJUnitStatus = new SelectionButtonDialogField(SWT.CHECK);
 		fShowJUnitStatus.setDialogFieldListener(listener);
 		fShowJUnitStatus.setLabelText(MyPreferencesMessages.JavaEditorCodeMiningPreferencePage_showJUnitStatus_label);
@@ -138,6 +147,7 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 		fShowImplementationsAtLeastOne.setEnabled(fShowImplementations.isSelected());
 		fShowMethodParameterNames.setSelection(prefs.getBoolean(PREF_SHOW_METHOD_PARAMETER_NAMES));
 		fShowMethodParameterTypes.setSelection(prefs.getBoolean(PREF_SHOW_METHOD_PARAMETER_TYPES));
+		fShowEndStatement.setSelection(prefs.getBoolean(PREF_SHOW_END_STATEMENT));
 		fShowJUnitStatus.setSelection(prefs.getBoolean(PREF_SHOW_JUNIT_STATUS));
 		fShowJUnitRun.setSelection(prefs.getBoolean(PREF_SHOW_JUNIT_RUN));
 		fShowJUnitDebug.setSelection(prefs.getBoolean(PREF_SHOW_JUNIT_DEBUG));
@@ -174,6 +184,7 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 
 		fShowMethodParameterNames.doFillIntoGrid(result, nColumns);
 		fShowMethodParameterTypes.doFillIntoGrid(result, nColumns);
+		fShowEndStatement.doFillIntoGrid(result, nColumns);
 		fShowJUnitStatus.doFillIntoGrid(result, nColumns);
 		fShowJUnitRun.doFillIntoGrid(result, nColumns);
 		fShowJUnitDebug.doFillIntoGrid(result, nColumns);
@@ -245,6 +256,7 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 		prefs.setValue(PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE, fShowImplementationsAtLeastOne.isSelected());
 		prefs.setValue(PREF_SHOW_METHOD_PARAMETER_NAMES, fShowMethodParameterNames.isSelected());
 		prefs.setValue(PREF_SHOW_METHOD_PARAMETER_TYPES, fShowMethodParameterTypes.isSelected());
+		prefs.setValue(PREF_SHOW_END_STATEMENT, fShowEndStatement.isSelected());
 		prefs.setValue(PREF_SHOW_JUNIT_STATUS, fShowJUnitStatus.isSelected());
 		prefs.setValue(PREF_SHOW_JUNIT_RUN, fShowJUnitRun.isSelected());
 		prefs.setValue(PREF_SHOW_JUNIT_DEBUG, fShowJUnitDebug.isSelected());
@@ -264,6 +276,7 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 		fShowImplementationsAtLeastOne.setSelection(prefs.getDefaultBoolean(PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE));
 		fShowMethodParameterNames.setSelection(prefs.getDefaultBoolean(PREF_SHOW_METHOD_PARAMETER_NAMES));
 		fShowMethodParameterTypes.setSelection(prefs.getDefaultBoolean(PREF_SHOW_METHOD_PARAMETER_TYPES));
+		fShowEndStatement.setSelection(prefs.getDefaultBoolean(PREF_SHOW_END_STATEMENT));
 		fShowJUnitStatus.setSelection(prefs.getDefaultBoolean(PREF_SHOW_JUNIT_STATUS));
 		fShowJUnitRun.setSelection(prefs.getDefaultBoolean(PREF_SHOW_JUNIT_RUN));
 		fShowJUnitDebug.setSelection(prefs.getDefaultBoolean(PREF_SHOW_JUNIT_DEBUG));
