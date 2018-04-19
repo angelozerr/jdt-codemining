@@ -2,10 +2,11 @@ package org.eclipse.jdt.internal.ui.javaeditor.codemining;
 
 import java.util.List;
 
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
-import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.internal.corext.dom.HierarchicalASTVisitor;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.preferences.JavaEditorCodeMiningPreferencePage;
@@ -49,10 +50,13 @@ public class CalleeJavaMethodParameterVisitor extends HierarchicalASTVisitor {
 	}
 
 	@Override
-	public void endVisit(IfStatement node) {
+	public void endVisit(Statement node) {
 		super.endVisit(node);
-		if (isShowEndStatement()) {
-			minings.add(new EndStatementCodeMining(node, textEditor, provider));
+		if (node.getNodeType() == ASTNode.IF_STATEMENT || node.getNodeType() == ASTNode.WHILE_STATEMENT
+				|| node.getNodeType() == ASTNode.FOR_STATEMENT || node.getNodeType() == ASTNode.DO_STATEMENT) {
+			if (isShowEndStatement()) {
+				minings.add(new EndStatementCodeMining(node, textEditor, provider));
+			}
 		}
 	}
 
