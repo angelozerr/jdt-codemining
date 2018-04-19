@@ -47,7 +47,7 @@ public class JavaMethodParameterCodeMiningProvider extends AbstractCodeMiningPro
 			try {
 				IJavaElement[] elements = unit.getChildren();
 				List<ICodeMining> minings = new ArrayList<>(elements.length);
-				collectLineContentCodeMinings(unit, minings);
+				collectLineContentCodeMinings(unit, textEditor, minings);
 				monitor.isCanceled();
 				return minings;
 			} catch (JavaModelException e) {
@@ -57,9 +57,9 @@ public class JavaMethodParameterCodeMiningProvider extends AbstractCodeMiningPro
 		});
 	}
 
-	private void collectLineContentCodeMinings(ITypeRoot unit, List<ICodeMining> minings) {
+	private void collectLineContentCodeMinings(ITypeRoot unit, ITextEditor textEditor, List<ICodeMining> minings) {
 		CompilationUnit cu = SharedASTProvider.getAST(unit, SharedASTProvider.WAIT_YES, null);
-		CalleeJavaMethodParameterVisitor visitor = new CalleeJavaMethodParameterVisitor(cu, minings, this);
+		CalleeJavaMethodParameterVisitor visitor = new CalleeJavaMethodParameterVisitor(cu, textEditor, minings, this);
 		cu.accept(visitor);
 	}
 

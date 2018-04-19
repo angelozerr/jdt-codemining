@@ -10,7 +10,6 @@
  */
 package org.eclipse.jdt.internal.ui.javaeditor.codemining;
 
-import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 

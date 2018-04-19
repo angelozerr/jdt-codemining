@@ -11,6 +11,7 @@ import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.preferences.JavaEditorCodeMiningPreferencePage;
 import org.eclipse.jface.text.codemining.ICodeMining;
 import org.eclipse.jface.text.codemining.ICodeMiningProvider;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 public class CalleeJavaMethodParameterVisitor extends HierarchicalASTVisitor {
 
@@ -24,13 +25,16 @@ public class CalleeJavaMethodParameterVisitor extends HierarchicalASTVisitor {
 
 	private final boolean showType;
 
-	public CalleeJavaMethodParameterVisitor(CompilationUnit cu, List<ICodeMining> minings,
+	private final ITextEditor textEditor;
+
+	public CalleeJavaMethodParameterVisitor(CompilationUnit cu, ITextEditor textEditor, List<ICodeMining> minings,
 			ICodeMiningProvider provider) {
 		this.cu = cu;
 		this.minings = minings;
 		this.provider = provider;
 		this.showName = isShowName();
 		this.showType = isShowType();
+		this.textEditor = textEditor;
 	}
 
 	public boolean visit(MethodInvocation node) {
@@ -48,7 +52,7 @@ public class CalleeJavaMethodParameterVisitor extends HierarchicalASTVisitor {
 	public void endVisit(IfStatement node) {
 		super.endVisit(node);
 		if (isShowEndStatement()) {
-			minings.add(new EndStatementCodeMining(node, provider));
+			minings.add(new EndStatementCodeMining(node, textEditor, provider));
 		}
 	}
 
