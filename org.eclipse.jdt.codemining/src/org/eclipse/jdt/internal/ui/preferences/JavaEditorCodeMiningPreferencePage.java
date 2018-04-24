@@ -10,7 +10,6 @@
  */
 package org.eclipse.jdt.internal.ui.preferences;
 
-import org.eclipse.jdt.internal.ui.IJavaHelpContextIds;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.wizards.dialogfields.DialogField;
 import org.eclipse.jdt.internal.ui.wizards.dialogfields.IDialogFieldListener;
@@ -27,7 +26,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.PlatformUI;
 
 /**
  * The page for setting the Java codemining.
@@ -47,14 +45,14 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 	public static final String PREF_SHOW_METHOD_PARAMETER_TYPES = "java.codemining.methodParameter.types.enabled"; //$NON-NLS-1$
 
 	public static final String PREF_SHOW_END_STATEMENT = "java.codemining.endStatement.enabled"; //$NON-NLS-1$
-	
+
+	public static final String PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING = "java.codemining.debug.variable"; //$NON-NLS-1$
+
 	public static final String PREF_SHOW_JUNIT_STATUS = "java.codemining.junit.status.enabled"; //$NON-NLS-1$
 
 	public static final String PREF_SHOW_JUNIT_RUN = "java.codemining.junit.run.enabled"; //$NON-NLS-1$
 
 	public static final String PREF_SHOW_JUNIT_DEBUG = "java.codemining.junit.debug.enabled"; //$NON-NLS-1$
-
-	public static final String PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING = "java.codemining.debug.variable"; //$NON-NLS-1$
 
 	private SelectionButtonDialogField fShowReferences;
 
@@ -67,16 +65,16 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 	private SelectionButtonDialogField fShowMethodParameterNames;
 
 	private SelectionButtonDialogField fShowMethodParameterTypes;
-	
+
 	private SelectionButtonDialogField fShowEndStatement;
+
+	private SelectionButtonDialogField fShowVariableValueWhileDebugging;
 
 	private SelectionButtonDialogField fShowJUnitStatus;
 
 	private SelectionButtonDialogField fShowJUnitRun;
 
 	private SelectionButtonDialogField fShowJUnitDebug;
-	
-	private SelectionButtonDialogField fShowVariableValueWhileDebugging;
 
 	public JavaEditorCodeMiningPreferencePage() {
 		setPreferenceStore(JavaPlugin.getDefault().getPreferenceStore());
@@ -105,8 +103,8 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 			listener.dialogFieldChanged(field);
 			fShowImplementationsAtLeastOne.setEnabled(fShowImplementations.isSelected());
 		});
-		fShowImplementations.setLabelText(
-				MyPreferencesMessages.JavaEditorCodeMiningPreferencePage_showImplementations_label);
+		fShowImplementations
+				.setLabelText(MyPreferencesMessages.JavaEditorCodeMiningPreferencePage_showImplementations_label);
 		fShowImplementationsAtLeastOne = new SelectionButtonDialogField(SWT.CHECK);
 		fShowImplementationsAtLeastOne.setDialogFieldListener(listener);
 		fShowImplementationsAtLeastOne.setLabelText(
@@ -124,8 +122,12 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 
 		fShowEndStatement = new SelectionButtonDialogField(SWT.CHECK);
 		fShowEndStatement.setDialogFieldListener(listener);
-		fShowEndStatement
-				.setLabelText(MyPreferencesMessages.JavaEditorCodeMiningPreferencePage_showEndStatement_label);
+		fShowEndStatement.setLabelText(MyPreferencesMessages.JavaEditorCodeMiningPreferencePage_showEndStatement_label);
+
+		fShowVariableValueWhileDebugging = new SelectionButtonDialogField(SWT.CHECK);
+		fShowVariableValueWhileDebugging.setDialogFieldListener(listener);
+		fShowVariableValueWhileDebugging.setLabelText(
+				MyPreferencesMessages.JavaEditorCodeMiningPreferencePage_showVariableValueWhileDebugging_label);
 
 		fShowJUnitStatus = new SelectionButtonDialogField(SWT.CHECK);
 		fShowJUnitStatus.setDialogFieldListener(listener);
@@ -138,10 +140,6 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 		fShowJUnitDebug = new SelectionButtonDialogField(SWT.CHECK);
 		fShowJUnitDebug.setDialogFieldListener(listener);
 		fShowJUnitDebug.setLabelText(MyPreferencesMessages.JavaEditorCodeMiningPreferencePage_showJUnitDebug_label);
-
-		fShowVariableValueWhileDebugging = new SelectionButtonDialogField(SWT.CHECK);
-		fShowVariableValueWhileDebugging.setDialogFieldListener(listener);
-		fShowVariableValueWhileDebugging.setLabelText(MyPreferencesMessages.JavaEditorCodeMiningPreferencePage_showVariableValueWhileDebugging_label);
 
 	}
 
@@ -156,10 +154,10 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 		fShowMethodParameterNames.setSelection(prefs.getBoolean(PREF_SHOW_METHOD_PARAMETER_NAMES));
 		fShowMethodParameterTypes.setSelection(prefs.getBoolean(PREF_SHOW_METHOD_PARAMETER_TYPES));
 		fShowEndStatement.setSelection(prefs.getBoolean(PREF_SHOW_END_STATEMENT));
+		fShowVariableValueWhileDebugging.setSelection(prefs.getBoolean(PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING));
 		fShowJUnitStatus.setSelection(prefs.getBoolean(PREF_SHOW_JUNIT_STATUS));
 		fShowJUnitRun.setSelection(prefs.getBoolean(PREF_SHOW_JUNIT_RUN));
 		fShowJUnitDebug.setSelection(prefs.getBoolean(PREF_SHOW_JUNIT_DEBUG));
-		fShowVariableValueWhileDebugging.setSelection(prefs.getBoolean(PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING));
 	}
 
 	/*
@@ -168,7 +166,8 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 	@Override
 	public void createControl(Composite parent) {
 		super.createControl(parent);
-		// PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), IJavaHelpContextIds.APPEARANCE_PREFERENCE_PAGE);
+		// PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(),
+		// IJavaHelpContextIds.APPEARANCE_PREFERENCE_PAGE);
 	}
 
 	/*
@@ -194,11 +193,11 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 		fShowMethodParameterNames.doFillIntoGrid(result, nColumns);
 		fShowMethodParameterTypes.doFillIntoGrid(result, nColumns);
 		fShowEndStatement.doFillIntoGrid(result, nColumns);
+		fShowVariableValueWhileDebugging.doFillIntoGrid(result, nColumns);
 		fShowJUnitStatus.doFillIntoGrid(result, nColumns);
 		fShowJUnitRun.doFillIntoGrid(result, nColumns);
 		fShowJUnitDebug.doFillIntoGrid(result, nColumns);
-		fShowVariableValueWhileDebugging.doFillIntoGrid(result, nColumns);
-		
+
 		initFields();
 
 		Dialog.applyDialogFont(result);
@@ -267,10 +266,10 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 		prefs.setValue(PREF_SHOW_METHOD_PARAMETER_NAMES, fShowMethodParameterNames.isSelected());
 		prefs.setValue(PREF_SHOW_METHOD_PARAMETER_TYPES, fShowMethodParameterTypes.isSelected());
 		prefs.setValue(PREF_SHOW_END_STATEMENT, fShowEndStatement.isSelected());
+		prefs.setValue(PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING, fShowVariableValueWhileDebugging.isSelected());
 		prefs.setValue(PREF_SHOW_JUNIT_STATUS, fShowJUnitStatus.isSelected());
 		prefs.setValue(PREF_SHOW_JUNIT_RUN, fShowJUnitRun.isSelected());
 		prefs.setValue(PREF_SHOW_JUNIT_DEBUG, fShowJUnitDebug.isSelected());
-		prefs.setValue(PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING, fShowVariableValueWhileDebugging.isSelected());
 		JavaPlugin.flushInstanceScope();
 		return super.performOk();
 	}
@@ -288,10 +287,11 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 		fShowMethodParameterNames.setSelection(prefs.getDefaultBoolean(PREF_SHOW_METHOD_PARAMETER_NAMES));
 		fShowMethodParameterTypes.setSelection(prefs.getDefaultBoolean(PREF_SHOW_METHOD_PARAMETER_TYPES));
 		fShowEndStatement.setSelection(prefs.getDefaultBoolean(PREF_SHOW_END_STATEMENT));
+		fShowVariableValueWhileDebugging
+				.setSelection(prefs.getDefaultBoolean(PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING));
 		fShowJUnitStatus.setSelection(prefs.getDefaultBoolean(PREF_SHOW_JUNIT_STATUS));
 		fShowJUnitRun.setSelection(prefs.getDefaultBoolean(PREF_SHOW_JUNIT_RUN));
 		fShowJUnitDebug.setSelection(prefs.getDefaultBoolean(PREF_SHOW_JUNIT_DEBUG));
-		fShowVariableValueWhileDebugging.setSelection(prefs.getDefaultBoolean(PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING));
 		super.performDefaults();
 	}
 }

@@ -52,6 +52,8 @@
            	   	  <!-- TODO: change to property="org.eclipse.jdt.ui.hasPreference" -->
 	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.methodParameter.names.enabled" forcePluginActivation="true"/>
 	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.methodParameter.types.enabled" forcePluginActivation="true"/>
+	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.endStatement.enabled" forcePluginActivation="true"/>
+	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.debug.variable" forcePluginActivation="true"/>
 	           </or>
            	</and>
          </enabledWhen>
