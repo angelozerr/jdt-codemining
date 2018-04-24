@@ -54,6 +54,8 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 
 	public static final String PREF_SHOW_JUNIT_DEBUG = "java.codemining.junit.debug.enabled"; //$NON-NLS-1$
 
+	public static final String PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING = "java.codemining.debug.variable"; //$NON-NLS-1$
+
 	private SelectionButtonDialogField fShowReferences;
 
 	private SelectionButtonDialogField fShowReferencesAtLeastOne;
@@ -73,6 +75,8 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 	private SelectionButtonDialogField fShowJUnitRun;
 
 	private SelectionButtonDialogField fShowJUnitDebug;
+	
+	private SelectionButtonDialogField fShowVariableValueWhileDebugging;
 
 	public JavaEditorCodeMiningPreferencePage() {
 		setPreferenceStore(JavaPlugin.getDefault().getPreferenceStore());
@@ -135,6 +139,10 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 		fShowJUnitDebug.setDialogFieldListener(listener);
 		fShowJUnitDebug.setLabelText(MyPreferencesMessages.JavaEditorCodeMiningPreferencePage_showJUnitDebug_label);
 
+		fShowVariableValueWhileDebugging = new SelectionButtonDialogField(SWT.CHECK);
+		fShowVariableValueWhileDebugging.setDialogFieldListener(listener);
+		fShowVariableValueWhileDebugging.setLabelText(MyPreferencesMessages.JavaEditorCodeMiningPreferencePage_showVariableValueWhileDebugging_label);
+
 	}
 
 	private void initFields() {
@@ -151,6 +159,7 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 		fShowJUnitStatus.setSelection(prefs.getBoolean(PREF_SHOW_JUNIT_STATUS));
 		fShowJUnitRun.setSelection(prefs.getBoolean(PREF_SHOW_JUNIT_RUN));
 		fShowJUnitDebug.setSelection(prefs.getBoolean(PREF_SHOW_JUNIT_DEBUG));
+		fShowVariableValueWhileDebugging.setSelection(prefs.getBoolean(PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING));
 	}
 
 	/*
@@ -188,7 +197,8 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 		fShowJUnitStatus.doFillIntoGrid(result, nColumns);
 		fShowJUnitRun.doFillIntoGrid(result, nColumns);
 		fShowJUnitDebug.doFillIntoGrid(result, nColumns);
-
+		fShowVariableValueWhileDebugging.doFillIntoGrid(result, nColumns);
+		
 		initFields();
 
 		Dialog.applyDialogFont(result);
@@ -260,6 +270,7 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 		prefs.setValue(PREF_SHOW_JUNIT_STATUS, fShowJUnitStatus.isSelected());
 		prefs.setValue(PREF_SHOW_JUNIT_RUN, fShowJUnitRun.isSelected());
 		prefs.setValue(PREF_SHOW_JUNIT_DEBUG, fShowJUnitDebug.isSelected());
+		prefs.setValue(PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING, fShowVariableValueWhileDebugging.isSelected());
 		JavaPlugin.flushInstanceScope();
 		return super.performOk();
 	}
@@ -280,6 +291,7 @@ public final class JavaEditorCodeMiningPreferencePage extends PreferencePage imp
 		fShowJUnitStatus.setSelection(prefs.getDefaultBoolean(PREF_SHOW_JUNIT_STATUS));
 		fShowJUnitRun.setSelection(prefs.getDefaultBoolean(PREF_SHOW_JUNIT_RUN));
 		fShowJUnitDebug.setSelection(prefs.getDefaultBoolean(PREF_SHOW_JUNIT_DEBUG));
+		fShowVariableValueWhileDebugging.setSelection(prefs.getDefaultBoolean(PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING));
 		super.performDefaults();
 	}
 }

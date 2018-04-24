@@ -73,7 +73,7 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 
 	@Override
 	public boolean visit(VariableDeclaration node) {
-		if (isShowVariableWhileDebugging()) {
+		if (isShowVariableValueWhileDebugging()) {
 			IJavaStackFrame frame = getFrame();
 			if (frame != null) {
 				InlinedDebugCodeMining m = new InlinedDebugCodeMining(node, frame, viewer, provider);
@@ -93,13 +93,14 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 				.getBoolean(JavaEditorCodeMiningPreferencePage.PREF_SHOW_METHOD_PARAMETER_TYPES);
 	}
 
-	private boolean isShowVariableWhileDebugging() {
-		return true;
-	}
-
 	private boolean isShowEndStatement() {
 		return JavaPlugin.getDefault().getPreferenceStore()
 				.getBoolean(JavaEditorCodeMiningPreferencePage.PREF_SHOW_END_STATEMENT);
+	}
+
+	private boolean isShowVariableValueWhileDebugging() {
+		return JavaPlugin.getDefault().getPreferenceStore()
+				.getBoolean(JavaEditorCodeMiningPreferencePage.PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING);
 	}
 
 	/**

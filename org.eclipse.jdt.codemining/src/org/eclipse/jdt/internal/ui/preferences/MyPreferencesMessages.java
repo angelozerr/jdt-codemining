@@ -17,6 +17,7 @@ public class MyPreferencesMessages extends NLS {
 	public static String JavaEditorCodeMiningPreferencePage_showJUnitStatus_label;
 	public static String JavaEditorCodeMiningPreferencePage_showJUnitRun_label;
 	public static String JavaEditorCodeMiningPreferencePage_showJUnitDebug_label;
+	public static String JavaEditorCodeMiningPreferencePage_showVariableValueWhileDebugging_label;
 
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, MyPreferencesMessages.class);
