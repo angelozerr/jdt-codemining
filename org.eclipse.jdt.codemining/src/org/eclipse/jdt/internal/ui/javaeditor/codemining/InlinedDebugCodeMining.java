@@ -74,7 +74,7 @@ public class InlinedDebugCodeMining extends LineContentCodeMining {
 	public Point draw(GC gc, StyledText textWidget, Color color, int x, int y) {
 		String title = getLabel() != null ? getLabel() : "no command"; //$NON-NLS-1$
 		Point p = gc.stringExtent(title);
-		gc.setBackground(textWidget.getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+		gc.setBackground(textWidget.getDisplay().getSystemColor(SWT.COLOR_YELLOW));
 		Point space = gc.stringExtent(" ");
 		gc.fillRectangle(x + space.x, y, p.x, p.y);
 		gc.drawString(title, x, y, true);
