@@ -77,7 +77,7 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 			IJavaStackFrame frame = getFrame();
 			if (frame != null) {
 				InlinedDebugCodeMining m = new InlinedDebugCodeMining(node, frame, viewer, provider);
-				minings.add(m);				
+				minings.add(m);
 			}
 		}
 		return super.visit(node);

@@ -10,9 +10,6 @@
  */
 package org.eclipse.jdt.internal.ui.javaeditor.codemining;
 
-import java.util.concurrent.CompletableFuture;
-
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.internal.ui.views.launch.DebugElementHelper;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -53,7 +50,7 @@ public class InlinedDebugCodeMining extends LineContentCodeMining {
 		int offset = node.getStartPosition();
 		try {
 			IRegion region = document.getLineInformationOfOffset(offset);
-			return new Position(region.getOffset() + region.getLength(), 1);
+			return new Position(region.getOffset() + region.getLength() - 1, 1);
 		} catch (BadLocationException e) {
 			return new Position(offset, 1);
 		}
@@ -63,7 +60,7 @@ public class InlinedDebugCodeMining extends LineContentCodeMining {
 		try {
 			IJavaVariable variable = frame.findVariable(node.getName().getIdentifier());
 			if (variable != null) {
-				String s = "  " + DebugElementHelper.getLabel(variable);
+				String s = " " + DebugElementHelper.getLabel(variable);
 				super.setLabel(s);
 			} else {
 				super.setLabel("");
