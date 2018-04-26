@@ -11,7 +11,7 @@
 package org.eclipse.jdt.internal.ui.preferences;
 
 import org.eclipse.core.expressions.PropertyTester;
-
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.PreferenceConstants;
 
 /**
@@ -23,7 +23,12 @@ public class JavaPreferencesPropertyTester extends PropertyTester {
 
 	@Override
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		return PreferenceConstants.getPreferenceStore().getBoolean(expectedValue.toString());
+		return isEnabled(expectedValue.toString());
+	}
+	
+	public static boolean isEnabled(String preferenceName) {
+		return JavaCore.ENABLED.equals(PreferenceConstants.getPreferenceStore()
+				.getString(preferenceName));
 	}
 
 }

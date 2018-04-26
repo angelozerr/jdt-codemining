@@ -14,8 +14,8 @@ import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.VariableDeclaration;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.internal.corext.dom.HierarchicalASTVisitor;
-import org.eclipse.jdt.internal.ui.JavaPlugin;
-import org.eclipse.jdt.internal.ui.preferences.JavaEditorCodeMiningPreferencePage;
+import org.eclipse.jdt.internal.ui.preferences.JavaPreferencesPropertyTester;
+import org.eclipse.jdt.internal.ui.preferences.MyPreferenceConstants;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.codemining.ICodeMining;
 import org.eclipse.jface.text.codemining.ICodeMiningProvider;
@@ -52,11 +52,13 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 
 	@Override
 	public boolean visit(MethodInvocation node) {
-		List arguments = node.arguments();
-		if (arguments.size() > 0) {
-			for (int i = 0; i < arguments.size(); i++) {
-				Expression exp = (Expression) arguments.get(i);
-				minings.add(new JavaMethodParameterCodeMining(node, exp, i, cu, provider, showName, showType));
+		if (showName || showType) {
+			List arguments = node.arguments();
+			if (arguments.size() > 0) {
+				for (int i = 0; i < arguments.size(); i++) {
+					Expression exp = (Expression) arguments.get(i);
+					minings.add(new JavaMethodParameterCodeMining(node, exp, i, cu, provider, showName, showType));
+				}
 			}
 		}
 		return super.visit(node);
@@ -79,7 +81,8 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 			IJavaStackFrame frame = getFrame();
 			if (frame != null) {
 				try {
-					// TODO: improve the comparison of the methode which is visted and the debug frame
+					// TODO: improve the comparison of the methode which is visted and the debug
+					// frame
 					if (node.getName().toString().equals(frame.getMethodName())) {
 						this.frame = frame;
 					} else {
@@ -105,23 +108,22 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 	}
 
 	private boolean isShowName() {
-		return JavaPlugin.getDefault().getPreferenceStore()
-				.getBoolean(JavaEditorCodeMiningPreferencePage.PREF_SHOW_METHOD_PARAMETER_NAMES);
+		return JavaPreferencesPropertyTester
+				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_NAMES);
 	}
 
 	private boolean isShowType() {
-		return JavaPlugin.getDefault().getPreferenceStore()
-				.getBoolean(JavaEditorCodeMiningPreferencePage.PREF_SHOW_METHOD_PARAMETER_TYPES);
+		return JavaPreferencesPropertyTester
+				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_TYPES);
 	}
 
 	private boolean isShowEndStatement() {
-		return JavaPlugin.getDefault().getPreferenceStore()
-				.getBoolean(JavaEditorCodeMiningPreferencePage.PREF_SHOW_END_STATEMENT);
+		return JavaPreferencesPropertyTester.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT);
 	}
 
 	private boolean isShowVariableValueWhileDebugging() {
-		return JavaPlugin.getDefault().getPreferenceStore()
-				.getBoolean(JavaEditorCodeMiningPreferencePage.PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING);
+		return JavaPreferencesPropertyTester
+				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING);
 	}
 
 	/**

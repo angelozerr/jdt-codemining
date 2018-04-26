@@ -28,8 +28,8 @@ import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.ui.javaeditor.EditorUtility;
 import org.eclipse.jdt.internal.ui.javaeditor.JavaEditor;
+import org.eclipse.jdt.internal.ui.preferences.JavaPreferencesPropertyTester;
 import org.eclipse.jdt.internal.ui.preferences.MyPreferenceConstants;
-import org.eclipse.jdt.ui.PreferenceConstants;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.codemining.AbstractCodeMiningProvider;
@@ -48,23 +48,22 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider {
 	private static Set<String> SILENCED_CODEGENS = Collections.singleton("lombok"); //$NON-NLS-1$
 
 	private boolean isReferencesCodeMiningsEnabled() {
-		return PreferenceConstants.getPreferenceStore()
-				.getBoolean(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REFERENCES);
+		return JavaPreferencesPropertyTester.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REFERENCES);
 	}
 
 	private boolean isReferencesCodeMiningsAtLeastOne() {
-		return PreferenceConstants.getPreferenceStore()
-				.getBoolean(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REFERENCES_AT_LEAST_ONE);
+		return JavaPreferencesPropertyTester
+				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REFERENCES_AT_LEAST_ONE);
 	}
 
 	private boolean isImplementationsCodeMiningsEnabled() {
-		return PreferenceConstants.getPreferenceStore()
-				.getBoolean(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS);
+		return JavaPreferencesPropertyTester
+				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS);
 	}
 
 	private boolean isImplementationsCodeMiningsAtLeastOne() {
-		return PreferenceConstants.getPreferenceStore()
-				.getBoolean(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE);
+		return JavaPreferencesPropertyTester
+				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE);
 	}
 
 	@Override

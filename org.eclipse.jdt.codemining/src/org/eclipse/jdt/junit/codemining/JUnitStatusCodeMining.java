@@ -73,6 +73,7 @@ public class JUnitStatusCodeMining extends AbstractJavaCodeMining {
 	protected CompletableFuture<Void> doResolve(ITextViewer viewer, IProgressMonitor monitor) {
 		return CompletableFuture.runAsync(() -> {
 			this.testCaseElement = (TestCaseElement) testRegistry.findTestCase((IMethod) getElement());
+			super.setLabel(" "); // set label with space to mark the mining as resolved.
 		});
 	}
 

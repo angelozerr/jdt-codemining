@@ -14,9 +14,9 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.javaeditor.EditorUtility;
-import org.eclipse.jdt.internal.ui.preferences.JavaEditorCodeMiningPreferencePage;
+import org.eclipse.jdt.internal.ui.preferences.JavaPreferencesPropertyTester;
+import org.eclipse.jdt.internal.ui.preferences.MyPreferenceConstants;
 import org.eclipse.jdt.junit.JUnitCore;
 import org.eclipse.jdt.junit.TestRunListener;
 import org.eclipse.jdt.junit.model.ITestCaseElement;
@@ -83,15 +83,15 @@ public class JUnitCodeMiningProvider extends AbstractCodeMiningProvider {
 	}
 
 	private boolean isStatusCodeMiningsEnabled() {
-		return JavaPlugin.getDefault().getPreferenceStore().getBoolean(JavaEditorCodeMiningPreferencePage.PREF_SHOW_JUNIT_STATUS);
+		return JavaPreferencesPropertyTester.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_STATUS);
 	}
 
 	private boolean isRunCodeMiningsEnabled() {
-		return JavaPlugin.getDefault().getPreferenceStore().getBoolean(JavaEditorCodeMiningPreferencePage.PREF_SHOW_JUNIT_RUN);
+		return JavaPreferencesPropertyTester.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_RUN);
 	}
 
 	private boolean isDebugCodeMiningsEnabled() {
-		return JavaPlugin.getDefault().getPreferenceStore().getBoolean(JavaEditorCodeMiningPreferencePage.PREF_SHOW_JUNIT_DEBUG);
+		return JavaPreferencesPropertyTester.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_DEBUG);
 	}
 
 	@Override
