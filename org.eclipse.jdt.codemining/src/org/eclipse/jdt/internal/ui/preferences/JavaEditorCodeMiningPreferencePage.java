@@ -5,6 +5,7 @@ import java.util.Map;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
+import org.eclipse.jdt.ui.PreferenceConstants;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -27,7 +28,7 @@ public class JavaEditorCodeMiningPreferencePage extends PropertyAndPreferencePag
 	private JavaEditorCodeMiningConfigurationBlock fConfigurationBlock;
 
 	public JavaEditorCodeMiningPreferencePage() {
-		setPreferenceStore(JavaPlugin.getDefault().getPreferenceStore());
+		setPreferenceStore(PreferenceConstants.getPreferenceStore());
 	}
 
 	/*

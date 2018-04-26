@@ -51,7 +51,7 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_DEBUG); // $NON-NLS-1$
 
 	public static final Key PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING = getJDTUIKey(
-			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_DEBUG); // $NON-NLS-1$
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING); // $NON-NLS-1$
 
 	private static final String SETTINGS_SECTION_NAME = "JavaEditorCodeMiningConfigurationBlock"; // $NON-NLS-1
 

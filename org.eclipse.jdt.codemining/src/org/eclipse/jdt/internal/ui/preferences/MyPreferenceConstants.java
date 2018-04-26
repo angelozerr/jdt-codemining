@@ -13,7 +13,7 @@ public class MyPreferenceConstants {
 	 *
 	 * @since 3.14
 	 */
-	public static final String EDITOR_JAVA_CODEMINING_SHOW_REFERENCES = "java.codemining.references"; //$NON-NLS-1$ ;
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_REFERENCES = "java.codemining.references"; //$NON-NLS-1$
 
 	/**
 	 * A named preference that stores the value for "Show references" only if there
@@ -24,7 +24,7 @@ public class MyPreferenceConstants {
 	 *
 	 * @since 3.14
 	 */
-	public static final String EDITOR_JAVA_CODEMINING_SHOW_REFERENCES_AT_LEAST_ONE = "java.codemining.references.atLeastOne"; //$NON-NLS-1$ ;
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_REFERENCES_AT_LEAST_ONE = "java.codemining.references.atLeastOne"; //$NON-NLS-1$
 
 	/**
 	 * A named preference that stores the value for "Show implementations"
@@ -35,7 +35,7 @@ public class MyPreferenceConstants {
 	 *
 	 * @since 3.14
 	 */
-	public static final String EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS = "java.codemining.implementations"; //$NON-NLS-1$ ;
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS = "java.codemining.implementations"; //$NON-NLS-1$
 
 	/**
 	 * A named preference that stores the value for "Show implementations" only if
@@ -46,7 +46,7 @@ public class MyPreferenceConstants {
 	 *
 	 * @since 3.14
 	 */
-	public static final String EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE = "java.codemining.implementations.atLeastOne"; //$NON-NLS-1$ ;
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE = "java.codemining.implementations.atLeastOne"; //$NON-NLS-1$
 
 	/**
 	 * A named preference that stores the value for "Show method parameter names"
@@ -57,7 +57,7 @@ public class MyPreferenceConstants {
 	 *
 	 * @since 3.14
 	 */
-	public static final String EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_NAMES = "java.codemining.methodParameter.names"; //$NON-NLS-1$ ;
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_NAMES = "java.codemining.methodParameter.names"; //$NON-NLS-1$
 
 	/**
 	 * A named preference that stores the value for "Show method parameter types".
@@ -67,7 +67,7 @@ public class MyPreferenceConstants {
 	 *
 	 * @since 3.14
 	 */
-	public static final String EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_TYPES = "java.codemining.methodParameter.types"; //$NON-NLS-1$ ;
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_TYPES = "java.codemining.methodParameter.types"; //$NON-NLS-1$
 
 	/**
 	 * A named preference that stores the value for "Show end statement".
@@ -77,7 +77,7 @@ public class MyPreferenceConstants {
 	 *
 	 * @since 3.14
 	 */
-	public static final String EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT = "java.codemining.endStatement"; //$NON-NLS-1$ ;
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT = "java.codemining.endStatement"; //$NON-NLS-1$
 
 	/**
 	 * A named preference that stores the value for "Show JUnit status".
@@ -87,7 +87,7 @@ public class MyPreferenceConstants {
 	 *
 	 * @since 3.14
 	 */
-	public static final String EDITOR_JAVA_CODEMINING_SHOW_JUNIT_STATUS = "java.codemining.junit.status"; //$NON-NLS-1$ ;
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_JUNIT_STATUS = "java.codemining.junit.status"; //$NON-NLS-1$
 
 	/**
 	 * A named preference that stores the value for "Show JUnit run".
@@ -118,7 +118,7 @@ public class MyPreferenceConstants {
 	 *
 	 * @since 3.14
 	 */
-	public static final String EDITOR_JAVA_CODEMINING_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING = "java.codemining.debug.variable"; //$NON-NLS-1$ ;
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING = "java.codemining.debug.variable"; //$NON-NLS-1$
 
 	/**
 	 * Initializes the given preference store with the default values.
