@@ -10,10 +10,13 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.VariableDeclaration;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.internal.corext.dom.HierarchicalASTVisitor;
+import org.eclipse.jdt.internal.ui.javaeditor.codemining.debug.InlinedDebugCodeMining;
+import org.eclipse.jdt.internal.ui.javaeditor.codemining.debug.SimpleNameDebugCodeMining;
 import org.eclipse.jdt.internal.ui.preferences.JavaPreferencesPropertyTester;
 import org.eclipse.jdt.internal.ui.preferences.MyPreferenceConstants;
 import org.eclipse.jface.text.ITextViewer;
@@ -61,6 +64,19 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 				}
 			}
 		}
+		if (isShowVariableValueWhileDebugging() && frame != null) {
+			List arguments = node.arguments();
+			if (arguments.size() > 0) {
+				for (int i = 0; i < arguments.size(); i++) {
+					Expression exp = (Expression) arguments.get(i);
+					if (exp instanceof SimpleName) {
+						InlinedDebugCodeMining m = new SimpleNameDebugCodeMining((SimpleName) exp, frame, viewer,
+								provider);
+						minings.add(m);
+					}
+				}
+			}
+		}
 		return super.visit(node);
 	}
 
@@ -98,11 +114,9 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 
 	@Override
 	public boolean visit(VariableDeclaration node) {
-		if (isShowVariableValueWhileDebugging()) {
-			if (frame != null) {
-				InlinedDebugCodeMining m = new InlinedDebugCodeMining(node, frame, viewer, provider);
-				minings.add(m);
-			}
+		if (isShowVariableValueWhileDebugging() && frame != null) {
+			InlinedDebugCodeMining m = new SimpleNameDebugCodeMining(node.getName(), frame, viewer, provider);
+			minings.add(m);
 		}
 		return super.visit(node);
 	}

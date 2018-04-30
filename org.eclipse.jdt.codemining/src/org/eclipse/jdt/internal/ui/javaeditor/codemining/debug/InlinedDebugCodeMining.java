@@ -8,12 +8,11 @@
  *  Contributors:
  *     Angelo Zerr <angelo.zerr@gmail.com>
  */
-package org.eclipse.jdt.internal.ui.javaeditor.codemining;
+package org.eclipse.jdt.internal.ui.javaeditor.codemining.debug;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.internal.ui.views.launch.DebugElementHelper;
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.VariableDeclaration;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 import org.eclipse.jface.text.BadLocationException;
@@ -33,32 +32,29 @@ import org.eclipse.swt.graphics.Point;
  * Show start statement text in the end statement as mining.
  *
  */
-public class InlinedDebugCodeMining extends LineContentCodeMining {
+public abstract class InlinedDebugCodeMining extends LineContentCodeMining {
 
-	private final VariableDeclaration node;
 	private final IJavaStackFrame frame;
 
-	protected InlinedDebugCodeMining(VariableDeclaration node, IJavaStackFrame frame, ITextViewer viewer,
+	protected InlinedDebugCodeMining(ASTNode node, IJavaStackFrame frame, ITextViewer viewer,
 			ICodeMiningProvider provider) {
 		super(getPosition(node, viewer.getDocument()), provider, null);
-		this.node = node;
 		this.frame = frame;
-		updateLabel();
 	}
 
 	private static Position getPosition(ASTNode node, IDocument document) {
 		int offset = node.getStartPosition();
 		try {
 			IRegion region = document.getLineInformationOfOffset(offset);
-			return new Position(region.getOffset() + region.getLength() - 1, 1);
+			return new Position(region.getOffset() + region.getLength(), 1);
 		} catch (BadLocationException e) {
 			return new Position(offset, 1);
 		}
 	}
 
-	private void updateLabel() {
+	protected void updateLabel(String variableName) {
 		try {
-			IJavaVariable variable = frame.findVariable(node.getName().getIdentifier());
+			IJavaVariable variable = frame.findVariable(variableName);
 			if (variable != null) {
 				String s = " " + DebugElementHelper.getLabel(variable);
 				super.setLabel(s);
@@ -80,4 +76,5 @@ public class InlinedDebugCodeMining extends LineContentCodeMining {
 		gc.drawString(title, x, y, true);
 		return p;
 	}
+
 }
