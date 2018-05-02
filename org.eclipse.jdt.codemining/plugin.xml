@@ -85,7 +85,7 @@
    </extension>
    
     <extension point="org.eclipse.core.runtime.preferences">
-        <initializer class=" org.eclipse.jdt.internal.ui.preferences.MyJavaUIPreferenceInitializer"/>
+        <initializer class="org.eclipse.jdt.internal.ui.preferences.MyJavaUIPreferenceInitializer"/>
     </extension>
        
    <extension

@@ -27,7 +27,7 @@ public class JavaPreferencesPropertyTester extends PropertyTester {
 	}
 	
 	public static boolean isEnabled(String preferenceName) {
-		return JavaCore.ENABLED.equals(PreferenceConstants.getPreferenceStore()
+		return JavaCore.ENABLED.equals(MyPreferenceConstants.getPreferenceStore()
 				.getString(preferenceName));
 	}
 

@@ -19,6 +19,7 @@ import org.eclipse.jdt.internal.ui.javaeditor.codemining.debug.InlinedDebugCodeM
 import org.eclipse.jdt.internal.ui.javaeditor.codemining.debug.SimpleNameDebugCodeMining;
 import org.eclipse.jdt.internal.ui.preferences.JavaPreferencesPropertyTester;
 import org.eclipse.jdt.internal.ui.preferences.MyPreferenceConstants;
+import org.eclipse.jdt.ui.PreferenceConstants;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.codemining.ICodeMining;
 import org.eclipse.jface.text.codemining.ICodeMiningProvider;
@@ -42,6 +43,8 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 
 	private IJavaStackFrame frame;
 
+	private int endStatementMinLineNumber;
+
 	public JavaCodeMiningASTVisitor(CompilationUnit cu, ITextEditor textEditor, ITextViewer viewer,
 			List<ICodeMining> minings, ICodeMiningProvider provider) {
 		this.cu = cu;
@@ -49,6 +52,7 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 		this.provider = provider;
 		this.showName = isShowName();
 		this.showType = isShowType();
+		this.endStatementMinLineNumber = getEndStatementMinLineNumber();
 		this.textEditor = textEditor;
 		this.viewer = viewer;
 	}
@@ -86,7 +90,7 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 		if (node.getNodeType() == ASTNode.IF_STATEMENT || node.getNodeType() == ASTNode.WHILE_STATEMENT
 				|| node.getNodeType() == ASTNode.FOR_STATEMENT || node.getNodeType() == ASTNode.DO_STATEMENT) {
 			if (isShowEndStatement()) {
-				minings.add(new EndStatementCodeMining(node, textEditor, provider));
+				minings.add(new EndStatementCodeMining(node, textEditor, viewer, endStatementMinLineNumber, provider));
 			}
 		}
 	}
@@ -133,6 +137,11 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 
 	private boolean isShowEndStatement() {
 		return JavaPreferencesPropertyTester.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT);
+	}
+
+	private int getEndStatementMinLineNumber() {
+		return MyPreferenceConstants.getPreferenceStore()
+				.getInt(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT_MIN_LINE_NUMBER);
 	}
 
 	private boolean isShowVariableValueWhileDebugging() {

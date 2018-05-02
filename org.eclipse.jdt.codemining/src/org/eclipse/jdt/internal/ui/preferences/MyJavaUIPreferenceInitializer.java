@@ -6,9 +6,12 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 public class MyJavaUIPreferenceInitializer extends AbstractPreferenceInitializer {
 
+	public MyJavaUIPreferenceInitializer() {
+		
+	}
 	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = PreferenceConstants.getPreferenceStore();
+		IPreferenceStore store = MyPreferenceConstants.getPreferenceStore();
 		MyPreferenceConstants.initializeDefaultValues(store);
 	}
 

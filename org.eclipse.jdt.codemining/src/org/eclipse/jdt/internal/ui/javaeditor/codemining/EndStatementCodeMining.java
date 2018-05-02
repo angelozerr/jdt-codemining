@@ -11,6 +11,10 @@
 package org.eclipse.jdt.internal.ui.javaeditor.codemining;
 
 import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.codemining.ICodeMiningProvider;
 import org.eclipse.jface.text.codemining.LineContentCodeMining;
@@ -22,16 +26,29 @@ import org.eclipse.ui.texteditor.ITextEditor;
  */
 public class EndStatementCodeMining extends LineContentCodeMining {
 
-	protected EndStatementCodeMining(Statement node, ITextEditor textEditor, ICodeMiningProvider provider) {
+	protected EndStatementCodeMining(Statement node, ITextEditor textEditor, ITextViewer viewer, int minLineNumber,
+			ICodeMiningProvider provider) {
 		super(new Position(node.getStartPosition() + node.getLength(), 1), provider, e -> {
 			textEditor.selectAndReveal(node.getStartPosition(), 0);
 		});
-		String s = node.toString();
-		int index = s.indexOf("\n");
-		if (index != -1) {
-			// Get first line of statement
-			s = s.substring(0, index);
+		String label = getLabel(node, viewer.getDocument(), minLineNumber);
+		super.setLabel(label);
+	}
+
+	private static String getLabel(Statement node, IDocument document, int minLineNumber) {
+		try {
+			int offset = node.getStartPosition();
+			if (minLineNumber > 0) {
+				int startLine = document.getLineOfOffset(offset);
+				int endLine = document.getLineOfOffset(offset + node.getLength());
+				if (endLine - startLine <= minLineNumber) {
+					return "";
+				}
+			}
+			IRegion first = document.getLineInformationOfOffset(offset);
+			return "  // --> " + document.get(first.getOffset(), first.getLength());
+		} catch (BadLocationException e1) {
+			return "";
 		}
-		super.setLabel("  // --> " + s);
 	}
 }

@@ -1,6 +1,8 @@
 package org.eclipse.jdt.internal.ui.preferences;
 
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.internal.JavaCodeMiningPlugin;
+import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class MyPreferenceConstants {
@@ -80,6 +82,17 @@ public class MyPreferenceConstants {
 	public static final String EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT = "java.codemining.endStatement"; //$NON-NLS-1$
 
 	/**
+	 * A named preference that stores the value for "Show end statement min line
+	 * number".
+	 * <p>
+	 * Value is of type <code>int</code>.
+	 * </p>
+	 *
+	 * @since 3.14
+	 */
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT_MIN_LINE_NUMBER = "java.codemining.endStatement.minLineNumber"; //$NON-NLS-1$
+
+	/**
 	 * A named preference that stores the value for "Show JUnit status".
 	 * <p>
 	 * Value is of type <code>Boolean</code>.
@@ -135,10 +148,20 @@ public class MyPreferenceConstants {
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_NAMES, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_TYPES, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT, JavaCore.DISABLED);
+		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT_MIN_LINE_NUMBER, 20);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_STATUS, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_RUN, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_DEBUG, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING,
 				JavaCore.DISABLED);
+	}
+	
+	/**
+	 * Returns the JDT-UI preference store.
+	 *
+	 * @return the JDT-UI preference store
+	 */
+	public static IPreferenceStore getPreferenceStore() {
+		return JavaCodeMiningPlugin.getDefault().getPreferenceStore();
 	}
 }

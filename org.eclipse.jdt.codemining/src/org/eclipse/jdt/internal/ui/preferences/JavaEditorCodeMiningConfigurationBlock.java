@@ -2,6 +2,7 @@ package org.eclipse.jdt.internal.ui.preferences;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.internal.JavaCodeMiningPlugin;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.preferences.FilteredPreferenceTree.PreferenceTreeNode;
 import org.eclipse.jdt.internal.ui.wizards.IStatusChangeListener;
@@ -19,38 +20,45 @@ import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 
 public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfigurationBlock {
 
+	protected final static Key getJDTCodeMiningKey(String key) {
+		return getKey(JavaCodeMiningPlugin.PLUGIN_ID, key);
+	}
+
 	// Preference store keys, see JavaCore.getOptions
-	private static final Key PREF_SHOW_REFERENCES = getJDTUIKey(
+	private static final Key PREF_SHOW_REFERENCES = getJDTCodeMiningKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REFERENCES);
 
-	private static final Key PREF_SHOW_REFERENCES_AT_LEAST_ONE = getJDTUIKey(
+	private static final Key PREF_SHOW_REFERENCES_AT_LEAST_ONE = getJDTCodeMiningKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REFERENCES_AT_LEAST_ONE);
 
-	private static final Key PREF_SHOW_IMPLEMENTATIONS = getJDTUIKey(
+	private static final Key PREF_SHOW_IMPLEMENTATIONS = getJDTCodeMiningKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS);
 
-	private static final Key PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE = getJDTUIKey(
+	private static final Key PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE = getJDTCodeMiningKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE);
 
-	public static final Key PREF_SHOW_METHOD_PARAMETER_NAMES = getJDTUIKey(
+	public static final Key PREF_SHOW_METHOD_PARAMETER_NAMES = getJDTCodeMiningKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_NAMES); // $NON-NLS-1$
 
-	public static final Key PREF_SHOW_METHOD_PARAMETER_TYPES = getJDTUIKey(
+	public static final Key PREF_SHOW_METHOD_PARAMETER_TYPES = getJDTCodeMiningKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_TYPES); // $NON-NLS-1$
 
-	public static final Key PREF_SHOW_END_STATEMENT = getJDTUIKey(
+	public static final Key PREF_SHOW_END_STATEMENT = getJDTCodeMiningKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT); // $NON-NLS-1$
 
-	public static final Key PREF_SHOW_JUNIT_STATUS = getJDTUIKey(
+	public static final Key PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER = getJDTCodeMiningKey(
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT_MIN_LINE_NUMBER); // $NON-NLS-1$
+
+	public static final Key PREF_SHOW_JUNIT_STATUS = getJDTCodeMiningKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_STATUS); // $NON-NLS-1$
 
-	public static final Key PREF_SHOW_JUNIT_RUN = getJDTUIKey(
+	public static final Key PREF_SHOW_JUNIT_RUN = getJDTCodeMiningKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_RUN); // $NON-NLS-1$
 
-	public static final Key PREF_SHOW_JUNIT_DEBUG = getJDTUIKey(
+	public static final Key PREF_SHOW_JUNIT_DEBUG = getJDTCodeMiningKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_DEBUG); // $NON-NLS-1$
 
-	public static final Key PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING = getJDTUIKey(
+	public static final Key PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING = getJDTCodeMiningKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING); // $NON-NLS-1$
 
 	private static final String SETTINGS_SECTION_NAME = "JavaEditorCodeMiningConfigurationBlock"; // $NON-NLS-1
@@ -72,8 +80,9 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 	public static Key[] getKeys() {
 		return new Key[] { PREF_SHOW_REFERENCES, PREF_SHOW_REFERENCES_AT_LEAST_ONE, PREF_SHOW_IMPLEMENTATIONS,
 				PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE, PREF_SHOW_METHOD_PARAMETER_NAMES,
-				PREF_SHOW_METHOD_PARAMETER_TYPES, PREF_SHOW_END_STATEMENT, PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING,
-				PREF_SHOW_JUNIT_STATUS, PREF_SHOW_JUNIT_RUN, PREF_SHOW_JUNIT_DEBUG };
+				PREF_SHOW_METHOD_PARAMETER_TYPES, PREF_SHOW_END_STATEMENT, PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER,
+				PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING, PREF_SHOW_JUNIT_STATUS, PREF_SHOW_JUNIT_RUN,
+				PREF_SHOW_JUNIT_DEBUG };
 	}
 
 	/*
@@ -173,6 +182,10 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 		fFilteredPrefTree.addCheckBox(inner,
 				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showEndStatement_label,
 				PREF_SHOW_END_STATEMENT, enabledDisabled, defaultIndent, section);
+		// - Show end statement min line number
+		fFilteredPrefTree.addTextField(inner,
+				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showEndStatement_minLineNumber_label,
+				PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER, extraIndent, 0, section);
 	}
 
 	private void createJUnitSection(int nColumns, Composite parent) {
@@ -232,7 +245,6 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 
 	@Override
 	protected String[] getFullBuildDialogStrings(boolean workspaceSettings) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

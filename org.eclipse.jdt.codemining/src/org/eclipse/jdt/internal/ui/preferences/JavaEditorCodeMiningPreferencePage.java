@@ -28,7 +28,7 @@ public class JavaEditorCodeMiningPreferencePage extends PropertyAndPreferencePag
 	private JavaEditorCodeMiningConfigurationBlock fConfigurationBlock;
 
 	public JavaEditorCodeMiningPreferencePage() {
-		setPreferenceStore(PreferenceConstants.getPreferenceStore());
+		setPreferenceStore(MyPreferenceConstants.getPreferenceStore());
 	}
 
 	/*
