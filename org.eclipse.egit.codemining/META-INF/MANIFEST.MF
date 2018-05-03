@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Localization: plugin
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
-Bundle-SymbolicName: org.eclipse.jdt.codemining;singleton:=true
+Bundle-SymbolicName: org.eclipse.egit.codemining;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.jdt.junit;bundle-version="3.11.0",
@@ -26,4 +26,4 @@ Require-Bundle: org.eclipse.jdt.junit;bundle-version="3.11.0",
  org.eclipse.equinox.preferences,
  org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.eclipse.jdt.internal.JavaCodeMiningPlugin
+Bundle-Activator: org.eclipse.egit.internal.EGitCodeMiningPlugin
