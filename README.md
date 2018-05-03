@@ -2,7 +2,7 @@
 
 [![Build Status](https://secure.travis-ci.org/angelozerr/jdt-codemining.png)](http://travis-ci.org/angelozerr/jdt-codemining)
 
-Eclipse plugin for `JDT Java CodeMining` (Experimental)
+Eclipse plugin for `JDT Java Code Mining` anf `Git Code Mining` (Experimental)
 
 ![JUnit CodeMining Demo](images/JUnitCodeMiningDemo.gif)
 
@@ -22,19 +22,30 @@ Issues can be about:
 
 # Features
 
+## Java
+
 jdt-codemining provides several JDT Java CodeMining:
 
- * `Show references`
- * `Show implementations`
- * `Show method parameter names`
- * `Show method parameter types`
- * `Show JUnit status`
- * `Show JUnit run`
- * `Show JUnit debug`
- 
+ * `General`
+   * `Show references`
+   * `Show implementations`
+   * `Show method parameter names`
+   * `Show method parameter types`
+   * `Show end statement`
+ * `JUnit`   
+   * `Show JUnit status`
+   * `Show JUnit run`
+   * `Show JUnit debug`
+* `Debugging`
+   * `Show variable values inline while debugging`
+
 By default minings are disabled, you must activate them with preferences:
 
 ![](images/JavaCodeMiningPreferences.png)
+
+## EGit
+
+TODO
 
 # Install
 
