@@ -19,7 +19,6 @@ import org.eclipse.jdt.internal.ui.javaeditor.codemining.debug.InlinedDebugCodeM
 import org.eclipse.jdt.internal.ui.javaeditor.codemining.debug.SimpleNameDebugCodeMining;
 import org.eclipse.jdt.internal.ui.preferences.JavaPreferencesPropertyTester;
 import org.eclipse.jdt.internal.ui.preferences.MyPreferenceConstants;
-import org.eclipse.jdt.ui.PreferenceConstants;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.codemining.ICodeMining;
 import org.eclipse.jface.text.codemining.ICodeMiningProvider;
@@ -88,7 +87,8 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 	public void endVisit(Statement node) {
 		super.endVisit(node);
 		if (node.getNodeType() == ASTNode.IF_STATEMENT || node.getNodeType() == ASTNode.WHILE_STATEMENT
-				|| node.getNodeType() == ASTNode.FOR_STATEMENT || node.getNodeType() == ASTNode.DO_STATEMENT) {
+				|| node.getNodeType() == ASTNode.FOR_STATEMENT || node.getNodeType() == ASTNode.DO_STATEMENT
+				|| node.getNodeType() == ASTNode.SWITCH_STATEMENT) {
 			if (isShowEndStatement()) {
 				minings.add(new EndStatementCodeMining(node, textEditor, viewer, endStatementMinLineNumber, provider));
 			}

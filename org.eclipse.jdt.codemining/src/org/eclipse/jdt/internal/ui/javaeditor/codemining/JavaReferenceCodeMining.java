@@ -59,7 +59,7 @@ public class JavaReferenceCodeMining extends AbstractJavaCodeMining {
 				long refCount = countReferences(getElement(), monitor);
 				monitor.isCanceled();
 				if (refCount == 0 && referencesCodeMiningsAtLeastOne) {
-					super.setLabel("");					
+					super.setLabel("");
 				} else {
 					super.setLabel(refCount + " " + (refCount > 1 ? "references" : "reference")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				}
