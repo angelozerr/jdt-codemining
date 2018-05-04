@@ -72,7 +72,7 @@ public class JUnitCodeMiningProvider extends AbstractCodeMiningProvider {
 
 		public ITestCaseElement findTestCase(IMethod method) {
 			IJavaProject project = method.getJavaProject();
-			String className = method.getDeclaringType().getElementName();
+			String className = method.getDeclaringType().getFullyQualifiedName();
 			String methodName = method.getElementName();
 			String key = className + "#" + methodName;
 			Map<String, ITestCaseElement> tests = projects.get(project);
