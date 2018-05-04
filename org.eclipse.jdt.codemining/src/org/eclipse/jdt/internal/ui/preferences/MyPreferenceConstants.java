@@ -148,7 +148,7 @@ public class MyPreferenceConstants {
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_NAMES, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_TYPES, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT, JavaCore.DISABLED);
-		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT_MIN_LINE_NUMBER, 20);
+		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT_MIN_LINE_NUMBER, 4);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_STATUS, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_RUN, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_DEBUG, JavaCore.DISABLED);
