@@ -77,13 +77,6 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider {
 				return null;
 			}
 			try {
-//				try {
-//					synchronized (this) {
-//						wait(2000);
-//					}
-//				} catch (InterruptedException e) {
-//					Thread.currentThread().interrupt();
-//				}
 				IJavaElement[] elements = unit.getChildren();
 				List<ICodeMining> minings = new ArrayList<>(elements.length);
 				collectLineHeaderCodeMinings(unit, textEditor, unit.getChildren(), minings, viewer, monitor);
@@ -127,11 +120,6 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider {
 					// TODO: what should we done when there are some errors?
 				}
 			}
-			if (element.getElementType() == IJavaElement.METHOD) {
-				IMethod method = (IMethod) element;
-				method.getParameterNames();
-			}
-
 			if (isImplementationsCodeMiningsEnabled()) {
 				if (element instanceof IType) {
 					IType type = (IType) element;

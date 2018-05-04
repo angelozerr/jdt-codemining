@@ -29,6 +29,15 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 public class JUnitCodeMiningProvider extends AbstractCodeMiningProvider {
 
+	private final String JUNIT_TEST_ANNOTATION = "Test";
+
+	private final String JUNIT4_TEST_ANNOTATION = "org.junit.Test";
+
+	private final String JUNIT5_TEST_ANNOTATION = "org.junit.jupiter.api.Test";
+
+	private final String[] JUNIT_TEST_ANNOTATIONS = new String[] { JUNIT_TEST_ANNOTATION, JUNIT4_TEST_ANNOTATION,
+			JUNIT5_TEST_ANNOTATION };
+
 	class CodeMiningTestRunListener extends TestRunListener {
 
 		private Map<IJavaProject, Map<String, ITestCaseElement>> projects;
@@ -129,7 +138,7 @@ public class JUnitCodeMiningProvider extends AbstractCodeMiningProvider {
 					collectCodeMinings(unit, ((IType) element).getChildren(), minings, viewer, monitor);
 				} else if (element.getElementType() == IJavaElement.METHOD) {
 					IMethod method = (IMethod) element;
-					if (isTestMethod(method, "org.junit.Test") || isTestMethod(method, "Test")) {
+					if (isTestMethod(method, JUNIT_TEST_ANNOTATIONS)) {
 						if (isStatusCodeMiningsEnabled())
 							minings.add(new JUnitStatusCodeMining(method, junitListener, viewer.getDocument(), this));
 						if (isRunCodeMiningsEnabled())
@@ -145,14 +154,20 @@ public class JUnitCodeMiningProvider extends AbstractCodeMiningProvider {
 		}
 	}
 
-	public static boolean isTestMethod(IMethod method, String annotation) {
+	private static boolean isTestMethod(IMethod method, String[] annotations) {
 		int flags;
 		try {
 			flags = method.getFlags();
 			// 'V' is void signature
-			return !(method.isConstructor() || !Flags.isPublic(flags) || Flags.isAbstract(flags)
-					|| Flags.isStatic(flags) || !"V".equals(method.getReturnType()))
-					&& method.getAnnotation(annotation).exists();
+			if (!(method.isConstructor() || !Flags.isPublic(flags) || Flags.isAbstract(flags) || Flags.isStatic(flags)
+					|| !"V".equals(method.getReturnType()))) {
+				for (String annotation : annotations) {
+					if (method.getAnnotation(annotation).exists()) {
+						return true;
+					}
+				}
+			}
+			return false;
 		} catch (JavaModelException e) {
 			// ignore
 			return false;
