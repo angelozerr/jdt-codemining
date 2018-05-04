@@ -2,4 +2,23 @@
 <?eclipse version="3.0"?>
 <plugin>
    
+   <!-- Uncomment when Git mining will be ready
+     <extension
+         point="org.eclipse.ui.workbench.texteditor.codeMiningProviders">
+      <codeMiningProvider
+         class="org.eclipse.egit.internal.JavaGitCodeMiningProvider"
+         id="org.eclipse.egit.codemining.general"
+         label="%JavaGitCodeMiningProvider.label">
+	     <enabledWhen>
+	        <and>
+	            <with variable="editorInput">
+	               <adapt type="org.eclipse.core.resources.IFile">
+	                  <test property="org.eclipse.core.resources.contentTypeId" value="org.eclipse.jdt.core.javaSource" />
+	               </adapt>
+	           	</with>
+           	</and>
+         </enabledWhen>
+      </codeMiningProvider>
+   </extension>
+-->
 </plugin>
