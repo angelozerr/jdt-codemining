@@ -1,8 +1,7 @@
 package org.eclipse.jdt.internal.ui.preferences;
 
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.internal.JavaCodeMiningPlugin;
-import org.eclipse.jdt.internal.ui.JavaPlugin;
+import org.eclipse.jdt.ui.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class MyPreferenceConstants {
@@ -153,6 +152,8 @@ public class MyPreferenceConstants {
 	 */
 	public static final String EDITOR_JAVA_CODEMINING_SHOW_GIT_CHANGES = "java.codemining.git.changes"; //$NON-NLS-1$
 
+	private static boolean initialized;
+
 	/**
 	 * Initializes the given preference store with the default values.
 	 *
@@ -174,14 +175,23 @@ public class MyPreferenceConstants {
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_DEBUG, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING,
 				JavaCore.DISABLED);
+		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_GIT_AUTHOR,
+				JavaCore.DISABLED);
+		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_GIT_CHANGES,
+				JavaCore.DISABLED);
 	}
-	
+
 	/**
 	 * Returns the JDT-UI preference store.
 	 *
 	 * @return the JDT-UI preference store
 	 */
 	public static IPreferenceStore getPreferenceStore() {
-		return JavaCodeMiningPlugin.getDefault().getPreferenceStore();
+		IPreferenceStore store = PreferenceConstants.getPreferenceStore();
+		if (!initialized) {
+			MyPreferenceConstants.initializeDefaultValues(store);
+			initialized = true;
+		}
+		return store;
 	}
 }

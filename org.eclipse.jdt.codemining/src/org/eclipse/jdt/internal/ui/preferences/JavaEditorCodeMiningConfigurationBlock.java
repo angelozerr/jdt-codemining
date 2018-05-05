@@ -4,6 +4,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.JavaCodeMiningPlugin;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
+import org.eclipse.jdt.internal.ui.dialogs.StatusInfo;
 import org.eclipse.jdt.internal.ui.preferences.FilteredPreferenceTree.PreferenceTreeNode;
 import org.eclipse.jdt.internal.ui.wizards.IStatusChangeListener;
 import org.eclipse.jdt.internal.ui.wizards.dialogfields.LayoutUtil;
@@ -20,51 +21,47 @@ import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 
 public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfigurationBlock {
 
-	protected final static Key getJDTCodeMiningKey(String key) {
-		return getKey(JavaCodeMiningPlugin.PLUGIN_ID, key);
-	}
-
 	// Preference store keys, see JavaCore.getOptions
-	private static final Key PREF_SHOW_REFERENCES = getJDTCodeMiningKey(
+	private static final Key PREF_SHOW_REFERENCES = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REFERENCES);
 
-	private static final Key PREF_SHOW_REFERENCES_AT_LEAST_ONE = getJDTCodeMiningKey(
+	private static final Key PREF_SHOW_REFERENCES_AT_LEAST_ONE = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REFERENCES_AT_LEAST_ONE);
 
-	private static final Key PREF_SHOW_IMPLEMENTATIONS = getJDTCodeMiningKey(
+	private static final Key PREF_SHOW_IMPLEMENTATIONS = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS);
 
-	private static final Key PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE = getJDTCodeMiningKey(
+	private static final Key PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE);
 
-	public static final Key PREF_SHOW_METHOD_PARAMETER_NAMES = getJDTCodeMiningKey(
+	public static final Key PREF_SHOW_METHOD_PARAMETER_NAMES = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_NAMES); // $NON-NLS-1$
 
-	public static final Key PREF_SHOW_METHOD_PARAMETER_TYPES = getJDTCodeMiningKey(
+	public static final Key PREF_SHOW_METHOD_PARAMETER_TYPES = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_TYPES); // $NON-NLS-1$
 
-	public static final Key PREF_SHOW_END_STATEMENT = getJDTCodeMiningKey(
+	public static final Key PREF_SHOW_END_STATEMENT = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT); // $NON-NLS-1$
 
-	public static final Key PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER = getJDTCodeMiningKey(
+	public static final Key PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT_MIN_LINE_NUMBER); // $NON-NLS-1$
 
-	public static final Key PREF_SHOW_JUNIT_STATUS = getJDTCodeMiningKey(
+	public static final Key PREF_SHOW_JUNIT_STATUS = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_STATUS); // $NON-NLS-1$
 
-	public static final Key PREF_SHOW_JUNIT_RUN = getJDTCodeMiningKey(
+	public static final Key PREF_SHOW_JUNIT_RUN = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_RUN); // $NON-NLS-1$
 
-	public static final Key PREF_SHOW_JUNIT_DEBUG = getJDTCodeMiningKey(
+	public static final Key PREF_SHOW_JUNIT_DEBUG = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_DEBUG); // $NON-NLS-1$
 
-	public static final Key PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING = getJDTCodeMiningKey(
+	public static final Key PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING); // $NON-NLS-1$
 
-	public static final Key PREF_SHOW_GIT_AUTHOR = getJDTCodeMiningKey(
+	public static final Key PREF_SHOW_GIT_AUTHOR = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_GIT_AUTHOR); // $NON-NLS-1$
 
-	public static final Key PREF_SHOW_GIT_CHANGES = getJDTCodeMiningKey(
+	public static final Key PREF_SHOW_GIT_CHANGES = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_GIT_CHANGES); // $NON-NLS-1$
 
 	private static final String SETTINGS_SECTION_NAME = "JavaEditorCodeMiningConfigurationBlock"; // $NON-NLS-1
@@ -269,6 +266,7 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 		if (!areSettingsEnabled()) {
 			return;
 		}
+		fContext.statusChanged(new StatusInfo());
 	}
 
 	@Override
