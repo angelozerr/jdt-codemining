@@ -42,7 +42,6 @@ import org.eclipse.jgit.api.BlameCommand;
 import org.eclipse.jgit.blame.BlameResult;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -52,17 +51,17 @@ public class JavaGitCodeMiningProvider extends AbstractCodeMiningProvider {
 	private RevisionInformation fRevisionInfo;
 
 	private List<RevisionRange> fRevisionRanges;
-	
-	private ILineDiffer fLineDiffer= null;
-	
+
+	private ILineDiffer fLineDiffer = null;
+
 	private ITextViewer fViewer;
-	
+
 	private static Set<String> SILENCED_CODEGENS = Collections.singleton("lombok"); //$NON-NLS-1$
 
 	private boolean isReferencesCodeMiningsEnabled() {
 		return true;
 	}
-	
+
 	@Override
 	public CompletableFuture<List<? extends ICodeMining>> provideCodeMinings(ITextViewer viewer,
 			IProgressMonitor monitor) {
@@ -91,57 +90,45 @@ public class JavaGitCodeMiningProvider extends AbstractCodeMiningProvider {
 			} catch (CoreException e2) {
 				return new ArrayList<>();
 			}
-			
-			
-			final BlameCommand command = new BlameCommand(mapping.getRepository())
-					.setFollowFileRenames(true).setFilePath(repoRelativePath);
-			BlameResult result;
+
 			try {
-				result = command.call();				
-				try {
-					IJavaElement[] elements = unit.getChildren();
-					List<ICodeMining> minings = new ArrayList<>(elements.length);
-					collectLineHeaderCodeMinings(unit, result, textEditor, unit.getChildren(), minings, viewer, monitor);
-					monitor.isCanceled();
-					return minings;
-				} catch (JavaModelException e) {
-					// TODO: what should we done when there are some errors?
-				}
-				
-				
-				PersonIdent person = result.getSourceAuthor(0);
-				
-				System.err.println(person.getName());				
-			} catch (Exception e1) {
-				e1.printStackTrace();
-				return null;
+				IJavaElement[] elements = unit.getChildren();
+				List<ICodeMining> minings = new ArrayList<>(elements.length);
+				collectLineHeaderCodeMinings(unit, textEditor, unit.getChildren(), minings, viewer, monitor);
+				monitor.isCanceled();
+				return minings;
+			} catch (JavaModelException e) {
+				// TODO: what should we done when there are some errors?
 			}
 			return new ArrayList<>();
 		});
 	}
 
-	private void collectLineHeaderCodeMinings(ITypeRoot unit, BlameResult result, ITextEditor textEditor,
-			IJavaElement[] elements, List<ICodeMining> minings, ITextViewer viewer, IProgressMonitor monitor) throws JavaModelException {
+	private void collectLineHeaderCodeMinings(ITypeRoot unit,ITextEditor textEditor,
+			IJavaElement[] elements, List<ICodeMining> minings, ITextViewer viewer, IProgressMonitor monitor)
+			throws JavaModelException {
 		for (IJavaElement element : elements) {
 			if (monitor.isCanceled()) {
 				return;
 			}
 			if (element.getElementType() == IJavaElement.TYPE) {
-				collectLineHeaderCodeMinings(unit, result, textEditor, ((IType) element).getChildren(), minings, viewer,
+				collectLineHeaderCodeMinings(unit, textEditor, ((IType) element).getChildren(), minings, viewer,
 						monitor);
 			} else if (element.getElementType() != IJavaElement.METHOD || isHiddenGeneratedElement(element)) {
 				continue;
 			}
 			if (isReferencesCodeMiningsEnabled()) {
 				try {
-					minings.add(new GitAuthorMining(element, result, (JavaEditor) textEditor, viewer.getDocument(),
-							this));
+					minings.add(
+							new GitAuthorMining(element, (JavaEditor) textEditor, viewer.getDocument(), this));
+					minings.add(
+							new GitChangesMining(element, (JavaEditor) textEditor, viewer.getDocument(), this));					
 				} catch (BadLocationException e) {
 					// TODO: what should we done when there are some errors?
 				}
 			}
 		}
-		
+
 	}
 
 	/**
@@ -208,35 +195,37 @@ public class JavaGitCodeMiningProvider extends AbstractCodeMiningProvider {
 	public void setModel(IAnnotationModel model) {
 		IAnnotationModel diffModel;
 		if (model instanceof IAnnotationModelExtension)
-			diffModel= ((IAnnotationModelExtension) model).getAnnotationModel(IChangeRulerColumn.QUICK_DIFF_MODEL_ID);
+			diffModel = ((IAnnotationModelExtension) model).getAnnotationModel(IChangeRulerColumn.QUICK_DIFF_MODEL_ID);
 		else
-			diffModel= model;
+			diffModel = model;
 
 		setDiffer(diffModel);
-		//setAnnotationModel(model);
+		// setAnnotationModel(model);
 	}
-	
+
 	private void setDiffer(IAnnotationModel differ) {
 		if (differ instanceof ILineDiffer || differ == null) {
 			if (fLineDiffer != differ) {
-				//if (fLineDiffer != null)
-				//	((IAnnotationModel) fLineDiffer).removeAnnotationModelListener(fAnnotationListener);
-				fLineDiffer= (ILineDiffer) differ;
-				//if (fLineDiffer != null)
-				//	((IAnnotationModel) fLineDiffer).addAnnotationModelListener(fAnnotationListener);
+				// if (fLineDiffer != null)
+				// ((IAnnotationModel)
+				// fLineDiffer).removeAnnotationModelListener(fAnnotationListener);
+				fLineDiffer = (ILineDiffer) differ;
+				// if (fLineDiffer != null)
+				// ((IAnnotationModel)
+				// fLineDiffer).addAnnotationModelListener(fAnnotationListener);
 			}
 		}
 	}
-	
+
 	/**
-	 * Returns the revision range that contains the given line, or
-	 * <code>null</code> if there is none.
+	 * Returns the revision range that contains the given line, or <code>null</code>
+	 * if there is none.
 	 *
 	 * @param line the line of interest
 	 * @return the corresponding <code>RevisionRange</code> or <code>null</code>
 	 */
 	public RevisionRange getRange(int line) {
-		List<RevisionRange> ranges= getRangeCache();
+		List<RevisionRange> ranges = getRangeCache();
 
 		if (ranges.isEmpty() || line == -1)
 			return null;
@@ -247,18 +236,18 @@ public class JavaGitCodeMiningProvider extends AbstractCodeMiningProvider {
 		}
 
 		// line may be right after the last region
-		RevisionRange lastRegion= ranges.get(ranges.size() - 1);
+		RevisionRange lastRegion = ranges.get(ranges.size() - 1);
 		if (line == end(lastRegion))
 			return lastRegion;
 		return null;
 	}
 
 	/**
-	 * Returns <code>true</code> if <code>range</code> contains <code>line</code>. A line is
-	 * not contained in a range if it is the range's exclusive end line.
+	 * Returns <code>true</code> if <code>range</code> contains <code>line</code>. A
+	 * line is not contained in a range if it is the range's exclusive end line.
 	 *
 	 * @param range the range to check whether it contains <code>line</code>
-	 * @param line the line the line
+	 * @param line  the line the line
 	 * @return <code>true</code> if <code>range</code> contains <code>line</code>,
 	 *         <code>false</code> if not
 	 */
@@ -277,57 +266,57 @@ public class JavaGitCodeMiningProvider extends AbstractCodeMiningProvider {
 	}
 
 	/**
-	 * Gets all change ranges of the revisions in the revision model and adapts them to the current
-	 * quick diff information. The list is cached.
+	 * Gets all change ranges of the revisions in the revision model and adapts them
+	 * to the current quick diff information. The list is cached.
 	 *
 	 * @return the list of all change regions, with diff information applied
 	 */
 	private synchronized List<RevisionRange> getRangeCache() {
 		if (fRevisionRanges == null) {
 			if (fRevisionInfo == null) {
-				fRevisionRanges= Collections.emptyList();
+				fRevisionRanges = Collections.emptyList();
 			} else {
-				Hunk[] hunks= HunkComputer.computeHunks(fLineDiffer, fViewer.getDocument().getNumberOfLines());
+				Hunk[] hunks = HunkComputer.computeHunks(fLineDiffer, fViewer.getDocument().getNumberOfLines());
 				fRevisionInfo.applyDiff(hunks);
-				fRevisionRanges= fRevisionInfo.getRanges();
-				//updateOverviewAnnotations();
-				//informListeners();
+				fRevisionRanges = fRevisionInfo.getRanges();
+				// updateOverviewAnnotations();
+				// informListeners();
 			}
 		}
 
 		return fRevisionRanges;
 	}
 
-
-	private RevisionInformation execute(Repository repository, String path, RevCommit startCommit, IProgressMonitor monitor) throws CoreException {
-		//SubMonitor progress = SubMonitor.convert(monitor, 3);
+	private RevisionInformation execute(Repository repository, String path, RevCommit startCommit,
+			IProgressMonitor monitor) throws CoreException {
+		// SubMonitor progress = SubMonitor.convert(monitor, 3);
 		final RevisionInformation info = new RevisionInformation();
 
-		final BlameCommand command = new BlameCommand(repository)
-				.setFollowFileRenames(true).setFilePath(path);
+		final BlameCommand command = new BlameCommand(repository).setFollowFileRenames(true).setFilePath(path);
 		if (startCommit != null)
 			command.setStartCommit(startCommit);
 		else {
 			try {
 				command.setStartCommit(repository.resolve(Constants.HEAD));
 			} catch (IOException e) {
-				//Activator
-				//		.error("Error resolving HEAD for showing annotations in repository: " + repository, e); //$NON-NLS-1$
+				// Activator
+				// .error("Error resolving HEAD for showing annotations in repository: " +
+				// repository, e); //$NON-NLS-1$
 				return null;
 			}
 		}
-		//if (Activator.getDefault().getPreferenceStore()
-		//		.getBoolean(UIPreferences.BLAME_IGNORE_WHITESPACE))
-			command.setTextComparator(RawTextComparator.WS_IGNORE_ALL);
+		// if (Activator.getDefault().getPreferenceStore()
+		// .getBoolean(UIPreferences.BLAME_IGNORE_WHITESPACE))
+		command.setTextComparator(RawTextComparator.WS_IGNORE_ALL);
 
 		BlameResult result;
 		try {
 			result = command.call();
 		} catch (Exception e1) {
-			//Activator.error(e1.getMessage(), e1);
+			// Activator.error(e1.getMessage(), e1);
 			return null;
 		}
-		//progress.worked(1);
+		// progress.worked(1);
 		if (result == null)
 			return null;
 
@@ -373,11 +362,11 @@ public class JavaGitCodeMiningProvider extends AbstractCodeMiningProvider {
 //			return;
 //		}
 
-		/*if (fileRevision != null) {
-			storage = fileRevision.getStorage(progress.newChild(1));
-		} else {
-			//progress.worked(1);
-		}*/
+		/*
+		 * if (fileRevision != null) { storage =
+		 * fileRevision.getStorage(progress.newChild(1)); } else { //progress.worked(1);
+		 * }
+		 */
 //		shell.getDisplay().asyncExec(new Runnable() {
 //			@Override
 //			public void run() {

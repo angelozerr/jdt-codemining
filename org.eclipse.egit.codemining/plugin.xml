@@ -2,7 +2,6 @@
 <?eclipse version="3.0"?>
 <plugin>
    
-   <!-- Uncomment when Git mining will be ready
      <extension
          point="org.eclipse.ui.workbench.texteditor.codeMiningProviders">
       <codeMiningProvider
@@ -16,9 +15,14 @@
 	                  <test property="org.eclipse.core.resources.contentTypeId" value="org.eclipse.jdt.core.javaSource" />
 	               </adapt>
 	           	</with>
+	           	<or>
+	           	   <!-- TODO: change to property="org.eclipse.jdt.ui.hasPreference" -->
+	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.git.author" forcePluginActivation="true"/>
+	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.git.changes" forcePluginActivation="true"/>
+	           	</or>	           	
            	</and>
          </enabledWhen>
       </codeMiningProvider>
    </extension>
--->
+
 </plugin>
