@@ -1,46 +1,52 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.angelozerr</groupId>
-  <artifactId>jdt-codemining-parent</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.angelozerr</groupId>
+	<artifactId>jdt-codemining-parent</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-maven-plugin</artifactId>
-        <version>1.1.0</version>
-        <extensions>true</extensions>
-      </plugin>
-    </plugins>
-  </build>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>1.1.0</version>
+				<extensions>true</extensions>
+			</plugin>
+		</plugins>
+	</build>
 
-  <modules>
-    <module>org.eclipse.jdt.codemining</module>
-    <module>org.eclipse.egit.codemining</module>
-    <module>plugin_to_delete_when_m7</module>
-    <module>update-site</module>
-  </modules>
+	<modules>
+		<module>org.eclipse.jdt.codemining</module>
+		<module>org.eclipse.egit.codemining</module>
+		<module>plugin_to_delete_when_m7</module>
+		<module>update-site</module>
+	</modules>
 
-  <repositories>
-    <repository>
-      <id>photon</id>
-      <layout>p2</layout>
-      <url>http://download.eclipse.org/eclipse/updates/4.8-I-builds</url>
-    </repository>
-    <repository>
-      <id>license-feature</id>
-      <url>http://download.eclipse.org/cbi/updates/license/</url>
-      <layout>p2</layout>
-    </repository>
-  </repositories>
+	<repositories>
+		<repository>
+			<id>photon</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/eclipse/updates/4.8-I-builds</url>
+		</repository>
+		<repository>
+			<id>egit</id>
+			<layout>p2</layout>
+			<url> http://download.eclipse.org/egit/updates</url>
+		</repository>
+		<repository>
+			<id>license-feature</id>
+			<url>http://download.eclipse.org/cbi/updates/license/</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
 
-  <scm>
-    <url>https://github.com/angelozerr/jdt-codemining</url>
-    <connection>scm:git:https://github.com/angelozerr/jdt-codemining.git</connection>
-    <developerConnection>scm:git:https://github.com/angelozerr/jdt-codemining.git</developerConnection>
-  </scm>
+	<scm>
+		<url>https://github.com/angelozerr/jdt-codemining</url>
+		<connection>scm:git:https://github.com/angelozerr/jdt-codemining.git</connection>
+		<developerConnection>scm:git:https://github.com/angelozerr/jdt-codemining.git</developerConnection>
+	</scm>
 
 </project>
