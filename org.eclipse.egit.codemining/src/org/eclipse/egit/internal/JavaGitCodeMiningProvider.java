@@ -14,10 +14,13 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.egit.core.project.RepositoryMapping;
 import org.eclipse.egit.ui.internal.blame.BlameRevision;
+import org.eclipse.egit.ui.internal.blame.ExtendedBlameRevision;
 import org.eclipse.jdt.core.IAnnotatable;
 import org.eclipse.jdt.core.IAnnotation;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMemberValuePair;
+import org.eclipse.jdt.core.ISourceRange;
+import org.eclipse.jdt.core.ISourceReference;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
@@ -26,11 +29,15 @@ import org.eclipse.jdt.internal.ui.javaeditor.JavaEditor;
 import org.eclipse.jface.internal.text.revisions.Hunk;
 import org.eclipse.jface.internal.text.revisions.HunkComputer;
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.codemining.AbstractCodeMiningProvider;
 import org.eclipse.jface.text.codemining.ICodeMining;
 import org.eclipse.jface.text.revisions.RevisionInformation;
 import org.eclipse.jface.text.revisions.RevisionRange;
+import org.eclipse.jface.text.revisions.codemining.IRevisionRangeProvider;
+import org.eclipse.jface.text.revisions.codemining.RevisionAuthorsCodeMining;
+import org.eclipse.jface.text.revisions.codemining.RevisionRecentChangeCodeMining;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.IAnnotationModelExtension;
 import org.eclipse.jface.text.source.IChangeRulerColumn;
@@ -46,7 +53,7 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-public class JavaGitCodeMiningProvider extends AbstractCodeMiningProvider {
+public class JavaGitCodeMiningProvider extends AbstractCodeMiningProvider implements IRevisionRangeProvider {
 
 	private RevisionInformation fRevisionInfo;
 
@@ -120,9 +127,11 @@ public class JavaGitCodeMiningProvider extends AbstractCodeMiningProvider {
 			if (isReferencesCodeMiningsEnabled()) {
 				try {
 					minings.add(
-							new GitAuthorMining(element, (JavaEditor) textEditor, viewer.getDocument(), this));
-					minings.add(
-							new GitChangesMining(element, (JavaEditor) textEditor, viewer.getDocument(), this));					
+							new RevisionRecentChangeCodeMining(getLineNumber(element, viewer.getDocument()), viewer.getDocument(), this, this));
+					//minings.add(
+					//		new RevisionAuthorsCodeMining(getLineNumber(element, viewer.getDocument()), viewer.getDocument(), this, this));					
+					//minings.add(
+					//		new GitChangesMining(element, (JavaEditor) textEditor, viewer.getDocument(), this));					
 				} catch (BadLocationException e) {
 					// TODO: what should we done when there are some errors?
 				}
@@ -156,6 +165,12 @@ public class JavaGitCodeMiningProvider extends AbstractCodeMiningProvider {
 			}
 		}
 		return false;
+	}
+	
+	public static int getLineNumber(IJavaElement element, IDocument document) throws JavaModelException, BadLocationException {
+		ISourceRange r= ((ISourceReference) element).getNameRange();
+		int offset= r.getOffset();
+		return document.getLineOfOffset(offset);
 	}
 
 	/**
@@ -336,7 +351,7 @@ public class JavaGitCodeMiningProvider extends AbstractCodeMiningProvider {
 			}
 			BlameRevision revision = revisions.get(commit);
 			if (revision == null) {
-				revision = new BlameRevision();
+				revision = new ExtendedBlameRevision();
 				revision.setRepository(repository);
 				revision.setCommit(commit);
 				revision.setSourcePath(sourcePath);
