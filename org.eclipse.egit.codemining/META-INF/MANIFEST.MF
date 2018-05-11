@@ -27,6 +27,7 @@ Require-Bundle: org.eclipse.jdt.junit;bundle-version="3.11.0",
  org.eclipse.core.runtime,
  org.eclipse.egit.core,
  org.eclipse.jgit,
- org.eclipse.egit.ui
+ org.eclipse.egit.ui,
+ org.eclipse.jdt.codemining;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.eclipse.egit.internal.EGitCodeMiningPlugin
+Bundle-Activator: org.eclipse.egit.codemining.internal.EGitCodeMiningPlugin

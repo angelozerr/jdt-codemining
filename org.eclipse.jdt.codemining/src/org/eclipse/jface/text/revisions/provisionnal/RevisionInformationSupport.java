@@ -1,4 +1,4 @@
-package org.eclipse.jface.text.revisions;
+package org.eclipse.jface.text.revisions.provisionnal;
 
 import java.util.Collections;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.List;
 import org.eclipse.jface.internal.text.revisions.Hunk;
 import org.eclipse.jface.internal.text.revisions.HunkComputer;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.revisions.RevisionInformation;
+import org.eclipse.jface.text.revisions.RevisionRange;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.IAnnotationModelExtension;
 import org.eclipse.jface.text.source.IAnnotationModelListener;
@@ -61,7 +63,7 @@ public class RevisionInformationSupport {
 		else
 			diffModel = model;
 		if (diffModel == null) {
-			diffModel= new DocumentLineDiffer();
+			diffModel = new DocumentLineDiffer();
 		}
 		setDiffer(diffModel);
 		// setAnnotationModel(model);

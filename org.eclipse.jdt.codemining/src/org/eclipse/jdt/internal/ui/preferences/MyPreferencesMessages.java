@@ -22,8 +22,8 @@ public class MyPreferencesMessages extends NLS {
 	public static String JavaEditorCodeMiningConfigurationBlock_showJUnitDebug_label;
 	public static String JavaEditorCodeMiningConfigurationBlock_section_debugging;
 	public static String JavaEditorCodeMiningConfigurationBlock_showVariableValueWhileDebugging_label;
-	public static String JavaEditorCodeMiningConfigurationBlock_section_git;
-	public static String JavaEditorCodeMiningConfigurationBlock_showGitAuthor_label;
+	public static String JavaEditorCodeMiningConfigurationBlock_section_scsm;
+	public static String JavaEditorCodeMiningConfigurationBlock_showRevisionRecentChange;
 	public static String JavaEditorCodeMiningConfigurationBlock_showGitChanges_label;
 
 	static {

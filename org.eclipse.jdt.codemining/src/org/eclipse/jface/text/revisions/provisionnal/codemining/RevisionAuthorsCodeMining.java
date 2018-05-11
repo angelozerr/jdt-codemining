@@ -1,4 +1,4 @@
-package org.eclipse.jface.text.revisions.codemining;
+package org.eclipse.jface.text.revisions.provisionnal.codemining;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,6 +9,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.codemining.ICodeMiningProvider;
 import org.eclipse.jface.text.codemining.LineHeaderCodeMining;
 import org.eclipse.jface.text.revisions.RevisionRange;
+import org.eclipse.jface.text.revisions.provisionnal.IRevisionRangeProvider;
 
 public class RevisionAuthorsCodeMining extends LineHeaderCodeMining {
 

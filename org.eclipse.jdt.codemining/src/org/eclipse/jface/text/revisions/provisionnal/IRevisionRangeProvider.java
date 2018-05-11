@@ -1,9 +1,11 @@
-package org.eclipse.jface.text.revisions.codemining;
+package org.eclipse.jface.text.revisions.provisionnal;
 
 import org.eclipse.jface.text.revisions.RevisionRange;
 
 public interface IRevisionRangeProvider {
 
+	boolean isInitialized();
+	
 	/**
 	 * Returns the revision range that contains the given line, or <code>null</code>
 	 * if there is none.

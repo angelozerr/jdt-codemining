@@ -1,4 +1,4 @@
-package org.eclipse.egit.ui.internal.blame;
+package org.eclipse.egit.codemining.ui.internal.blame;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -6,8 +6,9 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.egit.core.project.RepositoryMapping;
-import org.eclipse.jface.text.revisions.IRevisionInformationProvider;
+import org.eclipse.egit.ui.internal.blame.BlameRevision;
 import org.eclipse.jface.text.revisions.RevisionInformation;
+import org.eclipse.jface.text.revisions.provisionnal.IRevisionInformationProvider;
 import org.eclipse.jgit.api.BlameCommand;
 import org.eclipse.jgit.blame.BlameResult;
 import org.eclipse.jgit.diff.RawTextComparator;

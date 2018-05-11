@@ -16,13 +16,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IAnnotatable;
 import org.eclipse.jdt.core.IAnnotation;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMemberValuePair;
-import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
@@ -34,6 +34,13 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.codemining.AbstractCodeMiningProvider;
 import org.eclipse.jface.text.codemining.ICodeMining;
+import org.eclipse.jface.text.revisions.RevisionInformation;
+import org.eclipse.jface.text.revisions.RevisionRange;
+import org.eclipse.jface.text.revisions.provisionnal.IRevisionRangeProvider;
+import org.eclipse.jface.text.revisions.provisionnal.RevisionInformationProviderManager;
+import org.eclipse.jface.text.revisions.provisionnal.RevisionInformationSupport;
+import org.eclipse.jface.text.revisions.provisionnal.codemining.RevisionRecentChangeCodeMining;
+import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
@@ -43,9 +50,15 @@ import org.eclipse.ui.texteditor.ITextEditor;
  * @since 3.14
  *
  */
-public class JavaCodeMiningProvider extends AbstractCodeMiningProvider {
+public class JavaCodeMiningProvider extends AbstractCodeMiningProvider implements IRevisionRangeProvider {
 
 	private static Set<String> SILENCED_CODEGENS = Collections.singleton("lombok"); //$NON-NLS-1$
+
+	private RevisionInformationSupport fRevisionInfoSupport;
+
+	private ITextViewer fViewer;
+
+	private ITypeRoot fUnit;
 
 	private boolean isReferencesCodeMiningsEnabled() {
 		return JavaPreferencesPropertyTester.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REFERENCES);
@@ -66,6 +79,11 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider {
 				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE);
 	}
 
+	private boolean isRevisionRecentChangeEnabled() {
+		return JavaPreferencesPropertyTester
+				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE);
+	}
+
 	@Override
 	public CompletableFuture<List<? extends ICodeMining>> provideCodeMinings(ITextViewer viewer,
 			IProgressMonitor monitor) {
@@ -74,18 +92,20 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider {
 			ITextEditor textEditor = super.getAdapter(ITextEditor.class);
 			ITypeRoot unit = EditorUtility.getEditorInputJavaElement(textEditor, true);
 			if (unit == null) {
-				return null;
+				return Collections.emptyList();
 			}
+			fViewer = viewer;
+			fUnit = unit;
 			try {
 				IJavaElement[] elements = unit.getChildren();
 				List<ICodeMining> minings = new ArrayList<>(elements.length);
-				collectLineHeaderCodeMinings(unit, textEditor, unit.getChildren(), minings, viewer, monitor);
+				collectMinings(unit, textEditor, unit.getChildren(), minings, viewer, monitor);
 				monitor.isCanceled();
 				return minings;
 			} catch (JavaModelException e) {
 				// TODO: what should we done when there are some errors?
 			}
-			return null;
+			return Collections.emptyList();
 		});
 	}
 
@@ -100,15 +120,14 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider {
 	 * @param monitor    the monitor
 	 * @throws JavaModelException
 	 */
-	private void collectLineHeaderCodeMinings(ITypeRoot unit, ITextEditor textEditor, IJavaElement[] elements,
+	private void collectMinings(ITypeRoot unit, ITextEditor textEditor, IJavaElement[] elements,
 			List<ICodeMining> minings, ITextViewer viewer, IProgressMonitor monitor) throws JavaModelException {
 		for (IJavaElement element : elements) {
 			if (monitor.isCanceled()) {
 				return;
 			}
 			if (element.getElementType() == IJavaElement.TYPE) {
-				collectLineHeaderCodeMinings(unit, textEditor, ((IType) element).getChildren(), minings, viewer,
-						monitor);
+				collectMinings(unit, textEditor, ((IType) element).getChildren(), minings, viewer, monitor);
 			} else if (element.getElementType() != IJavaElement.METHOD || isHiddenGeneratedElement(element)) {
 				continue;
 			}
@@ -131,6 +150,14 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider {
 							// TODO: what should we done when there are some errors?
 						}
 					}
+				}
+			}
+			if (isRevisionRecentChangeEnabled()) {
+				try {
+					minings.add(new RevisionRecentChangeCodeMining(Utils.getLineNumber(element, viewer.getDocument()),
+							viewer.getDocument(), this, this));
+				} catch (BadLocationException e) {
+					e.printStackTrace();
 				}
 			}
 		}
@@ -189,5 +216,41 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (fRevisionInfoSupport != null) {
+			fRevisionInfoSupport.uninstall();
+		}
+	}
+
+	@Override
+	public RevisionRange getRange(int line) {
+		if (fRevisionInfoSupport == null) {
+			initRevisionSupport(fViewer, fUnit);
+		}
+		return fRevisionInfoSupport != null ? fRevisionInfoSupport.getRange(line) : null;
+	}
+
+	private void initRevisionSupport(ITextViewer viewer, ITypeRoot unit) {
+		IResource resource = unit.getResource();
+		if (resource == null) {
+			return;
+		}
+		if (fRevisionInfoSupport == null) {
+			RevisionInformation info = RevisionInformationProviderManager.getInstance()
+					.getRevisionInformation(resource);
+			if (info != null) {
+				fRevisionInfoSupport = new RevisionInformationSupport();
+				fRevisionInfoSupport.install((ISourceViewer) viewer, info);
+			}
+		}
+	}
+
+	@Override
+	public boolean isInitialized() {
+		return fRevisionInfoSupport != null;
 	}
 }

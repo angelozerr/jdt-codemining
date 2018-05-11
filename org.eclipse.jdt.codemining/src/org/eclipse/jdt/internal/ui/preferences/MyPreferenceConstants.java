@@ -133,24 +133,14 @@ public class MyPreferenceConstants {
 	public static final String EDITOR_JAVA_CODEMINING_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING = "java.codemining.debug.variable"; //$NON-NLS-1$
 
 	/**
-	 * A named preference that stores the value for "Show author".
+	 * A named preference that stores the value for "Show revision recent change".
 	 * <p>
 	 * Value is of type <code>Boolean</code>.
 	 * </p>
 	 *
 	 * @since 3.14
 	 */
-	public static final String EDITOR_JAVA_CODEMINING_SHOW_GIT_AUTHOR = "java.codemining.git.author"; //$NON-NLS-1$
-
-	/**
-	 * A named preference that stores the value for "Show changes number".
-	 * <p>
-	 * Value is of type <code>Boolean</code>.
-	 * </p>
-	 *
-	 * @since 3.14
-	 */
-	public static final String EDITOR_JAVA_CODEMINING_SHOW_GIT_CHANGES = "java.codemining.git.changes"; //$NON-NLS-1$
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE = "java.codemining.sccm.revison.recent.change"; //$NON-NLS-1$
 
 	private static boolean initialized;
 
@@ -175,9 +165,7 @@ public class MyPreferenceConstants {
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_DEBUG, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING,
 				JavaCore.DISABLED);
-		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_GIT_AUTHOR,
-				JavaCore.DISABLED);
-		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_GIT_CHANGES,
+		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE,
 				JavaCore.DISABLED);
 	}
 

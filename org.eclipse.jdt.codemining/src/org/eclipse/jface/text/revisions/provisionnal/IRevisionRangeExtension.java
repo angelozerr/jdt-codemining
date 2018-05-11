@@ -1,4 +1,4 @@
-package org.eclipse.jface.text.revisions;
+package org.eclipse.jface.text.revisions.provisionnal;
 
 public interface IRevisionRangeExtension {
 

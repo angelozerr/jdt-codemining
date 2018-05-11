@@ -1,6 +1,8 @@
-package org.eclipse.egit.internal;
+package org.eclipse.egit.codemining.internal;
 
+import org.eclipse.egit.codemining.ui.internal.blame.GitRevisionInformationProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.text.revisions.provisionnal.RevisionInformationProviderManager;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -14,7 +16,7 @@ public class EGitCodeMiningPlugin extends AbstractUIPlugin {
 
 	// The shared instance
 	private static EGitCodeMiningPlugin plugin;
-	
+
 	/**
 	 * The constructor
 	 */
@@ -23,7 +25,9 @@ public class EGitCodeMiningPlugin extends AbstractUIPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+	 * 
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.
+	 * BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -32,7 +36,9 @@ public class EGitCodeMiningPlugin extends AbstractUIPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 * 
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
@@ -49,8 +55,8 @@ public class EGitCodeMiningPlugin extends AbstractUIPlugin {
 	}
 
 	/**
-	 * Returns an image descriptor for the image file at the given
-	 * plug-in relative path
+	 * Returns an image descriptor for the image file at the given plug-in relative
+	 * path
 	 *
 	 * @param path the path
 	 * @return the image descriptor

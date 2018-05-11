@@ -58,11 +58,8 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 	public static final Key PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING); // $NON-NLS-1$
 
-	public static final Key PREF_SHOW_GIT_AUTHOR = getJDTUIKey(
-			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_GIT_AUTHOR); // $NON-NLS-1$
-
-	public static final Key PREF_SHOW_GIT_CHANGES = getJDTUIKey(
-			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_GIT_CHANGES); // $NON-NLS-1$
+	public static final Key PREF_SHOW_REVISION_RECENT_CHANGE = getJDTUIKey(
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE); // $NON-NLS-1$
 
 	private static final String SETTINGS_SECTION_NAME = "JavaEditorCodeMiningConfigurationBlock"; // $NON-NLS-1
 
@@ -85,7 +82,7 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 				PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE, PREF_SHOW_METHOD_PARAMETER_NAMES,
 				PREF_SHOW_METHOD_PARAMETER_TYPES, PREF_SHOW_END_STATEMENT, PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER,
 				PREF_SHOW_JUNIT_STATUS, PREF_SHOW_JUNIT_RUN, PREF_SHOW_JUNIT_DEBUG,
-				PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING, PREF_SHOW_GIT_AUTHOR, PREF_SHOW_GIT_CHANGES };
+				PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING, PREF_SHOW_REVISION_RECENT_CHANGE};
 	}
 
 	/*
@@ -235,8 +232,8 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 
 	private void createGitSection(int nColumns, Composite parent) {
 		final int defaultIndent = 0;
-		String label = MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_section_git;
-		Key twistieKey = OptionsConfigurationBlock.getLocalKey("JavaEditorCodeMiningPreferencePage_section_git"); //$NON-NLS-1$
+		String label = MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_section_scsm;
+		Key twistieKey = OptionsConfigurationBlock.getLocalKey("JavaEditorCodeMiningPreferencePage_section_sccm"); //$NON-NLS-1$
 		PreferenceTreeNode<?> section = fFilteredPrefTree.addExpandableComposite(parent, label, nColumns, twistieKey,
 				null, false);
 		ExpandableComposite excomposite = getExpandableComposite(twistieKey);
@@ -245,12 +242,12 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 
 		// - Show git author
 		fFilteredPrefTree.addCheckBox(inner,
-				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showGitAuthor_label, PREF_SHOW_GIT_AUTHOR,
+				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showRevisionRecentChange, PREF_SHOW_REVISION_RECENT_CHANGE,
 				enabledDisabled, defaultIndent, section);
 		// - Show git changes
-		fFilteredPrefTree.addCheckBox(inner,
-				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showGitChanges_label,
-				PREF_SHOW_GIT_CHANGES, enabledDisabled, defaultIndent, section);
+//		fFilteredPrefTree.addCheckBox(inner,
+//				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showGitChanges_label,
+//				PREF_SHOW_GIT_CHANGES, enabledDisabled, defaultIndent, section);
 	}
 
 	private Composite createInnerComposite(ExpandableComposite excomposite, int nColumns, Font font) {

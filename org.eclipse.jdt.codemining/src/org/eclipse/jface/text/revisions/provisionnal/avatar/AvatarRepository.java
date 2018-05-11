@@ -1,4 +1,4 @@
-package org.eclipse.egit.internal.avatar;
+package org.eclipse.jface.text.revisions.provisionnal.avatar;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

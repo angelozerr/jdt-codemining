@@ -1,19 +1,20 @@
-package org.eclipse.jface.text.revisions.codemining;
+package org.eclipse.jface.text.revisions.provisionnal.codemining;
 
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.egit.internal.avatar.Avatar;
-import org.eclipse.egit.internal.avatar.AvatarRepository;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.codemining.ICodeMiningProvider;
 import org.eclipse.jface.text.codemining.LineHeaderCodeMining;
-import org.eclipse.jface.text.revisions.IRevisionRangeExtension;
 import org.eclipse.jface.text.revisions.Revision;
 import org.eclipse.jface.text.revisions.RevisionRange;
+import org.eclipse.jface.text.revisions.provisionnal.IRevisionRangeExtension;
+import org.eclipse.jface.text.revisions.provisionnal.IRevisionRangeProvider;
+import org.eclipse.jface.text.revisions.provisionnal.avatar.Avatar;
+import org.eclipse.jface.text.revisions.provisionnal.avatar.AvatarRepository;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
@@ -35,29 +36,36 @@ public class RevisionRecentChangeCodeMining extends LineHeaderCodeMining {
 		super(beforeLineNumber, document, provider);
 		this.rangeProvider = rangeProvider;
 		this.beforeLineNumber = beforeLineNumber;
+		if (rangeProvider.isInitialized()) {
+			updateLabel();
+		}
 	}
 
 	@Override
 	protected CompletableFuture<Void> doResolve(ITextViewer viewer, IProgressMonitor monitor) {
 		return CompletableFuture.runAsync(() -> {
-			try {
-				RevisionRange range = rangeProvider.getRange(beforeLineNumber);
-				if (range != null) {
-					revision = range.getRevision();
-					super.setLabel(range.getRevision().getAuthor() + ", "
-							+ TimeAgo.using(range.getRevision().getDate().getTime()));
-					if (revision instanceof IRevisionRangeExtension) {
-						String email = ((IRevisionRangeExtension) revision).getAuthorEmail();
-						if (email != null) {
-							avatar = AvatarRepository.getInstance().getAvatarByEmail(email);
-						}
+			updateLabel();
+		});
+	}
+
+	private void updateLabel() {
+		try {
+			RevisionRange range = rangeProvider.getRange(beforeLineNumber);
+			if (range != null) {
+				revision = range.getRevision();
+				super.setLabel(range.getRevision().getAuthor() + ", "
+						+ TimeAgo.using(range.getRevision().getDate().getTime()));
+				if (revision instanceof IRevisionRangeExtension) {
+					String email = ((IRevisionRangeExtension) revision).getAuthorEmail();
+					if (email != null) {
+						avatar = AvatarRepository.getInstance().getAvatarByEmail(email);
 					}
 				}
-			} catch (Exception e) {
-				super.setLabel(e.getMessage());
-				e.printStackTrace();
 			}
-		});
+		} catch (Exception e) {
+			super.setLabel(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	@Override
