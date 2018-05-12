@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
@@ -19,6 +18,9 @@ import org.eclipse.jdt.internal.ui.preferences.JavaPreferencesPropertyTester;
 import org.eclipse.jdt.internal.ui.preferences.MyPreferenceConstants;
 import org.eclipse.jdt.junit.JUnitCore;
 import org.eclipse.jdt.junit.TestRunListener;
+import org.eclipse.jdt.junit.codemining.tester.JUnit3MethodTester;
+import org.eclipse.jdt.junit.codemining.tester.JUnit4MethodTester;
+import org.eclipse.jdt.junit.codemining.tester.JUnit5MethodTester;
 import org.eclipse.jdt.junit.model.ITestCaseElement;
 import org.eclipse.jdt.junit.model.ITestRunSession;
 import org.eclipse.jface.text.ITextViewer;
@@ -28,15 +30,6 @@ import org.eclipse.jface.text.source.ISourceViewerExtension5;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 public class JUnitCodeMiningProvider extends AbstractCodeMiningProvider {
-
-	private final String JUNIT_TEST_ANNOTATION = "Test";
-
-	private final String JUNIT4_TEST_ANNOTATION = "org.junit.Test";
-
-	private final String JUNIT5_TEST_ANNOTATION = "org.junit.jupiter.api.Test";
-
-	private final String[] JUNIT_TEST_ANNOTATIONS = new String[] { JUNIT_TEST_ANNOTATION, JUNIT4_TEST_ANNOTATION,
-			JUNIT5_TEST_ANNOTATION };
 
 	class CodeMiningTestRunListener extends TestRunListener {
 
@@ -138,7 +131,7 @@ public class JUnitCodeMiningProvider extends AbstractCodeMiningProvider {
 					collectCodeMinings(unit, ((IType) element).getChildren(), minings, viewer, monitor);
 				} else if (element.getElementType() == IJavaElement.METHOD) {
 					IMethod method = (IMethod) element;
-					if (isTestMethod(method, JUNIT_TEST_ANNOTATIONS)) {
+					if (isTestMethod(method)) {
 						if (isStatusCodeMiningsEnabled())
 							minings.add(new JUnitStatusCodeMining(method, junitListener, viewer.getDocument(), this));
 						if (isRunCodeMiningsEnabled())
@@ -154,24 +147,9 @@ public class JUnitCodeMiningProvider extends AbstractCodeMiningProvider {
 		}
 	}
 
-	private static boolean isTestMethod(IMethod method, String[] annotations) {
-		int flags;
-		try {
-			flags = method.getFlags();
-			// 'V' is void signature
-			if (!(method.isConstructor() || !Flags.isPublic(flags) || Flags.isAbstract(flags) || Flags.isStatic(flags)
-					|| !"V".equals(method.getReturnType()))) {
-				for (String annotation : annotations) {
-					if (method.getAnnotation(annotation).exists()) {
-						return true;
-					}
-				}
-			}
-			return false;
-		} catch (JavaModelException e) {
-			// ignore
-			return false;
-		}
+	private static boolean isTestMethod(IMethod method) {
+		return JUnit3MethodTester.INSTANCE.isTestMethod(method) || JUnit4MethodTester.INSTANCE.isTestMethod(method)
+				|| JUnit5MethodTester.INSTANCE.isTestMethod(method);
 	}
 
 	@Override
