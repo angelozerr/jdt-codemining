@@ -66,6 +66,9 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 	public static final Key PREF_SHOW_REVISION_RECENT_CHANGE_WITH_DATE = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE_WITH_DATE); // $NON-NLS-1$
 
+	public static final Key PREF_SHOW_REVISION_AUTHORS = getJDTUIKey(
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_AUTHORS); // $NON-NLS-1$
+
 	private static final String SETTINGS_SECTION_NAME = "JavaEditorCodeMiningConfigurationBlock"; // $NON-NLS-1
 
 	private static final String ENABLED = JavaCore.ENABLED;
@@ -88,7 +91,8 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 				PREF_SHOW_METHOD_PARAMETER_TYPES, PREF_SHOW_END_STATEMENT, PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER,
 				PREF_SHOW_JUNIT_STATUS, PREF_SHOW_JUNIT_RUN, PREF_SHOW_JUNIT_DEBUG,
 				PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING, PREF_SHOW_REVISION_RECENT_CHANGE,
-				PREF_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR, PREF_SHOW_REVISION_RECENT_CHANGE_WITH_DATE };
+				PREF_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR, PREF_SHOW_REVISION_RECENT_CHANGE_WITH_DATE,
+				PREF_SHOW_REVISION_AUTHORS };
 	}
 
 	/*
@@ -257,7 +261,11 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 		fFilteredPrefTree.addCheckBox(inner,
 				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showRevisionRecentChangeWithDate,
 				PREF_SHOW_REVISION_RECENT_CHANGE_WITH_DATE, enabledDisabled, extraIndent, section);
-		
+		// Show authors
+		fFilteredPrefTree.addCheckBox(inner,
+				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showRevisionAuthors,
+				PREF_SHOW_REVISION_AUTHORS, enabledDisabled, defaultIndent, section);
+
 		// - Show git changes
 //		fFilteredPrefTree.addCheckBox(inner,
 //				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showGitChanges_label,

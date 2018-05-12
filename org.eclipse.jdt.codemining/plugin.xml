@@ -32,6 +32,7 @@
 	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.sccm.revison.recent.change" forcePluginActivation="true"/>
 	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.sccm.revison.recent.change.withAvatar" forcePluginActivation="true"/>
 	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.sccm.revison.recent.change.withDate" forcePluginActivation="true"/>
+	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.sccm.revision.authors" forcePluginActivation="true"/>	           	   
 	           	</or>
            	</and>
          </enabledWhen>

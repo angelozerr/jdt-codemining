@@ -97,9 +97,8 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider implement
 	}
 
 	private boolean isRevisionAuthorsEnabled() {
-		return false;
-		//JavaPreferencesPropertyTester
-		//		.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE);
+		return JavaPreferencesPropertyTester
+				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_AUTHORS);
 	}
 
 	@Override
