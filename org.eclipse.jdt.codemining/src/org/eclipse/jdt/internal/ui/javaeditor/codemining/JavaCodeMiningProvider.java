@@ -84,6 +84,16 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider implement
 				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE);
 	}
 
+	private boolean isRevisionRecentChangeWithAvatarEnabled() {
+		return JavaPreferencesPropertyTester
+				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR);
+	}
+
+	private boolean isRevisionRecentChangeWithDateEnabled() {
+		return JavaPreferencesPropertyTester
+				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE_WITH_DATE);
+	}
+
 	@Override
 	public CompletableFuture<List<? extends ICodeMining>> provideCodeMinings(ITextViewer viewer,
 			IProgressMonitor monitor) {
@@ -155,7 +165,7 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider implement
 			if (isRevisionRecentChangeEnabled()) {
 				try {
 					minings.add(new RevisionRecentChangeCodeMining(Utils.getLineNumber(element, viewer.getDocument()),
-							viewer.getDocument(), this, this));
+							viewer.getDocument(), isRevisionRecentChangeWithAvatarEnabled(), isRevisionRecentChangeWithDateEnabled(), this, this));
 				} catch (BadLocationException e) {
 					e.printStackTrace();
 				}

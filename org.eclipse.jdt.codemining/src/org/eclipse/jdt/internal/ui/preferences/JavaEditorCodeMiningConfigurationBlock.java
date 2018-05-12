@@ -2,7 +2,6 @@ package org.eclipse.jdt.internal.ui.preferences;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.internal.JavaCodeMiningPlugin;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.dialogs.StatusInfo;
 import org.eclipse.jdt.internal.ui.preferences.FilteredPreferenceTree.PreferenceTreeNode;
@@ -61,6 +60,12 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 	public static final Key PREF_SHOW_REVISION_RECENT_CHANGE = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE); // $NON-NLS-1$
 
+	public static final Key PREF_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR = getJDTUIKey(
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR); // $NON-NLS-1$
+
+	public static final Key PREF_SHOW_REVISION_RECENT_CHANGE_WITH_DATE = getJDTUIKey(
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE_WITH_DATE); // $NON-NLS-1$
+
 	private static final String SETTINGS_SECTION_NAME = "JavaEditorCodeMiningConfigurationBlock"; // $NON-NLS-1
 
 	private static final String ENABLED = JavaCore.ENABLED;
@@ -82,7 +87,8 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 				PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE, PREF_SHOW_METHOD_PARAMETER_NAMES,
 				PREF_SHOW_METHOD_PARAMETER_TYPES, PREF_SHOW_END_STATEMENT, PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER,
 				PREF_SHOW_JUNIT_STATUS, PREF_SHOW_JUNIT_RUN, PREF_SHOW_JUNIT_DEBUG,
-				PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING, PREF_SHOW_REVISION_RECENT_CHANGE};
+				PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING, PREF_SHOW_REVISION_RECENT_CHANGE,
+				PREF_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR, PREF_SHOW_REVISION_RECENT_CHANGE_WITH_DATE };
 	}
 
 	/*
@@ -232,6 +238,7 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 
 	private void createGitSection(int nColumns, Composite parent) {
 		final int defaultIndent = 0;
+		int extraIndent = LayoutUtil.getIndent();
 		String label = MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_section_scsm;
 		Key twistieKey = OptionsConfigurationBlock.getLocalKey("JavaEditorCodeMiningPreferencePage_section_sccm"); //$NON-NLS-1$
 		PreferenceTreeNode<?> section = fFilteredPrefTree.addExpandableComposite(parent, label, nColumns, twistieKey,
@@ -240,10 +247,17 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 
 		Composite inner = createInnerComposite(excomposite, nColumns, parent.getFont());
 
-		// - Show git author
+		// - Show git recent change
 		fFilteredPrefTree.addCheckBox(inner,
-				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showRevisionRecentChange, PREF_SHOW_REVISION_RECENT_CHANGE,
-				enabledDisabled, defaultIndent, section);
+				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showRevisionRecentChange,
+				PREF_SHOW_REVISION_RECENT_CHANGE, enabledDisabled, defaultIndent, section);
+		fFilteredPrefTree.addCheckBox(inner,
+				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showRevisionRecentChangeWithAvatar,
+				PREF_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR, enabledDisabled, extraIndent, section);
+		fFilteredPrefTree.addCheckBox(inner,
+				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showRevisionRecentChangeWithDate,
+				PREF_SHOW_REVISION_RECENT_CHANGE_WITH_DATE, enabledDisabled, extraIndent, section);
+		
 		// - Show git changes
 //		fFilteredPrefTree.addCheckBox(inner,
 //				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showGitChanges_label,

@@ -29,7 +29,9 @@
 	           	   <!-- TODO: change to property="org.eclipse.jdt.ui.hasPreference" -->
 	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.references" forcePluginActivation="true"/>
 	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.implementations" forcePluginActivation="true"/>
-	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.sccm.revison.recent.change" forcePluginActivation="true"/>	           	   
+	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.sccm.revison.recent.change" forcePluginActivation="true"/>
+	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.sccm.revison.recent.change.withAvatar" forcePluginActivation="true"/>
+	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.sccm.revison.recent.change.withDate" forcePluginActivation="true"/>
 	           	</or>
            	</and>
          </enabledWhen>

@@ -142,6 +142,26 @@ public class MyPreferenceConstants {
 	 */
 	public static final String EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE = "java.codemining.sccm.revison.recent.change"; //$NON-NLS-1$
 
+	/**
+	 * A named preference that stores the value for "Show revision recent change with avatar".
+	 * <p>
+	 * Value is of type <code>Boolean</code>.
+	 * </p>
+	 *
+	 * @since 3.14
+	 */
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR = "java.codemining.sccm.revison.recent.change.withAvatar"; //$NON-NLS-1$
+
+	/**
+	 * A named preference that stores the value for "Show revision recent change with date".
+	 * <p>
+	 * Value is of type <code>Boolean</code>.
+	 * </p>
+	 *
+	 * @since 3.14
+	 */
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE_WITH_DATE = "java.codemining.sccm.revison.recent.change.withDate"; //$NON-NLS-1$
+
 	private static boolean initialized;
 
 	/**
@@ -167,6 +187,10 @@ public class MyPreferenceConstants {
 				JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE,
 				JavaCore.DISABLED);
+		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR,
+				JavaCore.ENABLED);
+		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE_WITH_DATE,
+				JavaCore.ENABLED);				
 	}
 
 	/**

@@ -29,13 +29,18 @@ public class RevisionRecentChangeCodeMining extends LineHeaderCodeMining {
 	private Revision revision;
 	private Avatar avatar;
 	private final IRevisionRangeProvider rangeProvider;
+	private final boolean showAvatar;
+	private final boolean showDate;
 	private int beforeLineNumber;
 
-	public RevisionRecentChangeCodeMining(int beforeLineNumber, IDocument document, ICodeMiningProvider provider,
-			IRevisionRangeProvider rangeProvider) throws JavaModelException, BadLocationException {
+	public RevisionRecentChangeCodeMining(int beforeLineNumber, IDocument document, boolean showAvatar,
+			boolean showDate, ICodeMiningProvider provider, IRevisionRangeProvider rangeProvider)
+			throws JavaModelException, BadLocationException {
 		super(beforeLineNumber, document, provider);
 		this.rangeProvider = rangeProvider;
 		this.beforeLineNumber = beforeLineNumber;
+		this.showAvatar = showAvatar;
+		this.showDate = showDate;
 		if (rangeProvider.isInitialized()) {
 			updateLabel();
 		}
@@ -56,12 +61,18 @@ public class RevisionRecentChangeCodeMining extends LineHeaderCodeMining {
 			RevisionRange range = rangeProvider.getRange(beforeLineNumber);
 			if (range != null) {
 				revision = range.getRevision();
-				super.setLabel(range.getRevision().getAuthor() + ", "
-						+ TimeAgo.using(range.getRevision().getDate().getTime()));
-				if (revision instanceof IRevisionRangeExtension) {
-					String email = ((IRevisionRangeExtension) revision).getAuthorEmail();
-					if (email != null) {
-						avatar = AvatarRepository.getInstance().getAvatarByEmail(email);
+				if (showDate) {
+					super.setLabel(range.getRevision().getAuthor() + ", "
+							+ TimeAgo.using(range.getRevision().getDate().getTime()));
+				} else {
+					super.setLabel(range.getRevision().getAuthor());
+				}
+				if (showAvatar) {
+					if (revision instanceof IRevisionRangeExtension) {
+						String email = ((IRevisionRangeExtension) revision).getAuthorEmail();
+						if (email != null) {
+							avatar = AvatarRepository.getInstance().getAvatarByEmail(email);
+						}
 					}
 				}
 			}
