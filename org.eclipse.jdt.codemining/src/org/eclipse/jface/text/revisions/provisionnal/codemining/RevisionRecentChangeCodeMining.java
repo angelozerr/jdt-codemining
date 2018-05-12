@@ -43,6 +43,9 @@ public class RevisionRecentChangeCodeMining extends LineHeaderCodeMining {
 
 	@Override
 	protected CompletableFuture<Void> doResolve(ITextViewer viewer, IProgressMonitor monitor) {
+		if (getLabel() != null) {
+			return super.doResolve(viewer, monitor);
+		}
 		return CompletableFuture.runAsync(() -> {
 			updateLabel();
 		});
