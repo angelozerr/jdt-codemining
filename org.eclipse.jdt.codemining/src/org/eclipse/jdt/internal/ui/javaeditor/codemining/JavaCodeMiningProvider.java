@@ -39,7 +39,9 @@ import org.eclipse.jface.text.revisions.RevisionRange;
 import org.eclipse.jface.text.revisions.provisionnal.IRevisionRangeProvider;
 import org.eclipse.jface.text.revisions.provisionnal.RevisionInformationProviderManager;
 import org.eclipse.jface.text.revisions.provisionnal.RevisionInformationSupport;
+import org.eclipse.jface.text.revisions.provisionnal.codemining.RevisionAuthorsCodeMining;
 import org.eclipse.jface.text.revisions.provisionnal.codemining.RevisionRecentChangeCodeMining;
+import org.eclipse.jface.text.source.ILineRange;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.texteditor.ITextEditor;
 
@@ -92,6 +94,12 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider implement
 	private boolean isRevisionRecentChangeWithDateEnabled() {
 		return JavaPreferencesPropertyTester
 				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE_WITH_DATE);
+	}
+
+	private boolean isRevisionAuthorsEnabled() {
+		return false;
+		//JavaPreferencesPropertyTester
+		//		.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE);
 	}
 
 	@Override
@@ -165,11 +173,21 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider implement
 			if (isRevisionRecentChangeEnabled()) {
 				try {
 					minings.add(new RevisionRecentChangeCodeMining(Utils.getLineNumber(element, viewer.getDocument()),
-							viewer.getDocument(), isRevisionRecentChangeWithAvatarEnabled(), isRevisionRecentChangeWithDateEnabled(), this, this));
+							viewer.getDocument(), isRevisionRecentChangeWithAvatarEnabled(),
+							isRevisionRecentChangeWithDateEnabled(), this, this));
 				} catch (BadLocationException e) {
 					e.printStackTrace();
 				}
 			}
+			if (isRevisionAuthorsEnabled()) {
+				try {
+					minings.add(new RevisionAuthorsCodeMining(Utils.getLineNumber(element, viewer.getDocument()),
+							Utils.getLineRange(element, viewer.getDocument()), viewer.getDocument(), this, this));
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+				}
+			}
+
 		}
 	}
 
@@ -233,6 +251,7 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider implement
 		super.dispose();
 		if (fRevisionInfoSupport != null) {
 			fRevisionInfoSupport.uninstall();
+			fRevisionInfoSupport = null;
 		}
 	}
 
@@ -242,6 +261,14 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider implement
 			initRevisionSupport(fViewer, fUnit);
 		}
 		return fRevisionInfoSupport != null ? fRevisionInfoSupport.getRange(line) : null;
+	}
+
+	@Override
+	public List<RevisionRange> getRanges(ILineRange lines) {
+		if (fRevisionInfoSupport == null) {
+			initRevisionSupport(fViewer, fUnit);
+		}
+		return fRevisionInfoSupport != null ? fRevisionInfoSupport.getRanges(lines) : null;
 	}
 
 	private void initRevisionSupport(ITextViewer viewer, ITypeRoot unit) {

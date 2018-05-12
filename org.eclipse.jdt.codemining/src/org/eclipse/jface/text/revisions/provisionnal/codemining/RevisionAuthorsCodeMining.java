@@ -1,45 +1,66 @@
 package org.eclipse.jface.text.revisions.provisionnal.codemining;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.concurrent.CompletableFuture;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.codemining.ICodeMiningProvider;
 import org.eclipse.jface.text.codemining.LineHeaderCodeMining;
 import org.eclipse.jface.text.revisions.RevisionRange;
 import org.eclipse.jface.text.revisions.provisionnal.IRevisionRangeProvider;
+import org.eclipse.jface.text.source.ILineRange;
 
 public class RevisionAuthorsCodeMining extends LineHeaderCodeMining {
 
-	public RevisionAuthorsCodeMining(int beforeLineNumber, IDocument document, ICodeMiningProvider provider,
-			IRevisionRangeProvider rangeProvider) throws JavaModelException, BadLocationException {
+	private final ILineRange lineRange;
+	private final IRevisionRangeProvider rangeProvider;
+
+	public RevisionAuthorsCodeMining(int beforeLineNumber, ILineRange lineRange, IDocument document,
+			ICodeMiningProvider provider, IRevisionRangeProvider rangeProvider)
+			throws JavaModelException, BadLocationException {
 		super(beforeLineNumber, document, provider);
-		try {
-			RevisionRange range = rangeProvider.getRange(beforeLineNumber);
-			if (range != null) {
-				List<String> authors = range.getRevision().getRegions().stream().map(r -> r.getRevision().getAuthor())
-						.distinct().collect(Collectors.toList());
-				long count = authors.size();
-				StringBuilder label = new StringBuilder();
-				label.append(count);
-				label.append(" ");
-				if (count == 1) {
-					label.append("author");
-				} else {
-					label.append("authors");
-				}
-				label.append(" ");
-				label.append(authors.get(0));
-				if (count > 1) {
-					label.append(" and others");
-				}
-				super.setLabel(label.toString());
+		this.lineRange = lineRange;
+		this.rangeProvider = rangeProvider;
+		if (rangeProvider.isInitialized()) {
+			updateLabel();
+		}
+	}
+
+	@Override
+	protected CompletableFuture<Void> doResolve(ITextViewer viewer, IProgressMonitor monitor) {
+		if (getLabel() != null) {
+			return super.doResolve(viewer, monitor);
+		}
+		return CompletableFuture.runAsync(() -> {
+			updateLabel();
+		});
+	}
+
+	private void updateLabel() {
+		List<RevisionRange> ranges = rangeProvider.getRanges(lineRange);
+		if (ranges != null && ranges.size() > 0) {
+			long count = ranges.size();
+			StringBuilder label = new StringBuilder();
+			label.append(count);
+			label.append(" ");
+			if (count == 1) {
+				label.append("author");
+			} else {
+				label.append("authors");
 			}
-		} catch (Exception e) {
-			super.setLabel(e.getMessage());
-			e.printStackTrace();
+			label.append(" (");
+			label.append(ranges.get(0).getRevision().getAuthor());
+			if (count > 1) {
+				label.append(" and others");
+			}
+			label.append(")");
+			super.setLabel(label.toString());
+		} else {
+			super.setLabel("");
 		}
 	}
 

@@ -107,6 +107,36 @@ public class RevisionInformationSupport {
 	}
 
 	/**
+	 * Returns the sublist of all <code>RevisionRange</code>s that intersect with the given lines.
+	 *
+	 * @param lines the model based lines of interest
+	 * @return elementType: RevisionRange
+	 */
+	public List<RevisionRange> getRanges(ILineRange lines) {
+		List<RevisionRange> ranges= getRangeCache();
+
+		// return the interesting subset
+		int end= end(lines);
+		int first= -1, last= -1;
+		for (int i= 0; i < ranges.size(); i++) {
+			RevisionRange range= ranges.get(i);
+			int rangeEnd= end(range);
+			if (first == -1 && rangeEnd > lines.getStartLine())
+				first= i;
+			if (first != -1 && rangeEnd > end) {
+				last= i;
+				break;
+			}
+		}
+		if (first == -1)
+			return Collections.emptyList();
+		if (last == -1)
+			last= ranges.size() - 1; // bottom index may be one too much
+
+		return ranges.subList(first, last + 1);
+	}
+	
+	/**
 	 * Gets all change ranges of the revisions in the revision model and adapts them
 	 * to the current quick diff information. The list is cached.
 	 *
