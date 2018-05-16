@@ -1,14 +1,11 @@
 package org.eclipse.jdt.junit.codemining;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeRoot;
@@ -21,7 +18,6 @@ import org.eclipse.jdt.junit.TestRunListener;
 import org.eclipse.jdt.junit.codemining.tester.JUnit3MethodTester;
 import org.eclipse.jdt.junit.codemining.tester.JUnit4MethodTester;
 import org.eclipse.jdt.junit.codemining.tester.JUnit5MethodTester;
-import org.eclipse.jdt.junit.model.ITestCaseElement;
 import org.eclipse.jdt.junit.model.ITestRunSession;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.codemining.AbstractCodeMiningProvider;
@@ -33,28 +29,6 @@ public class JUnitCodeMiningProvider extends AbstractCodeMiningProvider {
 
 	class CodeMiningTestRunListener extends TestRunListener {
 
-		private Map<IJavaProject, Map<String, ITestCaseElement>> projects;
-
-		public CodeMiningTestRunListener() {
-			projects = new HashMap<>();
-		}
-
-		@Override
-		public void testCaseFinished(ITestCaseElement testCaseElement) {
-			super.testCaseFinished(testCaseElement);
-			IJavaProject project = testCaseElement.getTestRunSession().getLaunchedProject();
-			String className = testCaseElement.getTestClassName();
-			String methodName = testCaseElement.getTestMethodName();
-
-			Map<String, ITestCaseElement> tests = projects.get(project);
-			if (tests == null) {
-				tests = new HashMap<>();
-				projects.put(project, tests);
-			}
-			String key = className + "#" + methodName;
-			tests.put(key, testCaseElement);
-		}
-
 		@Override
 		public void sessionFinished(ITestRunSession session) {
 			super.sessionFinished(session);
@@ -62,24 +36,16 @@ public class JUnitCodeMiningProvider extends AbstractCodeMiningProvider {
 				((ISourceViewerExtension5) viewer).updateCodeMinings();
 			}
 		}
-
-		public ITestCaseElement findTestCase(IMethod method) {
-			IJavaProject project = method.getJavaProject();
-			String className = method.getDeclaringType().getFullyQualifiedName();
-			String methodName = method.getElementName();
-			String key = className + "#" + methodName;
-			Map<String, ITestCaseElement> tests = projects.get(project);
-			if (tests == null) {
-				return null;
-			}
-			return tests.get(key);
-		}
 	}
 
+	private final JUnitStatusRegistry testRegistry;
 	private final CodeMiningTestRunListener junitListener;
 	private ITextViewer viewer;
 
 	public JUnitCodeMiningProvider() {
+		// TODO: use JUnitStatusRegistry as singleton once it will track remove of Java file/
+		// Using JUnitStatusRegistry as singleton will give the capability to show JUnit status when user open the editor.
+		testRegistry = new JUnitStatusRegistry();
 		junitListener = new CodeMiningTestRunListener();
 		JUnitCore.addTestRunListener(junitListener);
 	}
@@ -129,11 +95,27 @@ public class JUnitCodeMiningProvider extends AbstractCodeMiningProvider {
 			try {
 				if (element.getElementType() == IJavaElement.TYPE) {
 					collectCodeMinings(unit, ((IType) element).getChildren(), minings, viewer, monitor);
+					if (!minings.isEmpty()) {
+						try {
+							// There is one or more JUNit test, display Run, Debug icon for class
+							if (isStatusCodeMiningsEnabled())
+								minings.add(
+										new JUnitStatusCodeMining(element, testRegistry, viewer.getDocument(), this));
+							if (isRunCodeMiningsEnabled())
+								minings.add(new JUnitLaunchCodeMining(element, "Run All", "run", viewer.getDocument(),
+										this));
+							if (isDebugCodeMiningsEnabled())
+								minings.add(new JUnitLaunchCodeMining(element, "Debug All", "debug",
+										viewer.getDocument(), this));
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
 				} else if (element.getElementType() == IJavaElement.METHOD) {
 					IMethod method = (IMethod) element;
 					if (isTestMethod(method)) {
 						if (isStatusCodeMiningsEnabled())
-							minings.add(new JUnitStatusCodeMining(method, junitListener, viewer.getDocument(), this));
+							minings.add(new JUnitStatusCodeMining(method, testRegistry, viewer.getDocument(), this));
 						if (isRunCodeMiningsEnabled())
 							minings.add(new JUnitLaunchCodeMining(method, "Run", "run", viewer.getDocument(), this));
 						if (isDebugCodeMiningsEnabled())
@@ -155,6 +137,7 @@ public class JUnitCodeMiningProvider extends AbstractCodeMiningProvider {
 	@Override
 	public void dispose() {
 		super.dispose();
+		testRegistry.dispose();
 		JUnitCore.removeTestRunListener(junitListener);
 	}
 

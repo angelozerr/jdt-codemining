@@ -13,12 +13,14 @@ package org.eclipse.jdt.junit.codemining;
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.junit.model.TestCaseElement;
 import org.eclipse.jdt.internal.junit.model.TestElement.Status;
+import org.eclipse.jdt.internal.junit.model.TestSuiteElement;
 import org.eclipse.jdt.internal.junit.ui.JUnitPlugin;
-import org.eclipse.jdt.junit.codemining.JUnitCodeMiningProvider.CodeMiningTestRunListener;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
@@ -56,10 +58,11 @@ public class JUnitStatusCodeMining extends AbstractJavaCodeMining {
 
 	}
 
-	private final CodeMiningTestRunListener testRegistry;
+	private final JUnitStatusRegistry testRegistry;
 	private TestCaseElement testCaseElement;
+	private TestSuiteElement testSuiteElement;
 
-	public JUnitStatusCodeMining(IMethod element, CodeMiningTestRunListener testRegistry, IDocument document,
+	public JUnitStatusCodeMining(IJavaElement element, JUnitStatusRegistry testRegistry, IDocument document,
 			ICodeMiningProvider provider) throws JavaModelException, BadLocationException {
 		super(element, document, provider, null);
 		this.testRegistry = testRegistry;
@@ -72,7 +75,11 @@ public class JUnitStatusCodeMining extends AbstractJavaCodeMining {
 	@Override
 	protected CompletableFuture<Void> doResolve(ITextViewer viewer, IProgressMonitor monitor) {
 		return CompletableFuture.runAsync(() -> {
-			this.testCaseElement = (TestCaseElement) testRegistry.findTestCase((IMethod) getElement());
+			if (getElement().getElementType() == IJavaElement.TYPE) {
+				this.testSuiteElement = (TestSuiteElement) testRegistry.findTestSuite((IType) getElement());
+			} else {
+				this.testCaseElement = (TestCaseElement) testRegistry.findTestCase((IMethod) getElement());
+			}
 			super.setLabel(" "); // set label with space to mark the mining as resolved.
 		});
 	}
@@ -86,10 +93,10 @@ public class JUnitStatusCodeMining extends AbstractJavaCodeMining {
 	}
 
 	private Image getImage() {
-		if (testCaseElement == null) {
+		if (testCaseElement == null && testSuiteElement == null) {
 			return fTestIcon;
 		}
-		Status status = testCaseElement.getStatus();
+		Status status = testCaseElement != null ? testCaseElement.getStatus() : testSuiteElement.getStatus();
 		if (status.isNotRun())
 			return fTestIcon;
 		else if (status.isRunning())
