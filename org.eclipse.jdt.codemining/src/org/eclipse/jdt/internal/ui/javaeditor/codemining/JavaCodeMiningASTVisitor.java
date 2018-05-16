@@ -6,6 +6,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -57,6 +58,33 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 	}
 
 	@Override
+	public boolean visit(ClassInstanceCreation node) {
+		if (showName || showType) {
+			List arguments = node.arguments();
+			if (arguments.size() > 0) {
+				for (int i = 0; i < arguments.size(); i++) {
+					Expression exp = (Expression) arguments.get(i);
+					minings.add(new JavaMethodParameterCodeMining(node, exp, i, cu, provider, showName, showType));
+				}
+			}
+		}
+		if (isShowVariableValueWhileDebugging() && frame != null) {
+			List arguments = node.arguments();
+			if (arguments.size() > 0) {
+				for (int i = 0; i < arguments.size(); i++) {
+					Expression exp = (Expression) arguments.get(i);
+					if (exp instanceof SimpleName) {
+						InlinedDebugCodeMining m = new SimpleNameDebugCodeMining((SimpleName) exp, frame, viewer,
+								provider);
+						minings.add(m);
+					}
+				}
+			}
+		}
+		return super.visit(node);
+	}
+
+	@Override
 	public boolean visit(MethodInvocation node) {
 		if (showName || showType) {
 			List arguments = node.arguments();
@@ -101,7 +129,7 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 			IJavaStackFrame frame = getFrame();
 			if (frame != null) {
 				try {
-					// TODO: improve the comparison of the methode which is visted and the debug
+					// TODO: improve the comparison of the method which is visited and the debug
 					// frame
 					if (node.getName().toString().equals(frame.getMethodName())) {
 						this.frame = frame;

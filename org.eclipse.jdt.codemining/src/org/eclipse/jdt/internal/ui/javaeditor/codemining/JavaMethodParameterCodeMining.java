@@ -7,6 +7,8 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.IMethodBinding;
@@ -22,7 +24,7 @@ import org.eclipse.jface.text.codemining.LineContentCodeMining;
 
 public class JavaMethodParameterCodeMining extends LineContentCodeMining {
 
-	private final MethodInvocation method;
+	private final ASTNode node;
 
 	private final CompilationUnit cu;
 
@@ -34,9 +36,19 @@ public class JavaMethodParameterCodeMining extends LineContentCodeMining {
 
 	public JavaMethodParameterCodeMining(MethodInvocation method, Expression parameter, int parameterIndex,
 			CompilationUnit cu, ICodeMiningProvider provider, boolean showName, boolean showType) {
+		this((ASTNode) method, parameter, parameterIndex, cu, provider, showName, showType);
+	}
+
+	public JavaMethodParameterCodeMining(ClassInstanceCreation constructor, Expression parameter, int parameterIndex,
+			CompilationUnit cu, ICodeMiningProvider provider, boolean showName, boolean showType) {
+		this((ASTNode) constructor, parameter, parameterIndex, cu, provider, showName, showType);
+	}
+
+	private JavaMethodParameterCodeMining(ASTNode node, Expression parameter, int parameterIndex, CompilationUnit cu,
+			ICodeMiningProvider provider, boolean showName, boolean showType) {
 		super(new Position(parameter.getStartPosition(), 1), provider, null);
 		this.cu = cu;
-		this.method = method;
+		this.node = node;
 		this.parameterIndex = parameterIndex;
 		this.showName = showName;
 		this.showType = showType;
@@ -45,7 +57,9 @@ public class JavaMethodParameterCodeMining extends LineContentCodeMining {
 	@Override
 	protected CompletableFuture<Void> doResolve(ITextViewer viewer, IProgressMonitor monitor) {
 		return CompletableFuture.runAsync(() -> {
-			IMethodBinding calledMethodBinding = method.resolveMethodBinding();
+			IMethodBinding calledMethodBinding = ((node instanceof MethodInvocation)
+					? ((MethodInvocation) node).resolveMethodBinding()
+					: ((ClassInstanceCreation) node).resolveConstructorBinding());
 			if (calledMethodBinding != null) {
 				MethodDeclaration decl = (MethodDeclaration) cu.findDeclaringNode(calledMethodBinding.getKey());
 				if (decl != null) {

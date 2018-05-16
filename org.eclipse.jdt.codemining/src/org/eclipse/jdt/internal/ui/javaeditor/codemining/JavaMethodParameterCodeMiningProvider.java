@@ -11,7 +11,9 @@
 package org.eclipse.jdt.internal.ui.javaeditor.codemining;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -28,6 +30,9 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.codemining.AbstractCodeMiningProvider;
 import org.eclipse.jface.text.codemining.ICodeMining;
 import org.eclipse.jface.text.source.ISourceViewerExtension5;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -44,9 +49,12 @@ public class JavaMethodParameterCodeMiningProvider extends AbstractCodeMiningPro
 
 	private IDebugContextService service;
 
+	private final Map<RGB, Color> colorTable;
+
 	public JavaMethodParameterCodeMiningProvider() {
 		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		service = DebugUITools.getDebugContextManager().getContextService(window);
+		colorTable = new HashMap<>();
 	}
 
 	@Override
@@ -97,5 +105,15 @@ public class JavaMethodParameterCodeMiningProvider extends AbstractCodeMiningPro
 		if (contextListener != null) {
 			service.removeDebugContextListener(contextListener);
 		}
+		colorTable.values().forEach(color -> color.dispose());
+	}
+
+	public Color getColor(RGB rgb, Display display) {
+		Color color = colorTable.get(rgb);
+		if (color == null) {
+			color = new Color(display, rgb);
+			colorTable.put(rgb, color);
+		}
+		return color;
 	}
 }
