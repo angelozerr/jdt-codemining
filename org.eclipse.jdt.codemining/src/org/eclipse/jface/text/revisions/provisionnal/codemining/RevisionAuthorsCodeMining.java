@@ -43,7 +43,7 @@ public class RevisionAuthorsCodeMining extends LineHeaderCodeMining {
 	private void updateLabel() {
 		List<RevisionRange> ranges = rangeProvider.getRanges(lineRange);
 		if (ranges != null && ranges.size() > 0) {
-			long count = ranges.size();
+			long count = ranges.stream().map(r -> r.getRevision().getAuthor()).distinct().count();
 			StringBuilder label = new StringBuilder();
 			label.append(count);
 			label.append(" ");
