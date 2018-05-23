@@ -78,8 +78,7 @@ public abstract class InlinedDebugCodeMining extends LineContentCodeMining {
 						rgb = new RGB(red, green, blue);
 					}
 				}
-				String s = " " + DebugElementHelper.getLabel(variable);
-				super.setLabel(s);
+				super.setLabel(DebugElementHelper.getLabel(variable));
 			} else {
 				super.setLabel("");
 			}
@@ -90,6 +89,8 @@ public abstract class InlinedDebugCodeMining extends LineContentCodeMining {
 
 	@Override
 	public Point draw(GC gc, StyledText textWidget, Color color, int x, int y) {
+		// increment x with 3 spaces width
+		x+= 3 * (int) gc.getFontMetrics().getAverageCharacterWidth();
 		Point p = super.draw(gc, textWidget, color, x, y);
 		if (rgb != null) {
 			int width = drawSquare(rgb, gc, textWidget, x + p.x, y);
