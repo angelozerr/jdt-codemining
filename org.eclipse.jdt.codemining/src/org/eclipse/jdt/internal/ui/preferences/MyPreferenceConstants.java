@@ -92,6 +92,26 @@ public class MyPreferenceConstants {
 	public static final String EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT_MIN_LINE_NUMBER = "java.codemining.endStatement.minLineNumber"; //$NON-NLS-1$
 
 	/**
+	 * A named preference that stores the value for "Show run for main method"
+	 * <p>
+	 * Value is of type <code>Boolean</code>.
+	 * </p>
+	 *
+	 * @since 3.14
+	 */
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_MAIN_RUN = "java.codemining.main.run"; //$NON-NLS-1$
+
+	/**
+	 * A named preference that stores the value for "Show debug for main method"
+	 * <p>
+	 * Value is of type <code>Boolean</code>.
+	 * </p>
+	 *
+	 * @since 3.14
+	 */
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_MAIN_DEBUG = "java.codemining.main.debug"; //$NON-NLS-1$
+	
+	/**
 	 * A named preference that stores the value for "Show JUnit status".
 	 * <p>
 	 * Value is of type <code>Boolean</code>.
@@ -192,6 +212,8 @@ public class MyPreferenceConstants {
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_TYPES, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT_MIN_LINE_NUMBER, 4);
+		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_MAIN_RUN, JavaCore.DISABLED);
+		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_MAIN_DEBUG, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_STATUS, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_RUN, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_DEBUG, JavaCore.DISABLED);

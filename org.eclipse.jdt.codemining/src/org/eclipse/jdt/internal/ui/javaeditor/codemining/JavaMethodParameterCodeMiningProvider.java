@@ -71,6 +71,14 @@ public class JavaMethodParameterCodeMiningProvider extends AbstractCodeMiningPro
 			try {
 				IJavaElement[] elements = unit.getChildren();
 				List<ICodeMining> minings = new ArrayList<>(elements.length);
+//				synchronized (this) {
+//					try {
+//						this.wait(2000);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
 				collectLineContentCodeMinings(unit, textEditor, viewer, minings);
 				monitor.isCanceled();
 				return minings;

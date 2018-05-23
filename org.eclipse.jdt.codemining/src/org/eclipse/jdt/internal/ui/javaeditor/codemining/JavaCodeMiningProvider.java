@@ -23,6 +23,7 @@ import org.eclipse.jdt.core.IAnnotatable;
 import org.eclipse.jdt.core.IAnnotation;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMemberValuePair;
+import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
@@ -79,6 +80,14 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider implement
 	private boolean isImplementationsCodeMiningsAtLeastOne() {
 		return JavaPreferencesPropertyTester
 				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE);
+	}
+
+	private boolean isRunMainCodeMiningsEnabled() {
+		return JavaPreferencesPropertyTester.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_MAIN_RUN);
+	}
+
+	private boolean isDebugMainCodeMiningsEnabled() {
+		return JavaPreferencesPropertyTester.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_MAIN_DEBUG);
 	}
 
 	private boolean isRevisionRecentChangeEnabled() {
@@ -166,6 +175,24 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider implement
 						} catch (BadLocationException e) {
 							// TODO: what should we done when there are some errors?
 						}
+					}
+				}
+			}
+			if (isRunMainCodeMiningsEnabled()) {
+				if (element instanceof IMethod && ((IMethod) (element)).isMainMethod()) {
+					try {
+						minings.add(new JavaLaunchCodeMining(element, "Run", "run", viewer.getDocument(), this));
+					} catch (BadLocationException e) {
+						// TODO: what should we done when there are some errors?
+					}
+				}
+			}
+			if (isDebugMainCodeMiningsEnabled()) {
+				if (element instanceof IMethod && ((IMethod) (element)).isMainMethod()) {
+					try {
+						minings.add(new JavaLaunchCodeMining(element, "Debug", "debug", viewer.getDocument(), this));
+					} catch (BadLocationException e) {
+						// TODO: what should we done when there are some errors?
 					}
 				}
 			}

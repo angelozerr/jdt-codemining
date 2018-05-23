@@ -45,6 +45,12 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 	public static final Key PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT_MIN_LINE_NUMBER); // $NON-NLS-1$
 
+	private static final Key PREF_SHOW_SHOW_MAIN_RUN = getJDTUIKey(
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_MAIN_RUN);
+
+	private static final Key PREF_SHOW_SHOW_MAIN_DEBUG = getJDTUIKey(
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_MAIN_DEBUG);
+
 	public static final Key PREF_SHOW_JUNIT_STATUS = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_STATUS); // $NON-NLS-1$
 
@@ -89,8 +95,8 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 		return new Key[] { PREF_SHOW_REFERENCES, PREF_SHOW_REFERENCES_AT_LEAST_ONE, PREF_SHOW_IMPLEMENTATIONS,
 				PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE, PREF_SHOW_METHOD_PARAMETER_NAMES,
 				PREF_SHOW_METHOD_PARAMETER_TYPES, PREF_SHOW_END_STATEMENT, PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER,
-				PREF_SHOW_JUNIT_STATUS, PREF_SHOW_JUNIT_RUN, PREF_SHOW_JUNIT_DEBUG,
-				PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING, PREF_SHOW_REVISION_RECENT_CHANGE,
+				PREF_SHOW_SHOW_MAIN_RUN, PREF_SHOW_SHOW_MAIN_DEBUG, PREF_SHOW_JUNIT_STATUS, PREF_SHOW_JUNIT_RUN,
+				PREF_SHOW_JUNIT_DEBUG, PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING, PREF_SHOW_REVISION_RECENT_CHANGE,
 				PREF_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR, PREF_SHOW_REVISION_RECENT_CHANGE_WITH_DATE,
 				PREF_SHOW_REVISION_AUTHORS };
 	}
@@ -198,6 +204,14 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 		fFilteredPrefTree.addTextField(inner,
 				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showEndStatement_minLineNumber_label,
 				PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER, extraIndent, 0, section);
+
+		// - Show main run/debug
+		fFilteredPrefTree.addCheckBox(inner,
+				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showMainRun_label, PREF_SHOW_SHOW_MAIN_RUN,
+				enabledDisabled, defaultIndent, section);
+		fFilteredPrefTree.addCheckBox(inner,
+				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showMainDebug_label, PREF_SHOW_SHOW_MAIN_DEBUG,
+				enabledDisabled, defaultIndent, section);		
 	}
 
 	private void createJUnitSection(int nColumns, Composite parent) {
