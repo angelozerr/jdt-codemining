@@ -169,24 +169,26 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider implement
 					}
 				}
 			}
-			if (isRevisionRecentChangeEnabled()) {
+			boolean revisionRecentChangeEnabled = isRevisionRecentChangeEnabled();
+			boolean revisionAuthorsEnabled = isRevisionAuthorsEnabled();
+			if (revisionRecentChangeEnabled || revisionAuthorsEnabled) {
 				try {
-					minings.add(new RevisionRecentChangeCodeMining(Utils.getLineNumber(element, viewer.getDocument()),
-							viewer.getDocument(), isRevisionRecentChangeWithAvatarEnabled(),
-							isRevisionRecentChangeWithDateEnabled(), this, this));
-				} catch (BadLocationException e) {
-					e.printStackTrace();
-				}
-			}
-			if (isRevisionAuthorsEnabled()) {
-				try {
-					minings.add(new RevisionAuthorsCodeMining(Utils.getLineNumber(element, viewer.getDocument()),
-							Utils.getLineRange(element, viewer.getDocument()), viewer.getDocument(), this, this));
-				} catch (BadLocationException e) {
-					e.printStackTrace();
-				}
-			}
+					int lineNumber = Utils.getLineNumber(element, viewer.getDocument());
+					ILineRange lineRange = Utils.getLineRange(element, viewer.getDocument());
+					if (revisionRecentChangeEnabled) {
+						minings.add(new RevisionRecentChangeCodeMining(lineNumber, lineRange, viewer.getDocument(),
+								isRevisionRecentChangeWithAvatarEnabled(), isRevisionRecentChangeWithDateEnabled(),
+								this, this));
+					}
+					if (revisionAuthorsEnabled) {
+						minings.add(
+								new RevisionAuthorsCodeMining(lineNumber, lineRange, viewer.getDocument(), this, this));
 
+					}
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 

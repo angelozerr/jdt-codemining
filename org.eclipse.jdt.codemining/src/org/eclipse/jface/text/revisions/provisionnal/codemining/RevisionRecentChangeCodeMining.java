@@ -1,5 +1,7 @@
 package org.eclipse.jface.text.revisions.provisionnal.codemining;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -15,6 +17,7 @@ import org.eclipse.jface.text.revisions.provisionnal.IRevisionRangeExtension;
 import org.eclipse.jface.text.revisions.provisionnal.IRevisionRangeProvider;
 import org.eclipse.jface.text.revisions.provisionnal.avatar.Avatar;
 import org.eclipse.jface.text.revisions.provisionnal.avatar.AvatarRepository;
+import org.eclipse.jface.text.source.ILineRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
@@ -26,19 +29,18 @@ import com.github.marlonlom.utilities.timeago.TimeAgo;
 
 public class RevisionRecentChangeCodeMining extends LineHeaderCodeMining {
 
-	private Revision revision;
-	private Avatar avatar;
+	private final ILineRange lineRange;
 	private final IRevisionRangeProvider rangeProvider;
 	private final boolean showAvatar;
 	private final boolean showDate;
-	private int beforeLineNumber;
+	private Avatar avatar;
 
-	public RevisionRecentChangeCodeMining(int beforeLineNumber, IDocument document, boolean showAvatar,
-			boolean showDate, ICodeMiningProvider provider, IRevisionRangeProvider rangeProvider)
+	public RevisionRecentChangeCodeMining(int beforeLineNumber, ILineRange lineRange, IDocument document,
+			boolean showAvatar, boolean showDate, ICodeMiningProvider provider, IRevisionRangeProvider rangeProvider)
 			throws JavaModelException, BadLocationException {
 		super(beforeLineNumber, document, provider);
 		this.rangeProvider = rangeProvider;
-		this.beforeLineNumber = beforeLineNumber;
+		this.lineRange = lineRange;
 		this.showAvatar = showAvatar;
 		this.showDate = showDate;
 		if (rangeProvider.isInitialized()) {
@@ -58,14 +60,14 @@ public class RevisionRecentChangeCodeMining extends LineHeaderCodeMining {
 
 	private void updateLabel() {
 		try {
-			RevisionRange range = rangeProvider.getRange(beforeLineNumber);
-			if (range != null) {
-				revision = range.getRevision();
+			List<RevisionRange> ranges = rangeProvider.getRanges(lineRange);
+			if (ranges != null && ranges.size() > 0) {
+				Revision revision = ranges.stream().map(r -> r.getRevision())
+						.max(Comparator.comparing(Revision::getDate)).get();
 				if (showDate) {
-					super.setLabel(range.getRevision().getAuthor() + ", "
-							+ TimeAgo.using(range.getRevision().getDate().getTime()));
+					super.setLabel(revision.getAuthor() + ", " + TimeAgo.using(revision.getDate().getTime()));
 				} else {
-					super.setLabel(range.getRevision().getAuthor());
+					super.setLabel(revision.getAuthor());
 				}
 				if (showAvatar) {
 					if (revision instanceof IRevisionRangeExtension) {
