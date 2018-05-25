@@ -25,8 +25,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 
-import com.github.marlonlom.utilities.timeago.TimeAgo;
-
 public class RevisionRecentChangeCodeMining extends LineHeaderCodeMining {
 
 	private final ILineRange lineRange;
@@ -64,8 +62,9 @@ public class RevisionRecentChangeCodeMining extends LineHeaderCodeMining {
 			if (ranges != null && ranges.size() > 0) {
 				Revision revision = ranges.stream().map(r -> r.getRevision())
 						.max(Comparator.comparing(Revision::getDate)).get();
-				if (showDate) {
-					super.setLabel(revision.getAuthor() + ", " + TimeAgo.using(revision.getDate().getTime()));
+				if (showDate && (revision instanceof IRevisionRangeExtension)) {
+					super.setLabel(
+							revision.getAuthor() + ", " + ((IRevisionRangeExtension) revision).getFormattedTime());
 				} else {
 					super.setLabel(revision.getAuthor());
 				}
