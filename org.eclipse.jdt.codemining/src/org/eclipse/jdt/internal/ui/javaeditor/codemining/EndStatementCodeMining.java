@@ -46,7 +46,7 @@ public class EndStatementCodeMining extends LineContentCodeMining {
 				}
 			}
 			IRegion first = document.getLineInformationOfOffset(offset);
-			return "  // --> " + document.get(first.getOffset(), first.getLength());
+			return "  // --> " + document.get(first.getOffset(), first.getLength()).trim();
 		} catch (BadLocationException e1) {
 			return "";
 		}
