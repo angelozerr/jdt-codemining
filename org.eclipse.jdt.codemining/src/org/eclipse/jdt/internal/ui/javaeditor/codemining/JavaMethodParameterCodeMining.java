@@ -3,6 +3,7 @@ package org.eclipse.jdt.internal.ui.javaeditor.codemining;
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
@@ -77,6 +78,10 @@ public class JavaMethodParameterCodeMining extends LineContentCodeMining {
 								String paramType = method.getParameterTypes()[parameterIndex];
 								paramType = Signature
 										.getSimpleName(Signature.toString(Signature.getTypeErasure(paramType)));
+								// replace [] with ... when varArgs
+								if (parameterIndex == method.getParameterTypes().length - 1 && Flags.isVarargs(method.getFlags())) {
+									paramType = paramType.substring(0,  paramType.length() - 2) + "...";
+								}
 								label.append(paramType);
 							}
 							if (showName) {
