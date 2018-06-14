@@ -91,6 +91,12 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 			if (arguments.size() > 0) {
 				for (int i = 0; i < arguments.size(); i++) {
 					Expression exp = (Expression) arguments.get(i);
+					// Ignore empty parameter
+					if (exp instanceof SimpleName) {
+						if ("$missing$".equals(((SimpleName) exp).getIdentifier())) {
+							continue;
+						}
+					}
 					minings.add(new JavaMethodParameterCodeMining(node, exp, i, cu, provider, showName, showType));
 				}
 			}
