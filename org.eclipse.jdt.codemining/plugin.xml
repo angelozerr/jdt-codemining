@@ -32,7 +32,7 @@
 	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.implementations" forcePluginActivation="true"/>
 	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.implementations.atLeastOne" forcePluginActivation="true"/>
 	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.main.run" forcePluginActivation="true"/>
-	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.main.debug" forcePluginActivation="true"/>
+	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.main.debug" forcePluginActivation="true"/>	           	   
 	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.sccm.revison.recent.change" forcePluginActivation="true"/>
 	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.sccm.revison.recent.change.withAvatar" forcePluginActivation="true"/>
 	           	   <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.sccm.revison.recent.change.withDate" forcePluginActivation="true"/>
@@ -62,6 +62,7 @@
 	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.methodParameter.types" forcePluginActivation="true"/>
 	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.endStatement" forcePluginActivation="true"/>
 	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.debug.variable" forcePluginActivation="true"/>
+	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.java9.var.type" forcePluginActivation="true"/>
 	           </or>
            	</and>
          </enabledWhen>

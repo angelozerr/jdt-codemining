@@ -51,7 +51,7 @@ TODO
 
 To install `JDT Java CodeMining`:
 
- * install last build of Eclipse Photon with update site http://download.eclipse.org/eclipse/updates/4.8-I-builds
+ * install https://www.eclipse.org/downloads/packages/release/Photon/M7 or last build of Eclipse Photon with update site http://download.eclipse.org/eclipse/updates/4.8-I-builds
  * install jdt-codemining with update site http://oss.opensagres.fr/jdt-codemining/snapshot/
 
 # Demos 

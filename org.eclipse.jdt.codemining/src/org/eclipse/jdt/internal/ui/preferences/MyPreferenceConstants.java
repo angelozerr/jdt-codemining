@@ -110,7 +110,17 @@ public class MyPreferenceConstants {
 	 * @since 3.14
 	 */
 	public static final String EDITOR_JAVA_CODEMINING_SHOW_MAIN_DEBUG = "java.codemining.main.debug"; //$NON-NLS-1$
-	
+
+	/**
+	 * A named preference that stores the value for "Show type of Java9 'var' declaration"
+	 * <p>
+	 * Value is of type <code>Boolean</code>.
+	 * </p>
+	 *
+	 * @since 3.14
+	 */
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_JAVA9_VAR_TYPE = "java.codemining.java9.var.type"; //$NON-NLS-1$
+		
 	/**
 	 * A named preference that stores the value for "Show JUnit status".
 	 * <p>
@@ -214,6 +224,7 @@ public class MyPreferenceConstants {
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT_MIN_LINE_NUMBER, 4);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_MAIN_RUN, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_MAIN_DEBUG, JavaCore.DISABLED);
+		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JAVA9_VAR_TYPE, JavaCore.DISABLED);		
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_STATUS, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_RUN, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_DEBUG, JavaCore.DISABLED);

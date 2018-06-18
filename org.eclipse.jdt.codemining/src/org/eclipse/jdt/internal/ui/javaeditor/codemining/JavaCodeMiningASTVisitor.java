@@ -12,12 +12,14 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.VariableDeclaration;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.internal.corext.dom.HierarchicalASTVisitor;
 import org.eclipse.jdt.internal.ui.javaeditor.codemining.debug.InlinedDebugCodeMining;
 import org.eclipse.jdt.internal.ui.javaeditor.codemining.debug.SimpleNameDebugCodeMining;
+import org.eclipse.jdt.internal.ui.javaeditor.codemining.var.JavaVarTypeCodeMining;
 import org.eclipse.jdt.internal.ui.preferences.JavaPreferencesPropertyTester;
 import org.eclipse.jdt.internal.ui.preferences.MyPreferenceConstants;
 import org.eclipse.jface.text.ITextViewer;
@@ -158,6 +160,15 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 		}
 		return super.visit(node);
 	}
+	
+	@Override
+	public boolean visit(SimpleType node) {
+		if (node.isVar() && isShowJava9VarType()) {
+			JavaVarTypeCodeMining m = new JavaVarTypeCodeMining(node, viewer, provider);
+			minings.add(m);
+		}
+		return super.visit(node);
+	}
 
 	private boolean isShowName() {
 		return JavaPreferencesPropertyTester
@@ -183,6 +194,11 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING);
 	}
 
+	private boolean isShowJava9VarType() {
+		return JavaPreferencesPropertyTester
+				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JAVA9_VAR_TYPE);
+	}
+	
 	/**
 	 * Returns the stack frame in which to search for variables, or
 	 * <code>null</code> if none.

@@ -34,40 +34,43 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE);
 
 	public static final Key PREF_SHOW_METHOD_PARAMETER_NAMES = getJDTUIKey(
-			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_NAMES); // $NON-NLS-1$
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_NAMES);
 
 	public static final Key PREF_SHOW_METHOD_PARAMETER_TYPES = getJDTUIKey(
-			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_TYPES); // $NON-NLS-1$
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_TYPES);
 
 	public static final Key PREF_SHOW_END_STATEMENT = getJDTUIKey(
-			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT); // $NON-NLS-1$
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT);
 
 	public static final Key PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER = getJDTUIKey(
-			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT_MIN_LINE_NUMBER); // $NON-NLS-1$
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT_MIN_LINE_NUMBER);
 
-	private static final Key PREF_SHOW_SHOW_MAIN_RUN = getJDTUIKey(
+	private static final Key PREF_SHOW_MAIN_RUN = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_MAIN_RUN);
 
-	private static final Key PREF_SHOW_SHOW_MAIN_DEBUG = getJDTUIKey(
+	private static final Key PREF_SHOW_MAIN_DEBUG = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_MAIN_DEBUG);
 
+	private static final Key PREF_SHOW_JAVA9_VAR_TYPE = getJDTUIKey(
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JAVA9_VAR_TYPE);
+
 	public static final Key PREF_SHOW_JUNIT_STATUS = getJDTUIKey(
-			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_STATUS); // $NON-NLS-1$
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_STATUS);
 
 	public static final Key PREF_SHOW_JUNIT_RUN = getJDTUIKey(
-			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_RUN); // $NON-NLS-1$
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_RUN);
 
 	public static final Key PREF_SHOW_JUNIT_DEBUG = getJDTUIKey(
-			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_DEBUG); // $NON-NLS-1$
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_DEBUG);
 
 	public static final Key PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING = getJDTUIKey(
-			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING); // $NON-NLS-1$
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING);
 
 	public static final Key PREF_SHOW_REVISION_RECENT_CHANGE = getJDTUIKey(
-			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE); // $NON-NLS-1$
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE);
 
 	public static final Key PREF_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR = getJDTUIKey(
-			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR); // $NON-NLS-1$
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR);
 
 	public static final Key PREF_SHOW_REVISION_RECENT_CHANGE_WITH_DATE = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REVISION_RECENT_CHANGE_WITH_DATE); // $NON-NLS-1$
@@ -95,7 +98,7 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 		return new Key[] { PREF_SHOW_REFERENCES, PREF_SHOW_REFERENCES_AT_LEAST_ONE, PREF_SHOW_IMPLEMENTATIONS,
 				PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE, PREF_SHOW_METHOD_PARAMETER_NAMES,
 				PREF_SHOW_METHOD_PARAMETER_TYPES, PREF_SHOW_END_STATEMENT, PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER,
-				PREF_SHOW_SHOW_MAIN_RUN, PREF_SHOW_SHOW_MAIN_DEBUG, PREF_SHOW_JUNIT_STATUS, PREF_SHOW_JUNIT_RUN,
+				PREF_SHOW_MAIN_RUN, PREF_SHOW_MAIN_DEBUG, PREF_SHOW_JUNIT_STATUS, PREF_SHOW_JUNIT_RUN,
 				PREF_SHOW_JUNIT_DEBUG, PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING, PREF_SHOW_REVISION_RECENT_CHANGE,
 				PREF_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR, PREF_SHOW_REVISION_RECENT_CHANGE_WITH_DATE,
 				PREF_SHOW_REVISION_AUTHORS };
@@ -207,11 +210,16 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 
 		// - Show main run/debug
 		fFilteredPrefTree.addCheckBox(inner,
-				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showMainRun_label, PREF_SHOW_SHOW_MAIN_RUN,
+				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showMainRun_label, PREF_SHOW_MAIN_RUN,
 				enabledDisabled, defaultIndent, section);
 		fFilteredPrefTree.addCheckBox(inner,
-				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showMainDebug_label, PREF_SHOW_SHOW_MAIN_DEBUG,
-				enabledDisabled, defaultIndent, section);		
+				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showMainDebug_label, PREF_SHOW_MAIN_DEBUG,
+				enabledDisabled, defaultIndent, section);
+
+		// - Show type of Java9 'var' declaration
+		fFilteredPrefTree.addCheckBox(inner,
+				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showJava9VarType_label,
+				PREF_SHOW_JAVA9_VAR_TYPE, enabledDisabled, defaultIndent, section);
 	}
 
 	private void createJUnitSection(int nColumns, Composite parent) {
