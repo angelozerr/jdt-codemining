@@ -18,8 +18,8 @@ import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.ui.DebugUITools;
+import org.eclipse.debug.ui.contexts.DebugContextEvent;
 import org.eclipse.debug.ui.contexts.IDebugContextListener;
-import org.eclipse.debug.ui.contexts.IDebugContextService;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
@@ -33,8 +33,7 @@ import org.eclipse.jface.text.source.ISourceViewerExtension5;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
@@ -45,15 +44,13 @@ import org.eclipse.ui.texteditor.ITextEditor;
  */
 public class JavaMethodParameterCodeMiningProvider extends AbstractCodeMiningProvider {
 
-	private IDebugContextListener contextListener;
+	private IWorkbenchPartSite site;
 
-	private IDebugContextService service;
+	private IDebugContextListener contextListener;
 
 	private final Map<RGB, Color> colorTable;
 
 	public JavaMethodParameterCodeMiningProvider() {
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		service = DebugUITools.getDebugContextManager().getContextService(window);
 		colorTable = new HashMap<>();
 	}
 
@@ -61,24 +58,17 @@ public class JavaMethodParameterCodeMiningProvider extends AbstractCodeMiningPro
 	public CompletableFuture<List<? extends ICodeMining>> provideCodeMinings(ITextViewer viewer,
 			IProgressMonitor monitor) {
 		return CompletableFuture.supplyAsync(() -> {
-			addDebugListener(viewer);
 			monitor.isCanceled();
 			ITextEditor textEditor = super.getAdapter(ITextEditor.class);
 			ITypeRoot unit = EditorUtility.getEditorInputJavaElement(textEditor, true);
 			if (unit == null) {
 				return null;
 			}
+			this.site = textEditor.getSite();
+			addDebugListener(viewer);
 			try {
 				IJavaElement[] elements = unit.getChildren();
 				List<ICodeMining> minings = new ArrayList<>(elements.length);
-//				synchronized (this) {
-//					try {
-//						this.wait(2000);
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
 				collectLineContentCodeMinings(unit, textEditor, viewer, minings);
 				monitor.isCanceled();
 				return minings;
@@ -91,13 +81,20 @@ public class JavaMethodParameterCodeMiningProvider extends AbstractCodeMiningPro
 
 	private void addDebugListener(ITextViewer viewer) {
 		if (contextListener == null) {
-			contextListener = event -> {
-				if (viewer != null) {
-					((ISourceViewerExtension5) viewer).updateCodeMinings();
-				}
-			};
-			service.addDebugContextListener(contextListener);
+			addSynchronizedDebugListener(viewer);
 		}
+	}
+
+	private synchronized void addSynchronizedDebugListener(ITextViewer viewer) {
+		if (contextListener != null) {
+			return;
+		}
+		contextListener = event -> {
+			if ((event.getFlags() & DebugContextEvent.ACTIVATED) > 0 && viewer != null) {
+				((ISourceViewerExtension5) viewer).updateCodeMinings();
+			}
+		};
+		DebugUITools.addPartDebugContextListener(site, contextListener);
 	}
 
 	private void collectLineContentCodeMinings(ITypeRoot unit, ITextEditor textEditor, ITextViewer viewer,
@@ -111,7 +108,7 @@ public class JavaMethodParameterCodeMiningProvider extends AbstractCodeMiningPro
 	public void dispose() {
 		super.dispose();
 		if (contextListener != null) {
-			service.removeDebugContextListener(contextListener);
+			DebugUITools.removePartDebugContextListener(site, contextListener);
 		}
 		colorTable.values().forEach(color -> color.dispose());
 	}
