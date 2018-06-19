@@ -18,7 +18,7 @@ public class MyPreferencesMessages extends NLS {
 	public static String JavaEditorCodeMiningConfigurationBlock_showEndStatement_minLineNumber_label;
 	public static String JavaEditorCodeMiningConfigurationBlock_showMainRun_label;
 	public static String JavaEditorCodeMiningConfigurationBlock_showMainDebug_label;
-	public static String JavaEditorCodeMiningConfigurationBlock_showJava9VarType_label;
+	public static String JavaEditorCodeMiningConfigurationBlock_showJava10VarType_label;
 	public static String JavaEditorCodeMiningConfigurationBlock_section_junit;
 	public static String JavaEditorCodeMiningConfigurationBlock_showJUnitStatus_label;
 	public static String JavaEditorCodeMiningConfigurationBlock_showJUnitRun_label;

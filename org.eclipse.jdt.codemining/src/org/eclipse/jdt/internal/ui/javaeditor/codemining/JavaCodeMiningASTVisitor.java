@@ -196,7 +196,7 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 
 	private boolean isShowJava9VarType() {
 		return JavaPreferencesPropertyTester
-				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JAVA9_VAR_TYPE);
+				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JAVA10_VAR_TYPE);
 	}
 	
 	/**

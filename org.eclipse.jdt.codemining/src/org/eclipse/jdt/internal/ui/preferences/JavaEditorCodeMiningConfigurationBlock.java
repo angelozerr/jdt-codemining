@@ -51,8 +51,8 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 	private static final Key PREF_SHOW_MAIN_DEBUG = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_MAIN_DEBUG);
 
-	private static final Key PREF_SHOW_JAVA9_VAR_TYPE = getJDTUIKey(
-			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JAVA9_VAR_TYPE);
+	private static final Key PREF_SHOW_JAVA10_VAR_TYPE = getJDTUIKey(
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JAVA10_VAR_TYPE);
 
 	public static final Key PREF_SHOW_JUNIT_STATUS = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_STATUS);
@@ -98,7 +98,7 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 		return new Key[] { PREF_SHOW_REFERENCES, PREF_SHOW_REFERENCES_AT_LEAST_ONE, PREF_SHOW_IMPLEMENTATIONS,
 				PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE, PREF_SHOW_METHOD_PARAMETER_NAMES,
 				PREF_SHOW_METHOD_PARAMETER_TYPES, PREF_SHOW_END_STATEMENT, PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER,
-				PREF_SHOW_MAIN_RUN, PREF_SHOW_MAIN_DEBUG, PREF_SHOW_JAVA9_VAR_TYPE, PREF_SHOW_JUNIT_STATUS,
+				PREF_SHOW_MAIN_RUN, PREF_SHOW_MAIN_DEBUG, PREF_SHOW_JAVA10_VAR_TYPE, PREF_SHOW_JUNIT_STATUS,
 				PREF_SHOW_JUNIT_RUN, PREF_SHOW_JUNIT_DEBUG, PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING,
 				PREF_SHOW_REVISION_RECENT_CHANGE, PREF_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR,
 				PREF_SHOW_REVISION_RECENT_CHANGE_WITH_DATE, PREF_SHOW_REVISION_AUTHORS };
@@ -218,8 +218,8 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 
 		// - Show type of Java9 'var' declaration
 		fFilteredPrefTree.addCheckBox(inner,
-				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showJava9VarType_label,
-				PREF_SHOW_JAVA9_VAR_TYPE, enabledDisabled, defaultIndent, section);
+				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showJava10VarType_label,
+				PREF_SHOW_JAVA10_VAR_TYPE, enabledDisabled, defaultIndent, section);
 	}
 
 	private void createJUnitSection(int nColumns, Composite parent) {
