@@ -8,7 +8,7 @@
  *  Contributors:
  *     Angelo Zerr <angelo.zerr@gmail.com> - [CodeMining] Provide Java References/Implementation CodeMinings - Bug 529127
  */
-package org.eclipse.jdt.internal.ui.javaeditor.codemining;
+package org.eclipse.jdt.internal.ui.javaeditor.codemining.implementations;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.junit.codemining.AbstractJavaCodeMining;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;

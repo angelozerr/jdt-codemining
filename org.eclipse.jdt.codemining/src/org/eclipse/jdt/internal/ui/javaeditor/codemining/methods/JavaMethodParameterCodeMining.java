@@ -1,4 +1,4 @@
-package org.eclipse.jdt.internal.ui.javaeditor.codemining;
+package org.eclipse.jdt.internal.ui.javaeditor.codemining.methods;
 
 import java.util.concurrent.CompletableFuture;
 

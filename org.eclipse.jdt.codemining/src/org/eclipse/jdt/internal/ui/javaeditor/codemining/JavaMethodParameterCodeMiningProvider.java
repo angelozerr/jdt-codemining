@@ -69,7 +69,7 @@ public class JavaMethodParameterCodeMiningProvider extends AbstractCodeMiningPro
 			try {
 				IJavaElement[] elements = unit.getChildren();
 				List<ICodeMining> minings = new ArrayList<>(elements.length);
-				collectLineContentCodeMinings(unit, textEditor, viewer, minings);
+				collectCodeMinings(unit, textEditor, viewer, minings);
 				monitor.isCanceled();
 				return minings;
 			} catch (JavaModelException e) {
@@ -97,7 +97,7 @@ public class JavaMethodParameterCodeMiningProvider extends AbstractCodeMiningPro
 		DebugUITools.addPartDebugContextListener(site, contextListener);
 	}
 
-	private void collectLineContentCodeMinings(ITypeRoot unit, ITextEditor textEditor, ITextViewer viewer,
+	private void collectCodeMinings(ITypeRoot unit, ITextEditor textEditor, ITextViewer viewer,
 			List<ICodeMining> minings) {
 		CompilationUnit cu = SharedASTProvider.getAST(unit, SharedASTProvider.WAIT_YES, null);
 		JavaCodeMiningASTVisitor visitor = new JavaCodeMiningASTVisitor(cu, textEditor, viewer, minings, this);
@@ -110,7 +110,7 @@ public class JavaMethodParameterCodeMiningProvider extends AbstractCodeMiningPro
 		if (contextListener != null) {
 			DebugUITools.removePartDebugContextListener(site, contextListener);
 		}
-		colorTable.values().forEach(color -> color.dispose());
+		colorTable.values().forEach(Color::dispose);
 	}
 
 	public Color getColor(RGB rgb, Display display) {

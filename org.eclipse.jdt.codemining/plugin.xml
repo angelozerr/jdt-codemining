@@ -21,9 +21,14 @@
 	     <enabledWhen>
 	        <and>
 	            <with variable="editorInput">
-	               <adapt type="org.eclipse.core.resources.IFile">
-	                  <test property="org.eclipse.core.resources.contentTypeId" value="org.eclipse.jdt.core.javaSource" />
-	               </adapt>
+	               <or>
+		              <adapt type="org.eclipse.core.resources.IFile">
+	                     <test property="org.eclipse.core.resources.contentTypeId" value="org.eclipse.jdt.core.javaSource" />                     
+		              </adapt>
+		              <adapt type="org.eclipse.jdt.core.IClassFile">
+						<instanceof value="org.eclipse.jdt.core.IClassFile" />
+		              </adapt>
+		           </or>
 	           	</with>
 	           	<or>
 	           	   <!-- TODO: change to property="org.eclipse.jdt.ui.hasPreference" -->
@@ -52,10 +57,15 @@
 	     <enabledWhen>
 	        <and>
                <with variable="editorInput">
-                  <adapt type="org.eclipse.core.resources.IFile">
-                     <test property="org.eclipse.core.resources.contentTypeId" value="org.eclipse.jdt.core.javaSource" />
-                  </adapt>
-           	   </with>
+	               <or>
+		              <adapt type="org.eclipse.core.resources.IFile">
+	                     <test property="org.eclipse.core.resources.contentTypeId" value="org.eclipse.jdt.core.javaSource" />                     
+		              </adapt>
+		              <adapt type="org.eclipse.jdt.core.IClassFile">
+						<instanceof value="org.eclipse.jdt.core.IClassFile" />
+		              </adapt>
+		           </or>
+	           </with>
            	   <or>
            	   	  <!-- TODO: change to property="org.eclipse.jdt.ui.hasPreference" -->
 	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.methodParameter.names" forcePluginActivation="true"/>
@@ -77,11 +87,16 @@
          label="%JUnitCodeMiningProvider.label">
          <enabledWhen>
             <and>
-               <with variable="editorInput">
-                  <adapt type="org.eclipse.core.resources.IFile">
-                     <test property="org.eclipse.core.resources.contentTypeId" value="org.eclipse.jdt.core.javaSource" />
-                  </adapt>
-           	   </with>
+				<with variable="editorInput">
+	               <or>
+		              <adapt type="org.eclipse.core.resources.IFile">
+	                     <test property="org.eclipse.core.resources.contentTypeId" value="org.eclipse.jdt.core.javaSource" />                     
+		              </adapt>
+		              <adapt type="org.eclipse.jdt.core.IClassFile">
+						<instanceof value="org.eclipse.jdt.core.IClassFile" />
+		              </adapt>
+		           </or>
+	           	</with>
            	   <or>
            	   	  <!-- TODO: change to property="org.eclipse.jdt.ui.hasPreference" -->
 	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.junit.status" forcePluginActivation="true"/>

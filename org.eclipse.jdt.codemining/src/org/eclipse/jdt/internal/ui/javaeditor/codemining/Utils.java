@@ -11,6 +11,31 @@ import org.eclipse.jface.text.source.LineRange;
 
 public class Utils {
 
+	/*private static final Field isGeneratedByLombokField;
+
+	static {
+		isGeneratedByLombokField = isGeneratedByLombokField();
+	}
+
+	static Field isGeneratedByLombokField() {
+		try {
+			return ASTNode.class.getDeclaredField("$isGenerated");
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public static boolean isGeneratedByLombok(ASTNode node) {
+		if (isGeneratedByLombokField == null) {
+			return false;
+		}
+		try {
+			return (boolean) isGeneratedByLombokField.get(node);
+		} catch (Exception e) {
+			return false;
+		}
+	}*/
+
 	public static int getLineNumber(IJavaElement element, IDocument document)
 			throws JavaModelException, BadLocationException {
 		ISourceRange r = ((ISourceReference) element).getNameRange();

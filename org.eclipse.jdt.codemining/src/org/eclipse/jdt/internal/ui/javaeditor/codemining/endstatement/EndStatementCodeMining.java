@@ -8,7 +8,7 @@
  *  Contributors:
  *     Angelo Zerr <angelo.zerr@gmail.com>
  */
-package org.eclipse.jdt.internal.ui.javaeditor.codemining;
+package org.eclipse.jdt.internal.ui.javaeditor.codemining.endstatement;
 
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jface.text.BadLocationException;
@@ -26,7 +26,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
  */
 public class EndStatementCodeMining extends LineContentCodeMining {
 
-	protected EndStatementCodeMining(Statement node, ITextEditor textEditor, ITextViewer viewer, int minLineNumber,
+	public EndStatementCodeMining(Statement node, ITextEditor textEditor, ITextViewer viewer, int minLineNumber,
 			ICodeMiningProvider provider) {
 		super(new Position(node.getStartPosition() + node.getLength(), 1), provider, e -> {
 			textEditor.selectAndReveal(node.getStartPosition(), 0);

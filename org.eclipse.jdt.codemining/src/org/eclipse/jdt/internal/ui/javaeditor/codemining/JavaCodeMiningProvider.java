@@ -29,6 +29,8 @@ import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.ui.javaeditor.EditorUtility;
 import org.eclipse.jdt.internal.ui.javaeditor.JavaEditor;
+import org.eclipse.jdt.internal.ui.javaeditor.codemining.implementations.JavaImplementationCodeMining;
+import org.eclipse.jdt.internal.ui.javaeditor.codemining.references.JavaReferenceCodeMining;
 import org.eclipse.jdt.internal.ui.preferences.JavaPreferencesPropertyTester;
 import org.eclipse.jdt.internal.ui.preferences.MyPreferenceConstants;
 import org.eclipse.jface.text.BadLocationException;
@@ -213,7 +215,7 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider implement
 
 					}
 				} catch (BadLocationException e) {
-					e.printStackTrace();
+					// TODO: what should we done when there are some errors?
 				}
 			}
 		}

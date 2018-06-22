@@ -19,6 +19,8 @@ import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.internal.corext.dom.HierarchicalASTVisitor;
 import org.eclipse.jdt.internal.ui.javaeditor.codemining.debug.InlinedDebugCodeMining;
 import org.eclipse.jdt.internal.ui.javaeditor.codemining.debug.SimpleNameDebugCodeMining;
+import org.eclipse.jdt.internal.ui.javaeditor.codemining.endstatement.EndStatementCodeMining;
+import org.eclipse.jdt.internal.ui.javaeditor.codemining.methods.JavaMethodParameterCodeMining;
 import org.eclipse.jdt.internal.ui.javaeditor.codemining.var.JavaVarTypeCodeMining;
 import org.eclipse.jdt.internal.ui.preferences.JavaPreferencesPropertyTester;
 import org.eclipse.jdt.internal.ui.preferences.MyPreferenceConstants;
@@ -43,9 +45,15 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 
 	private final ITextViewer viewer;
 
-	private IJavaStackFrame frame;
+	private final boolean showEndStatement;
 
 	private int endStatementMinLineNumber;
+
+	private IJavaStackFrame frame;
+
+	private boolean showVariableValueWhileDebugging;
+
+	private final boolean showJava10VarType;
 
 	public JavaCodeMiningASTVisitor(CompilationUnit cu, ITextEditor textEditor, ITextViewer viewer,
 			List<ICodeMining> minings, ICodeMiningProvider provider) {
@@ -54,13 +62,19 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 		this.provider = provider;
 		this.showName = isShowName();
 		this.showType = isShowType();
+		this.showVariableValueWhileDebugging = isShowVariableValueWhileDebugging();
+		this.showEndStatement = isShowEndStatement();
 		this.endStatementMinLineNumber = getEndStatementMinLineNumber();
+		this.showJava10VarType = isShowJava10VarType();
 		this.textEditor = textEditor;
 		this.viewer = viewer;
 	}
 
 	@Override
 	public boolean visit(ClassInstanceCreation node) {
+		/*if (Utils.isGeneratedByLombok(node)) {
+			return super.visit(node);
+		}*/
 		if (showName || showType) {
 			List arguments = node.arguments();
 			if (arguments.size() > 0) {
@@ -70,7 +84,7 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 				}
 			}
 		}
-		if (isShowVariableValueWhileDebugging() && frame != null) {
+		if (showVariableValueWhileDebugging && frame != null) {
 			List arguments = node.arguments();
 			if (arguments.size() > 0) {
 				for (int i = 0; i < arguments.size(); i++) {
@@ -88,7 +102,10 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 
 	@Override
 	public boolean visit(MethodInvocation node) {
-		if (showName || showType) {
+		/*if (Utils.isGeneratedByLombok(node)) {
+			return super.visit(node);
+		}*/
+		if ((showName || showType)) {
 			List arguments = node.arguments();
 			if (arguments.size() > 0) {
 				for (int i = 0; i < arguments.size(); i++) {
@@ -103,7 +120,7 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 				}
 			}
 		}
-		if (isShowVariableValueWhileDebugging() && frame != null) {
+		if (showVariableValueWhileDebugging && frame != null) {
 			List arguments = node.arguments();
 			if (arguments.size() > 0) {
 				for (int i = 0; i < arguments.size(); i++) {
@@ -125,7 +142,7 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 		if (node.getNodeType() == ASTNode.IF_STATEMENT || node.getNodeType() == ASTNode.WHILE_STATEMENT
 				|| node.getNodeType() == ASTNode.FOR_STATEMENT || node.getNodeType() == ASTNode.DO_STATEMENT
 				|| node.getNodeType() == ASTNode.SWITCH_STATEMENT) {
-			if (isShowEndStatement()) {
+			if (showEndStatement) {
 				minings.add(new EndStatementCodeMining(node, textEditor, viewer, endStatementMinLineNumber, provider));
 			}
 		}
@@ -133,7 +150,7 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 
 	@Override
 	public boolean visit(MethodDeclaration node) {
-		if (isShowVariableValueWhileDebugging()) {
+		if (showVariableValueWhileDebugging) {
 			IJavaStackFrame frame = getFrame();
 			if (frame != null) {
 				try {
@@ -154,16 +171,16 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 
 	@Override
 	public boolean visit(VariableDeclaration node) {
-		if (isShowVariableValueWhileDebugging() && frame != null) {
+		if (showVariableValueWhileDebugging && frame != null) {
 			InlinedDebugCodeMining m = new SimpleNameDebugCodeMining(node.getName(), frame, viewer, provider);
 			minings.add(m);
 		}
 		return super.visit(node);
 	}
-	
+
 	@Override
 	public boolean visit(SimpleType node) {
-		if (node.isVar() && isShowJava9VarType()) {
+		if (node.isVar() && showJava10VarType) {
 			JavaVarTypeCodeMining m = new JavaVarTypeCodeMining(node, viewer, provider);
 			minings.add(m);
 		}
@@ -194,11 +211,11 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING);
 	}
 
-	private boolean isShowJava9VarType() {
+	private boolean isShowJava10VarType() {
 		return JavaPreferencesPropertyTester
 				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JAVA10_VAR_TYPE);
 	}
-	
+
 	/**
 	 * Returns the stack frame in which to search for variables, or
 	 * <code>null</code> if none.
