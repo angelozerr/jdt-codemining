@@ -88,7 +88,14 @@ public class RevisionRecentChangeCodeMining extends LineHeaderCodeMining {
 		if (avatar != null) {
 			Display display = textWidget.getDisplay();
 			Image image = new Image(display, avatar.getData());
-			gc.drawImage(image, x, y + 2);
+			
+			int textHeight = gc.stringExtent(getLabel()).y;
+			int imageYOffset = (textHeight - image.getBounds().height) / 2;
+			if (imageYOffset < 0 ) {
+				imageYOffset = 0;
+			}
+			
+			gc.drawImage(image, x, y + imageYOffset);
 			image.dispose();
 			x += 18;
 
