@@ -1,7 +1,7 @@
 package org.eclipse.egit.codemining.ui.internal.blame;
 
 import org.eclipse.egit.ui.internal.blame.BlameRevision;
-import org.eclipse.jface.text.revisions.provisionnal.IRevisionRangeExtension;
+import org.eclipse.jface.text.revisions.provisional.IRevisionRangeExtension;
 import org.eclipse.jgit.util.RelativeDateFormatter;
 
 public class ExtendedBlameRevision extends BlameRevision implements IRevisionRangeExtension {

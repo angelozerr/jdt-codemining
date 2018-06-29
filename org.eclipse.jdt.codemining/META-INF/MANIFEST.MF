@@ -25,7 +25,9 @@ Require-Bundle: org.eclipse.jdt.junit;bundle-version="3.11.0",
  org.eclipse.ui.forms;bundle-version="3.7.200",
  org.eclipse.equinox.preferences,
  org.eclipse.core.runtime,
- org.eclipse.jdt.debug.ui
+ org.eclipse.jdt.debug.ui,
+ org.eclipse.ui
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.jdt.internal.JavaCodeMiningPlugin
-Export-Package: org.eclipse.jface.text.revisions.provisionnal
+Export-Package: org.eclipse.jface.text.revisions.provisional
+Automatic-Module-Name: org.eclipse.jdt.codemining

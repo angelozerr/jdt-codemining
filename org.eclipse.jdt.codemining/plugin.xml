@@ -117,5 +117,12 @@
             id="org.eclipse.jdt.ui.preferences.JavaEditorCodeMiningPreferencePage">
             <keywordReference id="org.eclipse.jdt.ui.codemining"/>
       </page>   
-    </extension>   
+    </extension>
+   <extension
+         point="org.eclipse.ui.keywords">
+      <keyword
+            id="org.eclipse.jdt.ui.codemining"
+            label="code mining">
+      </keyword>
+   </extension>   
 </plugin>
