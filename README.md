@@ -2,7 +2,7 @@
 
 [![Build Status](https://secure.travis-ci.org/angelozerr/jdt-codemining.png)](http://travis-ci.org/angelozerr/jdt-codemining)
 
-Eclipse plugin for `JDT Java Code Mining` anf `Git Code Mining` (Experimental)
+Eclipse plugin for `JDT Java Code Mining` and `Git Code Mining` (Experimental)
 
 ![JUnit CodeMining Demo](images/JUnitCodeMiningDemo.gif)
 
@@ -10,15 +10,16 @@ JDT CodeMining is a an Eclipse plugin which requires `Eclipse Photon` based on J
 
 ![JUnit CodeMining Demo](images/JUnitCodeMiningDemo.gif)
 
-Please `star this project if you want to have those CodeMinings inside JDT`. After discussing with JDT Team, this CodeMining support will not included for Photon release in June but perhaps in september if jdt-codemining receives good feedback. Indeed as CodeMining is a new feature which could cause some trouble (like performance) and JDT Team are very busy, they prefer not include my work on Java CodeMining for Photon release in June.  
- 
-So please star this github project and [create any issues](https://github.com/angelozerr/jdt-codemining/issues) to know your feelings and bugs. Thanks!
+# Install and activation
 
-Issues can be about:
+To install `JDT Java CodeMining`:
 
- * `performance`: indeed StyledText is not performant with big file and variable line height mode. As CodeMining can affect the line height (variable line height) to draw the mining before a line (like references), you could have trouble with performance. StyledText was improved to have better performance with variable line height, but it's not perfect yet. So please fill issues if you have troubles by describing your case (attach the big Java file, describes what you do, which version of Eclipse Photon are you using).
- * `regression`: StyledText was improved to have better performance in variable line height, please fill issue if you find regression (like scrollbar not well computed, focus problem after apply of completion, etc).
- * `new feature`: if you wish more settings to manage Java CodeMining, display other kind of mining, change the behaviour of mining when you click on it, etc, please create issues.
+ * install last build of Eclipse Photon from https://www.eclipse.org/downloads/eclipse-packages/
+ * install jdt-codemining with update site http://oss.opensagres.fr/jdt-codemining/snapshot/
+
+By default minings are disabled, you must activate them with preferences:
+
+![](images/JavaCodeMiningPreferences.png)
 
 # Features
 
@@ -39,20 +40,26 @@ jdt-codemining provides several JDT Java CodeMining:
 * `Debugging`
    * `Show variable values inline while debugging`
 
-By default minings are disabled, you must activate them with preferences:
-
-![](images/JavaCodeMiningPreferences.png)
 
 ## EGit
+ * Show revision recent change
+ 	* Show avatar
+ 	* Show date ago
+ * Show authors
 
-TODO
 
-# Install
+# Help us to get his into the Eclipse standard
 
-To install `JDT Java CodeMining`:
+Please `star this project if you want to have those CodeMinings inside JDT`. After discussing with JDT Team, this CodeMining support will not included for Photon release in June but perhaps in september if jdt-codemining receives good feedback. Indeed as CodeMining is a new feature which could cause some trouble (like performance) and JDT Team are very busy, they prefer not include my work on Java CodeMining for Photon release in June.  
+ 
+So please star this github project and [create any issues](https://github.com/angelozerr/jdt-codemining/issues) to know your feelings and bugs. Thanks!
 
- * install https://www.eclipse.org/downloads/packages/release/Photon/M7 or last build of Eclipse Photon with update site http://download.eclipse.org/eclipse/updates/4.8-I-builds
- * install jdt-codemining with update site http://oss.opensagres.fr/jdt-codemining/snapshot/
+Issues can be about:
+
+ * `performance`: indeed StyledText is not performant with big file and variable line height mode. As CodeMining can affect the line height (variable line height) to draw the mining before a line (like references), you could have trouble with performance. StyledText was improved to have better performance with variable line height, but it's not perfect yet. So please fill issues if you have troubles by describing your case (attach the big Java file, describes what you do, which version of Eclipse Photon are you using).
+ * `regression`: StyledText was improved to have better performance in variable line height, please fill issue if you find regression (like scrollbar not well computed, focus problem after apply of completion, etc).
+ * `new feature`: if you wish more settings to manage Java CodeMining, display other kind of mining, change the behaviour of mining when you click on it, etc, please create issues.
+
 
 # Demos 
  
