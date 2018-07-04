@@ -301,7 +301,10 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider implement
 		return fRevisionInfoSupport != null ? fRevisionInfoSupport.getRanges(lines) : null;
 	}
 
-	private void initRevisionSupport(ITextViewer viewer, ITypeRoot unit) {
+	private synchronized void initRevisionSupport(ITextViewer viewer, ITypeRoot unit) {
+		if (fRevisionInfoSupport != null) {
+			return;
+		}
 		IResource resource = unit.getResource();
 		if (resource == null) {
 			return;
