@@ -21,7 +21,6 @@
 	<modules>
 		<module>org.eclipse.jdt.codemining</module>
 		<module>org.eclipse.egit.codemining</module>
-		<module>plugin_to_delete_when_m7</module>
 		<module>update-site</module>
 	</modules>
 
