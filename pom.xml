@@ -29,7 +29,7 @@
 		<repository>
 			<id>photon</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/eclipse/updates/4.8-I-builds</url>
+			<url>http://download.eclipse.org/eclipse/updates/4.9-I-builds</url>
 		</repository>
 		<repository>
 			<id>egit</id>
