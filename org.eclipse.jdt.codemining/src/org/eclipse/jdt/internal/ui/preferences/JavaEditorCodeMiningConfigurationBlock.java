@@ -21,6 +21,9 @@ import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfigurationBlock {
 
 	// Preference store keys, see JavaCore.getOptions
+
+	// --------------------- General
+
 	private static final Key PREF_SHOW_REFERENCES = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REFERENCES);
 
@@ -32,12 +35,6 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 
 	private static final Key PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE);
-
-	public static final Key PREF_SHOW_METHOD_PARAMETER_NAMES = getJDTUIKey(
-			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_NAMES);
-
-	public static final Key PREF_SHOW_METHOD_PARAMETER_TYPES = getJDTUIKey(
-			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_TYPES);
 
 	public static final Key PREF_SHOW_END_STATEMENT = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT);
@@ -53,6 +50,19 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 
 	private static final Key PREF_SHOW_JAVA10_VAR_TYPE = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JAVA10_VAR_TYPE);
+
+	// --------------------- Method parameter
+
+	public static final Key PREF_SHOW_METHOD_PARAMETER_NAMES = getJDTUIKey(
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_NAMES);
+
+	public static final Key PREF_SHOW_METHOD_PARAMETER_TYPES = getJDTUIKey(
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_TYPES);
+
+	public static final Key PREF_SHOW_METHOD_PARAMETER_ONLY_FOR_LITERAL = getJDTUIKey(
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_ONLY_FOR_LITERAL);
+
+	// --------------------- JUnit
 
 	public static final Key PREF_SHOW_JUNIT_STATUS = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_JUNIT_STATUS);
@@ -96,9 +106,10 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 
 	public static Key[] getKeys() {
 		return new Key[] { PREF_SHOW_REFERENCES, PREF_SHOW_REFERENCES_AT_LEAST_ONE, PREF_SHOW_IMPLEMENTATIONS,
-				PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE, PREF_SHOW_METHOD_PARAMETER_NAMES,
-				PREF_SHOW_METHOD_PARAMETER_TYPES, PREF_SHOW_END_STATEMENT, PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER,
-				PREF_SHOW_MAIN_RUN, PREF_SHOW_MAIN_DEBUG, PREF_SHOW_JAVA10_VAR_TYPE, PREF_SHOW_JUNIT_STATUS,
+				PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE, PREF_SHOW_END_STATEMENT,
+				PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER, PREF_SHOW_MAIN_RUN, PREF_SHOW_MAIN_DEBUG,
+				PREF_SHOW_JAVA10_VAR_TYPE, PREF_SHOW_METHOD_PARAMETER_NAMES, PREF_SHOW_METHOD_PARAMETER_TYPES,
+				PREF_SHOW_METHOD_PARAMETER_ONLY_FOR_LITERAL, PREF_SHOW_JUNIT_STATUS,
 				PREF_SHOW_JUNIT_RUN, PREF_SHOW_JUNIT_DEBUG, PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING,
 				PREF_SHOW_REVISION_RECENT_CHANGE, PREF_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR,
 				PREF_SHOW_REVISION_RECENT_CHANGE_WITH_DATE, PREF_SHOW_REVISION_AUTHORS };
@@ -148,6 +159,8 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 
 		// --- General
 		createGeneralSection(nColumns, composite);
+		// --- Method parameter
+		createMethodParameterSection(nColumns, composite);		
 		// --- JUnit
 		createJUnitSection(nColumns, composite);
 		// --- Debugging
@@ -190,15 +203,6 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showImplementations_atLeastOne_label,
 				PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE, enabledDisabled, extraIndent, section);
 
-		// - Show method parameter names
-		fFilteredPrefTree.addCheckBox(inner,
-				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showMethodParameterNames_label,
-				PREF_SHOW_METHOD_PARAMETER_NAMES, enabledDisabled, defaultIndent, section);
-		// - Show method parameter types
-		fFilteredPrefTree.addCheckBox(inner,
-				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showMethodParameterTypes_label,
-				PREF_SHOW_METHOD_PARAMETER_TYPES, enabledDisabled, defaultIndent, section);
-
 		// - Show end statement
 		fFilteredPrefTree.addCheckBox(inner,
 				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showEndStatement_label,
@@ -222,6 +226,31 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 				PREF_SHOW_JAVA10_VAR_TYPE, enabledDisabled, defaultIndent, section);
 	}
 
+	private void createMethodParameterSection(int nColumns, Composite parent) {
+		final int defaultIndent = 0;
+		String label = MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_section_methodParameter;
+		Key twistieKey = OptionsConfigurationBlock.getLocalKey("JavaEditorCodeMiningPreferencePage_section_methodParameter"); //$NON-NLS-1$
+		PreferenceTreeNode<?> section = fFilteredPrefTree.addExpandableComposite(parent, label, nColumns, twistieKey,
+				null, false);
+		ExpandableComposite excomposite = getExpandableComposite(twistieKey);
+
+		Composite inner = createInnerComposite(excomposite, nColumns, parent.getFont());
+
+		// - Show method parameter names
+		fFilteredPrefTree.addCheckBox(inner,
+				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showMethodParameterNames_label,
+				PREF_SHOW_METHOD_PARAMETER_NAMES, enabledDisabled, defaultIndent, section);
+		// - Show method parameter types
+		fFilteredPrefTree.addCheckBox(inner,
+				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showMethodParameterTypes_label,
+				PREF_SHOW_METHOD_PARAMETER_TYPES, enabledDisabled, defaultIndent, section);
+		// - Show parameter only for literal
+		fFilteredPrefTree.addCheckBox(inner,
+				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showMethodParameterOnlyForLiteral_label,
+				PREF_SHOW_METHOD_PARAMETER_ONLY_FOR_LITERAL, enabledDisabled, defaultIndent, section);
+	}
+
+	
 	private void createJUnitSection(int nColumns, Composite parent) {
 		final int defaultIndent = 0;
 		String label = MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_section_junit;

@@ -14,10 +14,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.SimpleName;
-import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.internal.corext.dom.Bindings;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Position;
@@ -94,35 +91,9 @@ public class JavaMethodParameterCodeMining extends LineContentCodeMining {
 			IMethodBinding calledMethodBinding = ((node instanceof MethodInvocation)
 					? ((MethodInvocation) node).resolveMethodBinding()
 					: ((ClassInstanceCreation) node).resolveConstructorBinding());
-			String label = "";
-			if (calledMethodBinding != null) {
-				MethodDeclaration decl = (MethodDeclaration) cu.findDeclaringNode(calledMethodBinding.getKey());
-				if (decl != null) {
-					label = getParameterLabel(decl);
-				} else {
-					label = getParameterLabel(calledMethodBinding);
-				}
-			}
-			super.setLabel(label);
+			String label = calledMethodBinding != null ? getParameterLabel(calledMethodBinding) : null;
+			super.setLabel(label != null ? label : "");
 		});
-	}
-
-	private String getParameterLabel(MethodDeclaration decl) {
-		SingleVariableDeclaration elem = (SingleVariableDeclaration) decl.parameters().get(parameterIndex);
-		String paramName = elem.getName().getIdentifier();
-		if (filter(parameter, paramName)) {
-			// variable name used in the callee method as parameter as the same name than
-			// parameter of the method, don't display it.
-			return "";
-		}
-		ParameterMiningLabelBuilder label = new ParameterMiningLabelBuilder();
-		if (showType) {
-			// TODO
-		}
-		if (showName) {
-			label.addParameterInfo(paramName);
-		}
-		return label.toString();
 	}
 
 	private String getParameterLabel(IMethodBinding calledMethodBinding) {
@@ -131,12 +102,6 @@ public class JavaMethodParameterCodeMining extends LineContentCodeMining {
 		try {
 			IMethod method = Bindings.findMethod(calledMethodBinding, calledType);
 			if (method == null) {
-				return "";
-			}
-			String paramName = method.getParameterNames()[parameterIndex];
-			if (filter(parameter, paramName)) {
-				// variable name used in the callee method as parameter as the same name than
-				// parameter of the method, don't display it.
 				return "";
 			}
 			ParameterMiningLabelBuilder label = new ParameterMiningLabelBuilder();
@@ -150,26 +115,12 @@ public class JavaMethodParameterCodeMining extends LineContentCodeMining {
 				label.addParameterInfo(paramType);
 			}
 			if (showName) {
+				String paramName = method.getParameterNames()[parameterIndex];
 				label.addParameterInfo(paramName);
 			}
 			return label.toString();
 		} catch (JavaModelException e) {
 			return "";
 		}
-	}
-
-	/**
-	 * Returns true if the given parameter name must not displayed the code mining
-	 * parameter name and false otherwise.
-	 * 
-	 * @param parameter the expression parameter
-	 * @param paramName the parameter name of the callee method.
-	 * @return true if the given parameter name must not displayed the code mining
-	 *         parameter name and false otherwise.
-	 */
-	private boolean filter(Expression parameter, String paramName) {
-		String varName = parameter.getNodeType() == ASTNode.SIMPLE_NAME ? ((SimpleName) parameter).getIdentifier()
-				: null;
-		return paramName.equals(varName);
 	}
 }

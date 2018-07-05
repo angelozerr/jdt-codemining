@@ -37,10 +37,12 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 
 	private final ICodeMiningProvider provider;
 
-	private final boolean showName;
+	private final boolean showParameterName;
 
-	private final boolean showType;
+	private final boolean showParameterType;
 
+	private final boolean showParameterOnlyForLiteral;
+	
 	private final ITextEditor textEditor;
 
 	private final ITextViewer viewer;
@@ -60,8 +62,9 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 		this.cu = cu;
 		this.minings = minings;
 		this.provider = provider;
-		this.showName = isShowName();
-		this.showType = isShowType();
+		this.showParameterName = isShowParameterName();
+		this.showParameterType = isShowParameterType();
+		this.showParameterOnlyForLiteral = isShowParameterOnlyForLiteral();
 		this.showVariableValueWhileDebugging = isShowVariableValueWhileDebugging();
 		this.showEndStatement = isShowEndStatement();
 		this.endStatementMinLineNumber = getEndStatementMinLineNumber();
@@ -75,12 +78,15 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 		/*if (Utils.isGeneratedByLombok(node)) {
 			return super.visit(node);
 		}*/
-		if (showName || showType) {
+		if (showParameterName || showParameterType) {
 			List arguments = node.arguments();
 			if (arguments.size() > 0) {
 				for (int i = 0; i < arguments.size(); i++) {
 					Expression exp = (Expression) arguments.get(i);
-					minings.add(new JavaMethodParameterCodeMining(node, exp, i, cu, provider, showName, showType));
+					if (showParameterOnlyForLiteral && !isLiteral(exp)) {
+						continue;
+					}
+					minings.add(new JavaMethodParameterCodeMining(node, exp, i, cu, provider, showParameterName, showParameterType));
 				}
 			}
 		}
@@ -105,18 +111,21 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 		/*if (Utils.isGeneratedByLombok(node)) {
 			return super.visit(node);
 		}*/
-		if ((showName || showType)) {
+		if ((showParameterName || showParameterType)) {
 			List arguments = node.arguments();
 			if (arguments.size() > 0) {
 				for (int i = 0; i < arguments.size(); i++) {
 					Expression exp = (Expression) arguments.get(i);
+					if (showParameterOnlyForLiteral && !isLiteral(exp)) {
+						continue;
+					}
 					// Ignore empty parameter
 					if (exp instanceof SimpleName) {
 						if ("$missing$".equals(((SimpleName) exp).getIdentifier())) {
 							continue;
 						}
 					}
-					minings.add(new JavaMethodParameterCodeMining(node, exp, i, cu, provider, showName, showType));
+					minings.add(new JavaMethodParameterCodeMining(node, exp, i, cu, provider, showParameterName, showParameterType));
 				}
 			}
 		}
@@ -187,16 +196,21 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 		return super.visit(node);
 	}
 
-	private boolean isShowName() {
+	private boolean isShowParameterName() {
 		return JavaPreferencesPropertyTester
 				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_NAMES);
 	}
 
-	private boolean isShowType() {
+	private boolean isShowParameterType() {
 		return JavaPreferencesPropertyTester
 				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_TYPES);
 	}
 
+	private boolean isShowParameterOnlyForLiteral() {
+		return JavaPreferencesPropertyTester
+				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_ONLY_FOR_LITERAL);
+	}
+	
 	private boolean isShowEndStatement() {
 		return JavaPreferencesPropertyTester.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT);
 	}
@@ -229,5 +243,19 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 			return adaptable.getAdapter(IJavaStackFrame.class);
 		}
 		return null;
+	}
+	
+	private static boolean isLiteral(Expression expression) {
+		switch (expression.getNodeType()) {
+		case ASTNode.BOOLEAN_LITERAL:
+		case ASTNode.CHARACTER_LITERAL:
+		case ASTNode.NULL_LITERAL:
+		case ASTNode.NUMBER_LITERAL:
+		case ASTNode.STRING_LITERAL:
+			return true;
+
+		default:
+			return false;
+		}
 	}
 }

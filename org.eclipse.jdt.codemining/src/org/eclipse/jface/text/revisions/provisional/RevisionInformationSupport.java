@@ -154,7 +154,6 @@ public class RevisionInformationSupport {
 				// informListeners();
 			}
 		}
-
 		return fRevisionRanges;
 	}
 
