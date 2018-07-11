@@ -21,6 +21,20 @@ By default minings are disabled, you must activate them with preferences:
 
 ![](images/JavaCodeMiningPreferences.png)
 
+## Show variable values inline while debugging
+
+To show the result of the toString() method of an Object instead of for example `myObject= Integer  (id=20)` it is recommended to enable the following option:
+
+Go to Preferences > Java > Debug > Detail Formatters. On the section `Show variable details ('toString()' value)` select `As the label for all variables`.
+
+Before:
+
+![JUnit CodeMining Debugging ToString() Before](images/JavaCodeMiningDebuggingToStringBefore.png)
+
+After:
+
+![JUnit CodeMining Debugging ToString() After](images/JavaCodeMiningDebuggingToStringAfter.png)
+
 # Features
 
 ## Java
