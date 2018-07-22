@@ -116,11 +116,28 @@ public class JavaMethodParameterCodeMining extends LineContentCodeMining {
 			}
 			if (showName) {
 				String paramName = method.getParameterNames()[parameterIndex];
-				label.addParameterInfo(paramName);
+				if (!isArgNumber(paramName, method)) {
+					label.addParameterInfo(paramName);
+				}
 			}
 			return label.toString();
 		} catch (JavaModelException e) {
 			return "";
 		}
+	}
+
+	private static boolean isArgNumber(String paramName, IMethod method) {
+		if (method.isBinary()) {
+			// check param name is not arg0, arg1, etc
+			if (paramName.length() > 3 && paramName.startsWith("arg")) {
+				try {
+					Integer.parseInt(paramName.substring(3, paramName.length()));
+					return true;
+				} catch (Exception e) {
+
+				}
+			}
+		}
+		return false;
 	}
 }
