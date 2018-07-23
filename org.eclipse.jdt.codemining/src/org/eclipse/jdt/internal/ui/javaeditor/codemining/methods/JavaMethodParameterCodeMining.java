@@ -88,12 +88,16 @@ public class JavaMethodParameterCodeMining extends LineContentCodeMining {
 	@Override
 	protected CompletableFuture<Void> doResolve(ITextViewer viewer, IProgressMonitor monitor) {
 		return CompletableFuture.runAsync(() -> {
-			IMethodBinding calledMethodBinding = ((node instanceof MethodInvocation)
-					? ((MethodInvocation) node).resolveMethodBinding()
-					: ((ClassInstanceCreation) node).resolveConstructorBinding());
-			String label = calledMethodBinding != null ? getParameterLabel(calledMethodBinding) : null;
-			super.setLabel(label != null ? label : "");
+			updateLabel();
 		});
+	}
+
+	private void updateLabel() {
+		IMethodBinding calledMethodBinding = ((node instanceof MethodInvocation)
+				? ((MethodInvocation) node).resolveMethodBinding()
+				: ((ClassInstanceCreation) node).resolveConstructorBinding());
+		String label = calledMethodBinding != null ? getParameterLabel(calledMethodBinding) : null;
+		super.setLabel(label != null ? label : "");
 	}
 
 	private String getParameterLabel(IMethodBinding calledMethodBinding) {
@@ -106,11 +110,18 @@ public class JavaMethodParameterCodeMining extends LineContentCodeMining {
 			}
 			ParameterMiningLabelBuilder label = new ParameterMiningLabelBuilder();
 			if (showType) {
-				String paramType = method.getParameterTypes()[parameterIndex];
-				paramType = Signature.getSimpleName(Signature.toString(Signature.getTypeErasure(paramType)));
-				// replace [] with ... when varArgs
-				if (parameterIndex == method.getParameterTypes().length - 1 && Flags.isVarargs(method.getFlags())) {
-					paramType = paramType.substring(0, paramType.length() - 2) + "...";
+				String paramType = "";
+				if (calledTypeBinding.isParameterizedType()) {
+					// ex : List<String>
+					ITypeBinding typeArgument = calledTypeBinding.getTypeArguments()[parameterIndex];
+					paramType = typeArgument.getName();
+				} else {
+					paramType = method.getParameterTypes()[parameterIndex];
+					paramType = Signature.getSimpleName(Signature.toString(Signature.getTypeErasure(paramType)));
+					// replace [] with ... when varArgs
+					if (parameterIndex == method.getParameterTypes().length - 1 && Flags.isVarargs(method.getFlags())) {
+						paramType = paramType.substring(0, paramType.length() - 2) + "...";
+					}
 				}
 				label.addParameterInfo(paramType);
 			}
