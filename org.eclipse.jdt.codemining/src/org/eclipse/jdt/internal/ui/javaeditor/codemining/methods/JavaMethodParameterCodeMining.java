@@ -96,45 +96,56 @@ public class JavaMethodParameterCodeMining extends LineContentCodeMining {
 		IMethodBinding calledMethodBinding = ((node instanceof MethodInvocation)
 				? ((MethodInvocation) node).resolveMethodBinding()
 				: ((ClassInstanceCreation) node).resolveConstructorBinding());
-		String label = calledMethodBinding != null ? getParameterLabel(calledMethodBinding) : null;
-		super.setLabel(label != null ? label : "");
+		try {
+			IMethod method = getMethod(calledMethodBinding);
+			if (method == null || MethodFilterManager.getInstance().match(method)) {
+				super.setLabel("");
+			} else {
+				String label = calledMethodBinding != null
+						? getParameterLabel(method, calledMethodBinding.getDeclaringClass())
+						: null;
+				super.setLabel(label != null ? label : "");
+			}
+		} catch (JavaModelException e) {
+			super.setLabel("");
+		}
 	}
 
-	private String getParameterLabel(IMethodBinding calledMethodBinding) {
+	private IMethod getMethod(IMethodBinding calledMethodBinding) throws JavaModelException {
+		if (calledMethodBinding == null) {
+			return null;
+		}
 		ITypeBinding calledTypeBinding = calledMethodBinding.getDeclaringClass();
 		IType calledType = (IType) calledTypeBinding.getJavaElement();
-		try {
-			IMethod method = Bindings.findMethod(calledMethodBinding, calledType);
-			if (method == null) {
-				return "";
-			}
-			ParameterMiningLabelBuilder label = new ParameterMiningLabelBuilder();
-			if (showType) {
-				String paramType = "";
-				if (calledTypeBinding.isParameterizedType()) {
-					// ex : List<String>
-					ITypeBinding typeArgument = calledTypeBinding.getTypeArguments()[parameterIndex];
-					paramType = typeArgument.getName();
-				} else {
-					paramType = method.getParameterTypes()[parameterIndex];
-					paramType = Signature.getSimpleName(Signature.toString(Signature.getTypeErasure(paramType)));
-					// replace [] with ... when varArgs
-					if (parameterIndex == method.getParameterTypes().length - 1 && Flags.isVarargs(method.getFlags())) {
-						paramType = paramType.substring(0, paramType.length() - 2) + "...";
-					}
-				}
-				label.addParameterInfo(paramType);
-			}
-			if (showName) {
-				String paramName = method.getParameterNames()[parameterIndex];
-				if (!isArgNumber(paramName, method)) {
-					label.addParameterInfo(paramName);
+		return Bindings.findMethod(calledMethodBinding, calledType);
+	}
+
+	private String getParameterLabel(IMethod method, ITypeBinding calledTypeBinding) throws JavaModelException {
+		ParameterMiningLabelBuilder label = new ParameterMiningLabelBuilder();
+		if (showType) {
+			String paramType = "";
+			if (calledTypeBinding.isParameterizedType()) {
+				// ex : List<String>
+				ITypeBinding typeArgument = calledTypeBinding.getTypeArguments()[parameterIndex];
+				paramType = typeArgument.getName();
+			} else {
+				paramType = method.getParameterTypes()[parameterIndex];
+				paramType = Signature.getSimpleName(Signature.toString(Signature.getTypeErasure(paramType)));
+				// replace [] with ... when varArgs
+				if (parameterIndex == method.getParameterTypes().length - 1 && Flags.isVarargs(method.getFlags())) {
+					paramType = paramType.substring(0, paramType.length() - 2) + "...";
 				}
 			}
-			return label.toString();
-		} catch (JavaModelException e) {
-			return "";
+			label.addParameterInfo(paramType);
 		}
+		if (showName) {
+			String paramName = method.getParameterNames()[parameterIndex];
+			if (!isArgNumber(paramName, method)) {
+				label.addParameterInfo(paramName);
+			}
+		}
+		return label.toString();
+
 	}
 
 	private static boolean isArgNumber(String paramName, IMethod method) {

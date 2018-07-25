@@ -20,6 +20,7 @@
 
 	<modules>
 		<module>org.eclipse.jdt.codemining</module>
+		<module>org.eclipse.jdt.codemining.tests</module>
 		<module>org.eclipse.egit.codemining</module>
 		<module>update-site</module>
 	</modules>

@@ -1,0 +1,44 @@
+(begin*, end*)
+(start*, end*)
+(first*, last*)
+(first*, second*)
+(from*, to*)
+(min*, max*)
+(key, value)
+(format, arg*)
+(message)
+(message, error)
+
+*Exception
+
+*.set*(*)
+*.add(*)
+*.set(*,*)
+*.get(*)
+*.create(*)
+*.getProperty(*)
+*.setProperty(*,*)
+*.print(*)
+*.println(*)
+*.append(*)
+*.charAt(*)
+*.indexOf(*)
+*.contains(*)
+*.startsWith(*)
+*.endsWith(*)
+*.equals(*)
+*.equal(*)
+*.compareTo(*)
+*.compare(*,*)
+java.lang.Math.*
+org.slf4j.Logger.*
+
+*.singleton(*)
+*.singletonList(*)
+
+*.Set.of
+*.ImmutableList.of
+*.ImmutableMultiset.of
+*.ImmutableSortedMultiset.of
+*.ImmutableSortedSet.of
+*.Arrays.asList

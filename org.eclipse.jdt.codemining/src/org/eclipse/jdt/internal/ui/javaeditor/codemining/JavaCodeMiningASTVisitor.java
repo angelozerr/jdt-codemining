@@ -21,6 +21,7 @@ import org.eclipse.jdt.internal.ui.javaeditor.codemining.debug.InlinedDebugCodeM
 import org.eclipse.jdt.internal.ui.javaeditor.codemining.debug.SimpleNameDebugCodeMining;
 import org.eclipse.jdt.internal.ui.javaeditor.codemining.endstatement.EndStatementCodeMining;
 import org.eclipse.jdt.internal.ui.javaeditor.codemining.methods.JavaMethodParameterCodeMining;
+import org.eclipse.jdt.internal.ui.javaeditor.codemining.methods.MethodFilterManager;
 import org.eclipse.jdt.internal.ui.javaeditor.codemining.var.JavaVarTypeCodeMining;
 import org.eclipse.jdt.internal.ui.preferences.JavaPreferencesPropertyTester;
 import org.eclipse.jdt.internal.ui.preferences.MyPreferenceConstants;
@@ -42,7 +43,7 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 	private final boolean showParameterType;
 
 	private final boolean showParameterOnlyForLiteral;
-	
+
 	private final ITextEditor textEditor;
 
 	private final ITextViewer viewer;
@@ -75,18 +76,19 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 
 	@Override
 	public boolean visit(ClassInstanceCreation node) {
-		/*if (Utils.isGeneratedByLombok(node)) {
-			return super.visit(node);
-		}*/
+		/*
+		 * if (Utils.isGeneratedByLombok(node)) { return super.visit(node); }
+		 */
 		if (showParameterName || showParameterType) {
 			List arguments = node.arguments();
-			if (arguments.size() > 0) {
+			if (arguments.size() > 0 && !MethodFilterManager.getInstance().match(node)) {
 				for (int i = 0; i < arguments.size(); i++) {
 					Expression exp = (Expression) arguments.get(i);
 					if (showParameterOnlyForLiteral && !isLiteral(exp)) {
 						continue;
 					}
-					minings.add(new JavaMethodParameterCodeMining(node, exp, i, cu, provider, showParameterName, showParameterType));
+					minings.add(new JavaMethodParameterCodeMining(node, exp, i, cu, provider, showParameterName,
+							showParameterType));
 				}
 			}
 		}
@@ -108,12 +110,12 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 
 	@Override
 	public boolean visit(MethodInvocation node) {
-		/*if (Utils.isGeneratedByLombok(node)) {
-			return super.visit(node);
-		}*/
-		if ((showParameterName || showParameterType)) {
+		/*
+		 * if (Utils.isGeneratedByLombok(node)) { return super.visit(node); }
+		 */
+		if (showParameterName || showParameterType) {
 			List arguments = node.arguments();
-			if (arguments.size() > 0) {
+			if (arguments.size() > 0 && !MethodFilterManager.getInstance().match(node)) {
 				for (int i = 0; i < arguments.size(); i++) {
 					Expression exp = (Expression) arguments.get(i);
 					if (showParameterOnlyForLiteral && !isLiteral(exp)) {
@@ -125,7 +127,8 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 							continue;
 						}
 					}
-					minings.add(new JavaMethodParameterCodeMining(node, exp, i, cu, provider, showParameterName, showParameterType));
+					minings.add(new JavaMethodParameterCodeMining(node, exp, i, cu, provider, showParameterName,
+							showParameterType));
 				}
 			}
 		}
@@ -210,7 +213,7 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 		return JavaPreferencesPropertyTester
 				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_ONLY_FOR_LITERAL);
 	}
-	
+
 	private boolean isShowEndStatement() {
 		return JavaPreferencesPropertyTester.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT);
 	}
@@ -244,7 +247,7 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 		}
 		return null;
 	}
-	
+
 	private static boolean isLiteral(Expression expression) {
 		switch (expression.getNodeType()) {
 		case ASTNode.BOOLEAN_LITERAL:

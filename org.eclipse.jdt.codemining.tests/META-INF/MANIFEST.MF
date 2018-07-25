@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Localization: plugin
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
-Bundle-SymbolicName: org.eclipse.jdt.codemining;singleton:=true
+Bundle-SymbolicName: org.eclipse.jdt.codemining.tests;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.jdt.junit;bundle-version="3.11.0",
@@ -26,9 +26,8 @@ Require-Bundle: org.eclipse.jdt.junit;bundle-version="3.11.0",
  org.eclipse.equinox.preferences,
  org.eclipse.core.runtime,
  org.eclipse.jdt.debug.ui,
- org.eclipse.ui
-Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.eclipse.jdt.internal.JavaCodeMiningPlugin
-Export-Package: org.eclipse.jdt.internal.ui.javaeditor.codemining.methods;x-friends="org.eclipse.jdt.codemining.tests",
- org.eclipse.jface.text.revisions.provisional
-Automatic-Module-Name: org.eclipse.jdt.codemining
+ org.eclipse.ui,
+ org.eclipse.jdt.codemining,
+ org.junit;bundle-version="4.12.0"
+Automatic-Module-Name: org.eclipse.jdt.codemining.tests
+Import-Package: org.eclipse.jdt.internal.ui.javaeditor.codemining.methods
