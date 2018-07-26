@@ -34,8 +34,7 @@ public class MethodFilterManager {
 		if (initialized) {
 			return;
 		}
-		// Uncomment when it will be ready 
-		// initialize();
+		initialize();
 	}
 
 	private synchronized void initialize() {

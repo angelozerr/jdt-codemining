@@ -70,7 +70,8 @@
            	   	  <!-- TODO: change to property="org.eclipse.jdt.ui.hasPreference" -->
 	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.methodParameter.names" forcePluginActivation="true"/>
 	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.methodParameter.types" forcePluginActivation="true"/>
-	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.methodParameter.onlyForLiteral" forcePluginActivation="true"/>	              
+	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.methodParameter.onlyForLiteral" forcePluginActivation="true"/>
+	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.methodParameter.byUsingFilters" forcePluginActivation="true"/>	              	              
 	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.endStatement" forcePluginActivation="true"/>
 	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.debug.variable" forcePluginActivation="true"/>
 	              <test property="org.eclipse.jdt.codemining.hasPreference" value="java.codemining.java10.var.type" forcePluginActivation="true"/>

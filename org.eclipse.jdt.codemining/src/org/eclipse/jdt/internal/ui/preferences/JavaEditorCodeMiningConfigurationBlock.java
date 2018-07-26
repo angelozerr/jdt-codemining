@@ -13,6 +13,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -62,6 +63,9 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 	public static final Key PREF_SHOW_METHOD_PARAMETER_ONLY_FOR_LITERAL = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_ONLY_FOR_LITERAL);
 
+	public static final Key PREF_SHOW_METHOD_PARAMETER_BY_USING_FILTERS = getJDTUIKey(
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_BY_USING_FILTERS);
+
 	// --------------------- JUnit
 
 	public static final Key PREF_SHOW_JUNIT_STATUS = getJDTUIKey(
@@ -109,10 +113,11 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 				PREF_SHOW_IMPLEMENTATIONS_AT_LEAST_ONE, PREF_SHOW_END_STATEMENT,
 				PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER, PREF_SHOW_MAIN_RUN, PREF_SHOW_MAIN_DEBUG,
 				PREF_SHOW_JAVA10_VAR_TYPE, PREF_SHOW_METHOD_PARAMETER_NAMES, PREF_SHOW_METHOD_PARAMETER_TYPES,
-				PREF_SHOW_METHOD_PARAMETER_ONLY_FOR_LITERAL, PREF_SHOW_JUNIT_STATUS,
-				PREF_SHOW_JUNIT_RUN, PREF_SHOW_JUNIT_DEBUG, PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING,
-				PREF_SHOW_REVISION_RECENT_CHANGE, PREF_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR,
-				PREF_SHOW_REVISION_RECENT_CHANGE_WITH_DATE, PREF_SHOW_REVISION_AUTHORS };
+				PREF_SHOW_METHOD_PARAMETER_ONLY_FOR_LITERAL, PREF_SHOW_METHOD_PARAMETER_BY_USING_FILTERS,
+				PREF_SHOW_JUNIT_STATUS, PREF_SHOW_JUNIT_RUN, PREF_SHOW_JUNIT_DEBUG,
+				PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING, PREF_SHOW_REVISION_RECENT_CHANGE,
+				PREF_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR, PREF_SHOW_REVISION_RECENT_CHANGE_WITH_DATE,
+				PREF_SHOW_REVISION_AUTHORS };
 	}
 
 	/*
@@ -160,7 +165,7 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 		// --- General
 		createGeneralSection(nColumns, composite);
 		// --- Method parameter
-		createMethodParameterSection(nColumns, composite);		
+		createMethodParameterSection(nColumns, composite);
 		// --- JUnit
 		createJUnitSection(nColumns, composite);
 		// --- Debugging
@@ -229,7 +234,8 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 	private void createMethodParameterSection(int nColumns, Composite parent) {
 		final int defaultIndent = 0;
 		String label = MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_section_methodParameter;
-		Key twistieKey = OptionsConfigurationBlock.getLocalKey("JavaEditorCodeMiningPreferencePage_section_methodParameter"); //$NON-NLS-1$
+		Key twistieKey = OptionsConfigurationBlock
+				.getLocalKey("JavaEditorCodeMiningPreferencePage_section_methodParameter"); //$NON-NLS-1$
 		PreferenceTreeNode<?> section = fFilteredPrefTree.addExpandableComposite(parent, label, nColumns, twistieKey,
 				null, false);
 		ExpandableComposite excomposite = getExpandableComposite(twistieKey);
@@ -248,9 +254,14 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 		fFilteredPrefTree.addCheckBox(inner,
 				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showMethodParameterOnlyForLiteral_label,
 				PREF_SHOW_METHOD_PARAMETER_ONLY_FOR_LITERAL, enabledDisabled, defaultIndent, section);
+		// - Show parameter by using filters
+		fFilteredPrefTree.addCheckBox(inner,
+				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showMethodParameterByUsingFilters_label,
+				PREF_SHOW_METHOD_PARAMETER_BY_USING_FILTERS, enabledDisabled, defaultIndent, section);	
+		Button browse = new Button(inner, SWT.PUSH);
+		browse.setText(MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_filtersButton);
 	}
 
-	
 	private void createJUnitSection(int nColumns, Composite parent) {
 		final int defaultIndent = 0;
 		String label = MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_section_junit;

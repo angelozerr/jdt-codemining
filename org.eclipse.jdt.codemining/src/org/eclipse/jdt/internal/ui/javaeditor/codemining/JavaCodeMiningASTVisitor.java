@@ -44,6 +44,8 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 
 	private final boolean showParameterOnlyForLiteral;
 
+	private final boolean showParameterByUsingFilters;
+
 	private final ITextEditor textEditor;
 
 	private final ITextViewer viewer;
@@ -66,6 +68,7 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 		this.showParameterName = isShowParameterName();
 		this.showParameterType = isShowParameterType();
 		this.showParameterOnlyForLiteral = isShowParameterOnlyForLiteral();
+		this.showParameterByUsingFilters = isShowParameterByUsingFilters();
 		this.showVariableValueWhileDebugging = isShowVariableValueWhileDebugging();
 		this.showEndStatement = isShowEndStatement();
 		this.endStatementMinLineNumber = getEndStatementMinLineNumber();
@@ -81,7 +84,7 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 		 */
 		if (showParameterName || showParameterType) {
 			List arguments = node.arguments();
-			if (arguments.size() > 0 && !MethodFilterManager.getInstance().match(node)) {
+			if (arguments.size() > 0 && acceptMethod(node)) {
 				for (int i = 0; i < arguments.size(); i++) {
 					Expression exp = (Expression) arguments.get(i);
 					if (showParameterOnlyForLiteral && !isLiteral(exp)) {
@@ -108,6 +111,13 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 		return super.visit(node);
 	}
 
+	private boolean acceptMethod(ClassInstanceCreation node) {
+		if (showParameterByUsingFilters) {
+			return !MethodFilterManager.getInstance().match(node);
+		}
+		return true;
+	}
+
 	@Override
 	public boolean visit(MethodInvocation node) {
 		/*
@@ -115,7 +125,7 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 		 */
 		if (showParameterName || showParameterType) {
 			List arguments = node.arguments();
-			if (arguments.size() > 0 && !MethodFilterManager.getInstance().match(node)) {
+			if (arguments.size() > 0 && acceptMethod(node)) {
 				for (int i = 0; i < arguments.size(); i++) {
 					Expression exp = (Expression) arguments.get(i);
 					if (showParameterOnlyForLiteral && !isLiteral(exp)) {
@@ -146,6 +156,13 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 			}
 		}
 		return super.visit(node);
+	}
+
+	private boolean acceptMethod(MethodInvocation node) {
+		if (showParameterByUsingFilters) {
+			return !MethodFilterManager.getInstance().match(node);
+		}
+		return true;
 	}
 
 	@Override
@@ -212,6 +229,11 @@ public class JavaCodeMiningASTVisitor extends HierarchicalASTVisitor {
 	private boolean isShowParameterOnlyForLiteral() {
 		return JavaPreferencesPropertyTester
 				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_ONLY_FOR_LITERAL);
+	}
+
+	private boolean isShowParameterByUsingFilters() {
+		return JavaPreferencesPropertyTester
+				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_BY_USING_FILTERS);
 	}
 
 	private boolean isShowEndStatement() {

@@ -22,6 +22,9 @@ public class MyPreferencesMessages extends NLS {
 	public static String JavaEditorCodeMiningConfigurationBlock_showMethodParameterNames_label;
 	public static String JavaEditorCodeMiningConfigurationBlock_showMethodParameterTypes_label;
 	public static String JavaEditorCodeMiningConfigurationBlock_showMethodParameterOnlyForLiteral_label;
+	public static String JavaEditorCodeMiningConfigurationBlock_showMethodParameterByUsingFilters_label;
+	public static String JavaEditorCodeMiningConfigurationBlock_filtersButton;
+	// JUnit section
 	public static String JavaEditorCodeMiningConfigurationBlock_section_junit;
 	public static String JavaEditorCodeMiningConfigurationBlock_showJUnitStatus_label;
 	public static String JavaEditorCodeMiningConfigurationBlock_showJUnitRun_label;
