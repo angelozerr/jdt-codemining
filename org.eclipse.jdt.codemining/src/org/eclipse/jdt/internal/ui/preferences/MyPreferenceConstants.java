@@ -1,6 +1,7 @@
 package org.eclipse.jdt.internal.ui.preferences;
 
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.internal.ui.javaeditor.codemining.methods.MethodFilterManager;
 import org.eclipse.jdt.ui.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -92,6 +93,10 @@ public class MyPreferenceConstants {
 	 */
 	public static final String EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_BY_USING_FILTERS = "java.codemining.methodParameter.byUsingFilters"; //$NON-NLS-1$
 
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_FILTERS_ENABLED = "java.codemining.methodParameter.filters.enabled"; //$NON-NLS-1$
+	
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_FILTERS_DISABLED = "java.codemining.methodParameter.filters.disabled"; //$NON-NLS-1$
+	
 	/**
 	 * A named preference that stores the value for "Show end statement".
 	 * <p>
@@ -244,6 +249,8 @@ public class MyPreferenceConstants {
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_TYPES, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_ONLY_FOR_LITERAL, JavaCore.ENABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_BY_USING_FILTERS, JavaCore.DISABLED);
+		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_FILTERS_ENABLED, MethodFilterManager.getDefaultMethodFilters());		
+		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_FILTERS_DISABLED, "");
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT, JavaCore.DISABLED);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_END_STATEMENT_MIN_LINE_NUMBER, 4);
 		store.setDefault(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_MAIN_RUN, JavaCore.DISABLED);

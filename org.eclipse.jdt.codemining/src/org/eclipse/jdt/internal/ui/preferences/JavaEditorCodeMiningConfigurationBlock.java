@@ -10,6 +10,8 @@ import org.eclipse.jdt.internal.ui.wizards.dialogfields.LayoutUtil;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.layout.PixelConverter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -66,6 +68,12 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 	public static final Key PREF_SHOW_METHOD_PARAMETER_BY_USING_FILTERS = getJDTUIKey(
 			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_BY_USING_FILTERS);
 
+	public static final Key PREF_SHOW_METHOD_PARAMETER_FILTERS_ENABLED = getJDTUIKey(
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_FILTERS_ENABLED);
+
+	public static final Key PREF_SHOW_METHOD_PARAMETER_FILTERS_DISABLED = getJDTUIKey(
+			MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_PARAMETER_FILTERS_DISABLED);
+
 	// --------------------- JUnit
 
 	public static final Key PREF_SHOW_JUNIT_STATUS = getJDTUIKey(
@@ -103,6 +111,8 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 
 	private PreferenceTree fFilteredPrefTree;
 
+	private JavaMethodFiltersTable fJavaMethodFiltersTable;
+
 	public JavaEditorCodeMiningConfigurationBlock(IStatusChangeListener context, IProject project,
 			IWorkbenchPreferenceContainer container) {
 		super(context, project, getKeys(), container);
@@ -114,6 +124,7 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 				PREF_SHOW_END_STATEMENT_MIN_LINE_NUMBER, PREF_SHOW_MAIN_RUN, PREF_SHOW_MAIN_DEBUG,
 				PREF_SHOW_JAVA10_VAR_TYPE, PREF_SHOW_METHOD_PARAMETER_NAMES, PREF_SHOW_METHOD_PARAMETER_TYPES,
 				PREF_SHOW_METHOD_PARAMETER_ONLY_FOR_LITERAL, PREF_SHOW_METHOD_PARAMETER_BY_USING_FILTERS,
+				PREF_SHOW_METHOD_PARAMETER_FILTERS_ENABLED, PREF_SHOW_METHOD_PARAMETER_FILTERS_DISABLED,
 				PREF_SHOW_JUNIT_STATUS, PREF_SHOW_JUNIT_RUN, PREF_SHOW_JUNIT_DEBUG,
 				PREF_SHOW_VARIABLE_VALUE_WHILE_DEBUGGING, PREF_SHOW_REVISION_RECENT_CHANGE,
 				PREF_SHOW_REVISION_RECENT_CHANGE_WITH_AVATAR, PREF_SHOW_REVISION_RECENT_CHANGE_WITH_DATE,
@@ -257,9 +268,21 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 		// - Show parameter by using filters
 		fFilteredPrefTree.addCheckBox(inner,
 				MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_showMethodParameterByUsingFilters_label,
-				PREF_SHOW_METHOD_PARAMETER_BY_USING_FILTERS, enabledDisabled, defaultIndent, section);	
-		Button browse = new Button(inner, SWT.PUSH);
-		browse.setText(MyPreferencesMessages.JavaEditorCodeMiningConfigurationBlock_filtersButton);
+				PREF_SHOW_METHOD_PARAMETER_BY_USING_FILTERS, enabledDisabled, defaultIndent, section);
+
+		fJavaMethodFiltersTable = new JavaMethodFiltersTable();
+		fJavaMethodFiltersTable.createControl(inner);
+		fJavaMethodFiltersTable.refresh(getValue(PREF_SHOW_METHOD_PARAMETER_FILTERS_ENABLED),
+				getValue(PREF_SHOW_METHOD_PARAMETER_FILTERS_DISABLED));
+
+		Button useFiltersCheckbox = getCheckBox(PREF_SHOW_METHOD_PARAMETER_BY_USING_FILTERS);
+		fJavaMethodFiltersTable.setEnabled(useFiltersCheckbox.getSelection());
+		useFiltersCheckbox.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				fJavaMethodFiltersTable.setEnabled(useFiltersCheckbox.getSelection());
+			}
+		});
 	}
 
 	private void createJUnitSection(int nColumns, Composite parent) {
@@ -360,5 +383,21 @@ public class JavaEditorCodeMiningConfigurationBlock extends OptionsConfiguration
 		IDialogSettings section = JavaPlugin.getDefault().getDialogSettings().addNewSection(SETTINGS_SECTION_NAME);
 		storeSectionExpansionStates(section);
 		super.dispose();
+	}
+
+	@Override
+	protected boolean processChanges(IWorkbenchPreferenceContainer container) {
+		String enabled = fJavaMethodFiltersTable.getEnabled();
+		setValue(PREF_SHOW_METHOD_PARAMETER_FILTERS_ENABLED, enabled);
+		String disabled = fJavaMethodFiltersTable.getDisabled();
+		setValue(PREF_SHOW_METHOD_PARAMETER_FILTERS_DISABLED, disabled);
+		return super.processChanges(container);
+	}
+
+	@Override
+	protected void updateControls() {
+		fJavaMethodFiltersTable.refresh(getValue(PREF_SHOW_METHOD_PARAMETER_FILTERS_ENABLED),
+				getValue(PREF_SHOW_METHOD_PARAMETER_FILTERS_DISABLED));
+		super.updateControls();
 	}
 }
