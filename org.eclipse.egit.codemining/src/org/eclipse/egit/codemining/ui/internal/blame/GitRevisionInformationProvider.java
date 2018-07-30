@@ -7,16 +7,30 @@ import java.util.Map;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.egit.core.project.RepositoryMapping;
 import org.eclipse.egit.ui.internal.blame.BlameRevision;
+import org.eclipse.egit.ui.internal.decorators.GitQuickDiffProvider;
+import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.revisions.RevisionInformation;
 import org.eclipse.jface.text.revisions.provisional.IRevisionInformationProvider;
+import org.eclipse.jface.text.revisions.provisional.RevisionInformationSupport;
+import org.eclipse.jface.text.source.IAnnotationModelExtension;
+import org.eclipse.jface.text.source.ILineDiffer;
+import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jgit.api.BlameCommand;
 import org.eclipse.jgit.blame.BlameResult;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.ui.internal.texteditor.quickdiff.DocumentLineDiffer;
+import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.ui.texteditor.quickdiff.IQuickDiffReferenceProvider;
 
 public class GitRevisionInformationProvider implements IRevisionInformationProvider {
+
+	@Override
+	public boolean canApply(IResource resource) {
+		return org.eclipse.egit.core.internal.util.ResourceUtil.isSharedWithGit(resource.getProject());
+	}
 
 	@Override
 	public RevisionInformation getRevisionInformation(IResource resource) {
@@ -89,8 +103,15 @@ public class GitRevisionInformationProvider implements IRevisionInformationProvi
 		}
 		if (previous != null)
 			previous.register();
-
 		return info;
 	}
-
+	
+	@Override
+	public ILineDiffer getDocumentLineDiffer(ITextViewer viewer, ITextEditor textEditor) {
+		IQuickDiffReferenceProvider provider = new GitQuickDiffProvider();
+		DocumentLineDiffer differ = new DocumentLineDiffer();
+		differ.setReferenceProvider(provider);
+		provider.setActiveEditor(textEditor);
+		return differ;
+	}
 }

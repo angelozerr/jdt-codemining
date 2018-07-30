@@ -115,7 +115,7 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider implement
 	@Override
 	public CompletableFuture<List<? extends ICodeMining>> provideCodeMinings(ITextViewer viewer,
 			IProgressMonitor monitor) {
-		return CompletableFuture.supplyAsync(() -> {
+		return CompletableFuture.supplyAsync(() -> {			
 			monitor.isCanceled();
 			ITextEditor textEditor = super.getAdapter(ITextEditor.class);
 			ITypeRoot unit = EditorUtility.getEditorInputJavaElement(textEditor, true);
@@ -311,7 +311,7 @@ public class JavaCodeMiningProvider extends AbstractCodeMiningProvider implement
 		}
 		if (fRevisionInfoSupport == null) {
 			RevisionInformation info = RevisionInformationProviderManager.getInstance()
-					.getRevisionInformation(resource);
+					.getRevisionInformation(resource, viewer, super.getAdapter(ITextEditor.class));
 			if (info != null) {
 				fRevisionInfoSupport = new RevisionInformationSupport();
 				fRevisionInfoSupport.install((ISourceViewer) viewer, info);

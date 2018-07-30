@@ -4,7 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.revisions.RevisionInformation;
+import org.eclipse.jface.text.source.IAnnotationModel;
+import org.eclipse.jface.text.source.IAnnotationModelExtension;
+import org.eclipse.jface.text.source.ILineDiffer;
+import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 public class RevisionInformationProviderManager {
 
@@ -24,11 +30,17 @@ public class RevisionInformationProviderManager {
 		providers.add(provider);
 	}
 
-	public RevisionInformation getRevisionInformation(IResource resource) {
+	public RevisionInformation getRevisionInformation(IResource resource, ITextViewer viewer, ITextEditor textEditor) {
 		for (IRevisionInformationProvider provider : providers) {
-			RevisionInformation info = provider.getRevisionInformation(resource);
-			if (info != null) {
-				return info;
+			if (provider.canApply(resource)) {
+				RevisionInformation info = provider.getRevisionInformation(resource);
+				if (info != null) {
+					ILineDiffer differ = provider.getDocumentLineDiffer(viewer, textEditor);
+					// Connect line differ
+					IAnnotationModelExtension ext = (IAnnotationModelExtension) ((ISourceViewer) viewer).getAnnotationModel();
+					ext.addAnnotationModel(RevisionInformationSupport.MY_QUICK_DIFF_MODEL_ID, (IAnnotationModel) differ);
+					return info;
+				}
 			}
 		}
 		return null;

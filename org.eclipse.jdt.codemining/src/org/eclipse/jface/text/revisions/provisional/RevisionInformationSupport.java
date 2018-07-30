@@ -11,14 +11,14 @@ import org.eclipse.jface.text.revisions.RevisionRange;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.IAnnotationModelExtension;
 import org.eclipse.jface.text.source.IAnnotationModelListener;
-import org.eclipse.jface.text.source.IChangeRulerColumn;
 import org.eclipse.jface.text.source.ILineDiffer;
 import org.eclipse.jface.text.source.ILineRange;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.IVerticalRulerColumn;
-import org.eclipse.ui.internal.texteditor.quickdiff.DocumentLineDiffer;
 
 public class RevisionInformationSupport {
+
+	public static final String MY_QUICK_DIFF_MODEL_ID = "myQuickDiff";
 
 	private RevisionInformation fRevisionInfo;
 
@@ -39,7 +39,7 @@ public class RevisionInformationSupport {
 
 	public void install(ISourceViewer viewer, RevisionInformation information) {
 		fViewer = viewer;
-		fRevisionInfo = information;
+		fRevisionInfo = information;		
 		setModel(viewer.getAnnotationModel());
 	}
 
@@ -59,11 +59,11 @@ public class RevisionInformationSupport {
 	private void setModel(IAnnotationModel model) {
 		IAnnotationModel diffModel;
 		if (model instanceof IAnnotationModelExtension)
-			diffModel = ((IAnnotationModelExtension) model).getAnnotationModel(IChangeRulerColumn.QUICK_DIFF_MODEL_ID);
+			diffModel = ((IAnnotationModelExtension) model).getAnnotationModel(MY_QUICK_DIFF_MODEL_ID);
 		else
 			diffModel = model;
 		if (diffModel == null) {
-			diffModel = new DocumentLineDiffer();
+			//diffModel = new DocumentLineDiffer();
 		}
 		setDiffer(diffModel);
 		// setAnnotationModel(model);
@@ -120,8 +120,9 @@ public class RevisionInformationSupport {
 		int first= -1, last= -1;
 		for (int i= 0; i < ranges.size(); i++) {
 			RevisionRange range= ranges.get(i);
+			int rangeStart = range.getStartLine();
 			int rangeEnd= end(range);
-			if (first == -1 && rangeEnd > lines.getStartLine())
+			if (first == -1 && (rangeEnd > lines.getStartLine() && rangeStart <= lines.getStartLine()))
 				first= i;
 			if (first != -1 && rangeEnd > end) {
 				last= i;
@@ -132,6 +133,7 @@ public class RevisionInformationSupport {
 			return Collections.emptyList();
 		if (last == -1)
 			last= ranges.size() - 1; // bottom index may be one too much
+			//return Collections.emptyList();
 
 		return ranges.subList(first, last + 1);
 	}
