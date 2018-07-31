@@ -30,4 +30,4 @@ Require-Bundle: org.eclipse.jdt.junit;bundle-version="3.11.0",
  org.eclipse.jdt.codemining,
  org.junit;bundle-version="4.12.0"
 Automatic-Module-Name: org.eclipse.jdt.codemining.tests
-Import-Package: org.eclipse.jdt.internal.ui.javaeditor.codemining.methods
+Import-Package: org.eclipse.jdt.experimental.internal.ui.javaeditor.codemining.methods
