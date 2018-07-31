@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.debug.ui.codemining.DebugElementCodeMiningProvider;
+import org.eclipse.debug.ui.codemining.AbstractDebugElementCodeMiningProvider;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.internal.ui.javaeditor.EditorUtility;
@@ -29,7 +29,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
  * @since 3.15
  *
  */
-public class JavaDebugElementCodeMiningProvider extends DebugElementCodeMiningProvider {
+public class JavaDebugElementCodeMiningProvider extends AbstractDebugElementCodeMiningProvider {
 
 	@Override
 	protected List<? extends ICodeMining> doProvideCodeMinings(ITextViewer viewer, IProgressMonitor monitor) {

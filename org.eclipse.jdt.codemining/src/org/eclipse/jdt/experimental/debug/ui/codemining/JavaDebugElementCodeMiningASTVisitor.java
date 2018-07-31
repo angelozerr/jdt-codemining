@@ -5,8 +5,8 @@ import java.util.List;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.ui.DebugUITools;
-import org.eclipse.debug.ui.codemining.DebugElementCodeMining;
-import org.eclipse.debug.ui.codemining.DebugElementCodeMiningProvider;
+import org.eclipse.debug.ui.codemining.AbstractDebugElementCodeMining;
+import org.eclipse.debug.ui.codemining.AbstractDebugElementCodeMiningProvider;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
@@ -26,7 +26,7 @@ public class JavaDebugElementCodeMiningASTVisitor extends HierarchicalASTVisitor
 
 	private final List<ICodeMining> minings;
 
-	private final DebugElementCodeMiningProvider provider;
+	private final AbstractDebugElementCodeMiningProvider provider;
 
 	private final ITextEditor textEditor;
 
@@ -35,7 +35,7 @@ public class JavaDebugElementCodeMiningASTVisitor extends HierarchicalASTVisitor
 	private IJavaStackFrame frame;
 
 	public JavaDebugElementCodeMiningASTVisitor(CompilationUnit cu, ITextEditor textEditor, ITextViewer viewer,
-			List<ICodeMining> minings, DebugElementCodeMiningProvider provider) {
+			List<ICodeMining> minings, AbstractDebugElementCodeMiningProvider provider) {
 		this.cu = cu;
 		this.minings = minings;
 		this.provider = provider;
@@ -51,7 +51,7 @@ public class JavaDebugElementCodeMiningASTVisitor extends HierarchicalASTVisitor
 				for (int i = 0; i < arguments.size(); i++) {
 					Expression exp = (Expression) arguments.get(i);
 					if (exp instanceof SimpleName) {
-						DebugElementCodeMining<IJavaStackFrame> m = new JavaDebugElementCodeMining((SimpleName) exp,
+						AbstractDebugElementCodeMining<IJavaStackFrame> m = new JavaDebugElementCodeMining((SimpleName) exp,
 								frame, viewer, provider);
 						minings.add(m);
 					}
@@ -68,7 +68,7 @@ public class JavaDebugElementCodeMiningASTVisitor extends HierarchicalASTVisitor
 			for (int i = 0; i < arguments.size(); i++) {
 				Expression exp = (Expression) arguments.get(i);
 				if (exp instanceof SimpleName) {
-					DebugElementCodeMining<IJavaStackFrame> m = new JavaDebugElementCodeMining((SimpleName) exp, frame,
+					AbstractDebugElementCodeMining<IJavaStackFrame> m = new JavaDebugElementCodeMining((SimpleName) exp, frame,
 							viewer, provider);
 					minings.add(m);
 				}
@@ -99,7 +99,7 @@ public class JavaDebugElementCodeMiningASTVisitor extends HierarchicalASTVisitor
 	@Override
 	public boolean visit(VariableDeclaration node) {
 		if (frame != null) {
-			DebugElementCodeMining<IJavaStackFrame> m = new JavaDebugElementCodeMining(node.getName(), frame, viewer,
+			AbstractDebugElementCodeMining<IJavaStackFrame> m = new JavaDebugElementCodeMining(node.getName(), frame, viewer,
 					provider);
 			minings.add(m);
 		}

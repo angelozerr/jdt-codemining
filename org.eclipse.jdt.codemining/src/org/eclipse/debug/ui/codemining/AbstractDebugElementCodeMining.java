@@ -25,16 +25,32 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 
-public abstract class DebugElementCodeMining<T extends IStackFrame> extends LineContentCodeMining {
+/**
+ * 
+ * Abstract class to display debug variable value as mining at the line end.
+ *
+ * @param <T>
+ */
+public abstract class AbstractDebugElementCodeMining<T extends IStackFrame> extends LineContentCodeMining {
 
+	private final String variableName;
 	private final T frame;
 	private RGB rgb;
 
-	protected DebugElementCodeMining(Position position, String variableName, T frame,
-			DebugElementCodeMiningProvider provider) {
+	protected AbstractDebugElementCodeMining(Position position, String variableName, T frame,
+			AbstractDebugElementCodeMiningProvider provider) {
 		super(position, provider, null);
+		this.variableName = variableName;
 		this.frame = frame;
-		updateLabel(variableName);
+	}
+
+	@Override
+	public String getLabel() {
+		String label = super.getLabel();
+		if (label == null) {
+			updateLabel(variableName);
+		}
+		return super.getLabel();
 	}
 
 	private void updateLabel(String variableName) {
@@ -55,8 +71,11 @@ public abstract class DebugElementCodeMining<T extends IStackFrame> extends Line
 		return null;
 	}
 
-	protected abstract IVariable findVariable(String variableName) throws DebugException;
-
+	/**
+	 * Returns the debug stack frame.
+	 * 
+	 * @return the debug stack frame.
+	 */
 	protected T getFrame() {
 		return frame;
 	}
@@ -92,7 +111,7 @@ public abstract class DebugElementCodeMining<T extends IStackFrame> extends Line
 	}
 
 	protected Color getColor(RGB rgb, Display display) {
-		return ((DebugElementCodeMiningProvider) getProvider()).getColor(rgb, display);
+		return ((AbstractDebugElementCodeMiningProvider) getProvider()).getColor(rgb, display);
 	}
 
 	/**
@@ -116,4 +135,14 @@ public abstract class DebugElementCodeMining<T extends IStackFrame> extends Line
 		int width = 2 * fontMetrics.getAverageCharWidth() + getSquareSize(fontMetrics);
 		return width;
 	}
+
+	/**
+	 * Returns the debug variable from the given variable name and null otherwise.
+	 * 
+	 * @param variableName the variable name.
+	 * @return the debug variable from the given variable name and null otherwise.
+	 * @throws DebugException
+	 */
+	protected abstract IVariable findVariable(String variableName) throws DebugException;
+
 }

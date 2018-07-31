@@ -35,13 +35,13 @@ import org.eclipse.ui.texteditor.ITextEditor;
  * @since 3.15
  *
  */
-public abstract class DebugElementCodeMiningProvider extends AbstractCodeMiningProvider {
+public abstract class AbstractDebugElementCodeMiningProvider extends AbstractCodeMiningProvider {
 
 	private IDebugContextListener contextListener;
 
 	private final Map<RGB, Color> colorTable;
 
-	public DebugElementCodeMiningProvider() {
+	public AbstractDebugElementCodeMiningProvider() {
 		colorTable = new HashMap<>();
 	}
 
@@ -54,8 +54,6 @@ public abstract class DebugElementCodeMiningProvider extends AbstractCodeMiningP
 			return doProvideCodeMinings(viewer, monitor);
 		});
 	}
-
-	protected abstract List<? extends ICodeMining> doProvideCodeMinings(ITextViewer viewer, IProgressMonitor monitor);
 
 	private void addDebugListener(ITextViewer viewer) {
 		if (contextListener == null) {
@@ -101,4 +99,7 @@ public abstract class DebugElementCodeMiningProvider extends AbstractCodeMiningP
 		}
 		return color;
 	}
+	
+	protected abstract List<? extends ICodeMining> doProvideCodeMinings(ITextViewer viewer, IProgressMonitor monitor);
+
 }
