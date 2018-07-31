@@ -15,10 +15,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.contexts.DebugContextEvent;
 import org.eclipse.debug.ui.contexts.IDebugContextListener;
+import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.codemining.AbstractCodeMiningProvider;
 import org.eclipse.jface.text.codemining.ICodeMining;
@@ -50,6 +52,8 @@ public abstract class AbstractDebugElementCodeMiningProvider extends AbstractCod
 			IProgressMonitor monitor) {
 		return CompletableFuture.supplyAsync(() -> {
 			monitor.isCanceled();
+			//ITextEditor textEditor = super.getAdapter(ITextEditor.class);
+			//getFrame(textEditor);
 			addDebugListener(viewer);
 			return doProvideCodeMinings(viewer, monitor);
 		});
@@ -102,4 +106,18 @@ public abstract class AbstractDebugElementCodeMiningProvider extends AbstractCod
 	
 	protected abstract List<? extends ICodeMining> doProvideCodeMinings(ITextViewer viewer, IProgressMonitor monitor);
 
+	/**
+	 * Returns the stack frame in which to search for variables, or
+	 * <code>null</code> if none.
+	 *
+	 * @return the stack frame in which to search for variables, or
+	 *         <code>null</code> if none
+	 */
+	private IJavaStackFrame getFrame(ITextEditor textEditor) {
+		IAdaptable adaptable = DebugUITools.getPartDebugContext(textEditor.getSite());
+		if (adaptable != null) {
+			return adaptable.getAdapter(IJavaStackFrame.class);
+		}
+		return null;
+	}
 }

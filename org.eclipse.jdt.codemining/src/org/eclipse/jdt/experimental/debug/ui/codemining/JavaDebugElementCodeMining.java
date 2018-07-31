@@ -34,7 +34,7 @@ public class JavaDebugElementCodeMining extends AbstractDebugElementCodeMining<I
 
 	@Override
 	protected IVariable findVariable(String variableName) throws DebugException {
-		return getFrame().findVariable(variableName);
+		return getStackFrame().findVariable(variableName);
 	}
 
 	@Override

@@ -29,30 +29,44 @@ import org.eclipse.swt.widgets.Display;
  * 
  * Abstract class to display debug variable value as mining at the line end.
  *
- * @param <T>
+ * @param <T> the stack frame
  */
 public abstract class AbstractDebugElementCodeMining<T extends IStackFrame> extends LineContentCodeMining {
 
-	private final String variableName;
-	private final T frame;
+	private final String fVariableName;
+	private final T fStackFrame;
 	private RGB rgb;
 
-	protected AbstractDebugElementCodeMining(Position position, String variableName, T frame,
-			AbstractDebugElementCodeMiningProvider provider) {
+	/**
+	 * Debug element mining constructor
+	 *
+	 * * @param position the position where the mining must be drawn.
+	 *
+	 * @param variableName the variable name to search in the given debug stack
+	 *            frame
+	 * @param stackFrame the current debug stack frame
+	 * @param provider the owner codemining provider which creates this mining.
+	 */
+	protected AbstractDebugElementCodeMining(Position position, String variableName, T stackFrame, AbstractDebugElementCodeMiningProvider provider) {
 		super(position, provider, null);
-		this.variableName = variableName;
-		this.frame = frame;
+		this.fVariableName = variableName;
+		this.fStackFrame = stackFrame;
 	}
 
 	@Override
 	public String getLabel() {
 		String label = super.getLabel();
 		if (label == null) {
-			updateLabel(variableName);
+			updateLabel(fVariableName);
 		}
 		return super.getLabel();
 	}
 
+	/**
+	 * Update the debug mining label with the debug variable value.
+	 *
+	 * @param variableName the variable name
+	 */
 	private void updateLabel(String variableName) {
 		try {
 			IVariable variable = findVariable(variableName);
@@ -60,24 +74,31 @@ public abstract class AbstractDebugElementCodeMining<T extends IStackFrame> exte
 				rgb = getRGB(variable);
 				super.setLabel(DebugElementHelper.getLabel(variable));
 			} else {
-				super.setLabel("");
+				super.setLabel(""); //$NON-NLS-1$
 			}
 		} catch (DebugException e) {
-			super.setLabel("");
+			super.setLabel(""); //$NON-NLS-1$
 		}
 	}
 
+	/**
+	 * Returns the rgb value of the given variable and null otherwise.
+	 *
+	 * @param variable the debug variable.
+	 * @return the rgb value of the given variable and null otherwise.
+	 * @throws DebugException
+	 */
 	protected RGB getRGB(IVariable variable) throws DebugException {
 		return null;
 	}
 
 	/**
 	 * Returns the debug stack frame.
-	 * 
+	 *
 	 * @return the debug stack frame.
 	 */
-	protected T getFrame() {
-		return frame;
+	protected T getStackFrame() {
+		return fStackFrame;
 	}
 
 	@Override
@@ -92,6 +113,16 @@ public abstract class AbstractDebugElementCodeMining<T extends IStackFrame> exte
 		return p;
 	}
 
+	/**
+	 * Draw square.
+	 *
+	 * @param rgb the rgb color
+	 * @param gc the graphic context
+	 * @param textWidget the text widget
+	 * @param x the location y
+	 * @param y the location y
+	 * @return the square width.
+	 */
 	private int drawSquare(RGB rgb, GC gc, StyledText textWidget, int x, int y) {
 		FontMetrics fontMetrics = gc.getFontMetrics();
 		int size = getSquareSize(fontMetrics);
@@ -110,7 +141,14 @@ public abstract class AbstractDebugElementCodeMining<T extends IStackFrame> exte
 		return getSquareWidth(gc.getFontMetrics());
 	}
 
-	protected Color getColor(RGB rgb, Display display) {
+	/**
+	 * Returns the color from the gigen rgb.
+	 *
+	 * @param rgb the rgb
+	 * @param display the display
+	 * @return the color from the gigen rgb.
+	 */
+	private Color getColor(RGB rgb, Display display) {
 		return ((AbstractDebugElementCodeMiningProvider) getProvider()).getColor(rgb, display);
 	}
 
@@ -137,10 +175,12 @@ public abstract class AbstractDebugElementCodeMining<T extends IStackFrame> exte
 	}
 
 	/**
-	 * Returns the debug variable from the given variable name and null otherwise.
-	 * 
+	 * Returns the debug variable from the given variable name and null
+	 * otherwise.
+	 *
 	 * @param variableName the variable name.
-	 * @return the debug variable from the given variable name and null otherwise.
+	 * @return the debug variable from the given variable name and null
+	 *         otherwise.
 	 * @throws DebugException
 	 */
 	protected abstract IVariable findVariable(String variableName) throws DebugException;
