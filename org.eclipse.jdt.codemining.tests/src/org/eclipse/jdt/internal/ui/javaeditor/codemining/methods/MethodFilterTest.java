@@ -1,6 +1,6 @@
 package org.eclipse.jdt.internal.ui.javaeditor.codemining.methods;
 
-import org.eclipse.jdt.experimental.internal.ui.javaeditor.codemining.methods.MethodFilter;
+import org.eclipse.jdt.experimental.ui.javaeditor.codemining.methods.MethodFilter;
 import org.junit.Assert;
 import org.junit.Test;
 
