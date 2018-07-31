@@ -2,8 +2,8 @@ package org.eclipse.jdt.experimental.debug.ui.codemining;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
-import org.eclipse.debug.ui.codemining.AbstractDebugElementCodeMining;
-import org.eclipse.debug.ui.codemining.AbstractDebugElementCodeMiningProvider;
+import org.eclipse.debug.ui.codemining.provisional.AbstractDebugElementCodeMining;
+import org.eclipse.debug.ui.codemining.provisional.AbstractDebugElementCodeMiningProvider;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;

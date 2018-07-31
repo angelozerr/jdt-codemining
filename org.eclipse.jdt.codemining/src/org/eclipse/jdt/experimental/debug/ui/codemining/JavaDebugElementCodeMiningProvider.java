@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.debug.ui.codemining.AbstractDebugElementCodeMiningProvider;
+import org.eclipse.debug.ui.codemining.provisional.AbstractDebugElementCodeMiningProvider;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.internal.ui.javaeditor.EditorUtility;

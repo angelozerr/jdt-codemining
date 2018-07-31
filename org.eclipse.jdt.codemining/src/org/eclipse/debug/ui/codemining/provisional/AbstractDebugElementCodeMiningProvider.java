@@ -8,7 +8,7 @@
  *  Contributors:
  *     Angelo Zerr <angelo.zerr@gmail.com> - [CodeMining] Provide Java References/Implementation CodeMinings - Bug 529127
  */
-package org.eclipse.debug.ui.codemining;
+package org.eclipse.debug.ui.codemining.provisional;
 
 import java.util.HashMap;
 import java.util.List;

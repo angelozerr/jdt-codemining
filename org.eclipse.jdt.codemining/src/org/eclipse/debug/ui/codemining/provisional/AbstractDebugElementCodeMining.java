@@ -8,7 +8,7 @@
  *  Contributors:
  *     Angelo Zerr <angelo.zerr@gmail.com>
  */
-package org.eclipse.debug.ui.codemining;
+package org.eclipse.debug.ui.codemining.provisional;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IStackFrame;
