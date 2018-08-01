@@ -6,7 +6,7 @@
  *  http://www.eclipse.org/legal/epl-v10.html
  *
  *  Contributors:
- *     Angelo Zerr <angelo.zerr@gmail.com>
+ *     Angelo Zerr <angelo.zerr@gmail.com> - [code mining] Provide Debug codemining classes - Bug 537546
  */
 package org.eclipse.debug.ui.codemining.provisional;
 
@@ -26,28 +26,28 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 
 /**
- * 
- * Abstract class to display debug variable value as mining at the line end.
+ *
+ * Abstract class to display debug variable value in a given position.
  *
  * @param <T> the stack frame
  */
-public abstract class AbstractDebugElementCodeMining<T extends IStackFrame> extends LineContentCodeMining {
+public abstract class AbstractDebugVariableCodeMining<T extends IStackFrame> extends LineContentCodeMining {
 
 	private final String fVariableName;
 	private final T fStackFrame;
-	private RGB rgb;
+	private RGB fRgb;
 
 	/**
-	 * Debug element mining constructor
+	 * Debug variable mining constructor
 	 *
-	 * * @param position the position where the mining must be drawn.
-	 *
+	 * @param position     the position where the mining must be drawn.
 	 * @param variableName the variable name to search in the given debug stack
-	 *            frame
-	 * @param stackFrame the current debug stack frame
-	 * @param provider the owner codemining provider which creates this mining.
+	 *                     frame
+	 * @param stackFrame   the current debug stack frame
+	 * @param provider     the owner codemining provider which creates this mining.
 	 */
-	protected AbstractDebugElementCodeMining(Position position, String variableName, T stackFrame, AbstractDebugElementCodeMiningProvider provider) {
+	protected AbstractDebugVariableCodeMining(Position position, String variableName, T stackFrame,
+			AbstractDebugVariableCodeMiningProvider<T> provider) {
 		super(position, provider, null);
 		this.fVariableName = variableName;
 		this.fStackFrame = stackFrame;
@@ -71,7 +71,7 @@ public abstract class AbstractDebugElementCodeMining<T extends IStackFrame> exte
 		try {
 			IVariable variable = findVariable(variableName);
 			if (variable != null) {
-				rgb = getRGB(variable);
+				fRgb = getRGB(variable);
 				super.setLabel(DebugElementHelper.getLabel(variable));
 			} else {
 				super.setLabel(""); //$NON-NLS-1$
@@ -82,10 +82,10 @@ public abstract class AbstractDebugElementCodeMining<T extends IStackFrame> exte
 	}
 
 	/**
-	 * Returns the rgb value of the given variable and null otherwise.
+	 * Returns the rgb value of the given variable and <code>null</code> otherwise.
 	 *
 	 * @param variable the debug variable.
-	 * @return the rgb value of the given variable and null otherwise.
+	 * @return the rgb value of the given variable and <code>null</code> otherwise.
 	 * @throws DebugException
 	 */
 	protected RGB getRGB(IVariable variable) throws DebugException {
@@ -106,21 +106,21 @@ public abstract class AbstractDebugElementCodeMining<T extends IStackFrame> exte
 		// increment x with 3 spaces width
 		x += 3 * (int) gc.getFontMetrics().getAverageCharacterWidth();
 		Point p = super.draw(gc, textWidget, color, x, y);
-		if (rgb != null) {
-			int width = drawSquare(rgb, gc, textWidget, x + p.x, y);
+		if (fRgb != null) {
+			int width = drawSquare(fRgb, gc, textWidget, x + p.x, y);
 			p.x += width;
 		}
 		return p;
 	}
 
 	/**
-	 * Draw square.
+	 * Draw square of the given rgb.
 	 *
-	 * @param rgb the rgb color
-	 * @param gc the graphic context
+	 * @param rgb        the rgb color
+	 * @param gc         the graphic context
 	 * @param textWidget the text widget
-	 * @param x the location y
-	 * @param y the location y
+	 * @param x          the location y
+	 * @param y          the location y
 	 * @return the square width.
 	 */
 	private int drawSquare(RGB rgb, GC gc, StyledText textWidget, int x, int y) {
@@ -144,12 +144,13 @@ public abstract class AbstractDebugElementCodeMining<T extends IStackFrame> exte
 	/**
 	 * Returns the color from the gigen rgb.
 	 *
-	 * @param rgb the rgb
+	 * @param rgb     the rgb
 	 * @param display the display
 	 * @return the color from the gigen rgb.
 	 */
+	@SuppressWarnings("unchecked")
 	private Color getColor(RGB rgb, Display display) {
-		return ((AbstractDebugElementCodeMiningProvider) getProvider()).getColor(rgb, display);
+		return ((AbstractDebugVariableCodeMiningProvider<T>) getProvider()).getColor(rgb, display);
 	}
 
 	/**
@@ -175,11 +176,11 @@ public abstract class AbstractDebugElementCodeMining<T extends IStackFrame> exte
 	}
 
 	/**
-	 * Returns the debug variable from the given variable name and null
+	 * Returns the debug variable from the given name and <code>null</code>
 	 * otherwise.
 	 *
 	 * @param variableName the variable name.
-	 * @return the debug variable from the given variable name and null
+	 * @return the debug variable from the given variable name and <code>null</code>
 	 *         otherwise.
 	 * @throws DebugException
 	 */

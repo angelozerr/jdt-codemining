@@ -13,10 +13,13 @@ package org.eclipse.jdt.experimental.debug.ui.codemining;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.debug.ui.codemining.provisional.AbstractDebugElementCodeMiningProvider;
+import org.eclipse.debug.ui.DebugUITools;
+import org.eclipse.debug.ui.codemining.provisional.AbstractDebugVariableCodeMiningProvider;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.internal.ui.javaeditor.EditorUtility;
 import org.eclipse.jdt.ui.SharedASTProvider;
 import org.eclipse.jface.text.ITextViewer;
@@ -29,10 +32,10 @@ import org.eclipse.ui.texteditor.ITextEditor;
  * @since 3.15
  *
  */
-public class JavaDebugElementCodeMiningProvider extends AbstractDebugElementCodeMiningProvider {
+public class JavaDebugElementCodeMiningProvider extends AbstractDebugVariableCodeMiningProvider<IJavaStackFrame> {
 
 	@Override
-	protected List<? extends ICodeMining> doProvideCodeMinings(ITextViewer viewer, IProgressMonitor monitor) {
+	protected List provideCodeMinings(ITextViewer viewer, IJavaStackFrame frame, IProgressMonitor monitor) {
 		List<ICodeMining> minings = new ArrayList<>();
 		ITextEditor textEditor = super.getAdapter(ITextEditor.class);
 		ITypeRoot unit = EditorUtility.getEditorInputJavaElement(textEditor, true);
@@ -40,9 +43,19 @@ public class JavaDebugElementCodeMiningProvider extends AbstractDebugElementCode
 			return minings;
 		}
 		CompilationUnit cu = SharedASTProvider.getAST(unit, SharedASTProvider.WAIT_YES, null);
-		JavaDebugElementCodeMiningASTVisitor visitor = new JavaDebugElementCodeMiningASTVisitor(cu, textEditor, viewer,
+		JavaDebugElementCodeMiningASTVisitor visitor = new JavaDebugElementCodeMiningASTVisitor(frame, cu, viewer,
 				minings, this);
 		cu.accept(visitor);
 		return minings;
 	}
+
+	@Override
+	protected IJavaStackFrame getStackFrame(ITextViewer viewer, ITextEditor textEditor) {
+		IAdaptable adaptable = DebugUITools.getPartDebugContext(textEditor.getSite());
+		if (adaptable != null) {
+			return adaptable.getAdapter(IJavaStackFrame.class);
+		}
+		return null;
+	}
+
 }

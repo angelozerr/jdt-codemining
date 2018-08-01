@@ -2,8 +2,8 @@ package org.eclipse.jdt.experimental.debug.ui.codemining;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
-import org.eclipse.debug.ui.codemining.provisional.AbstractDebugElementCodeMining;
-import org.eclipse.debug.ui.codemining.provisional.AbstractDebugElementCodeMiningProvider;
+import org.eclipse.debug.ui.codemining.provisional.AbstractDebugVariableCodeMining;
+import org.eclipse.debug.ui.codemining.provisional.AbstractDebugVariableCodeMiningProvider;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
@@ -15,10 +15,10 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Position;
 import org.eclipse.swt.graphics.RGB;
 
-public class JavaDebugElementCodeMining extends AbstractDebugElementCodeMining<IJavaStackFrame> {
+public class JavaDebugElementCodeMining extends AbstractDebugVariableCodeMining<IJavaStackFrame> {
 
 	public JavaDebugElementCodeMining(SimpleName node, IJavaStackFrame frame, ITextViewer viewer,
-			AbstractDebugElementCodeMiningProvider provider) {
+			AbstractDebugVariableCodeMiningProvider provider) {
 		super(getPosition(node, viewer.getDocument()), node.getIdentifier(), frame, provider);
 	}
 

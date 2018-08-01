@@ -1,26 +1,26 @@
 /**
- *  Copyright (c) 2017 Angelo ZERR.
+ *  Copyright (c) 2018 Angelo ZERR.
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v1.0
  *  which accompanies this distribution, and is available at
  *  http://www.eclipse.org/legal/epl-v10.html
  *
  *  Contributors:
- *     Angelo Zerr <angelo.zerr@gmail.com> - [CodeMining] Provide Java References/Implementation CodeMinings - Bug 529127
+ *     Angelo Zerr <angelo.zerr@gmail.com> - [code mining] Provide Debug codemining classes - Bug 537546
  */
 package org.eclipse.debug.ui.codemining.provisional;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.contexts.DebugContextEvent;
 import org.eclipse.debug.ui.contexts.IDebugContextListener;
-import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.codemining.AbstractCodeMiningProvider;
 import org.eclipse.jface.text.codemining.ICodeMining;
@@ -32,19 +32,21 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
- * Java code mining provider to show method parameters code minings.
- * 
+ * Abstract class mining provider to display debug variable value in a given
+ * position.
+ *
  * @since 3.15
  *
  */
-public abstract class AbstractDebugElementCodeMiningProvider extends AbstractCodeMiningProvider {
+public abstract class AbstractDebugVariableCodeMiningProvider<T extends IStackFrame>
+		extends AbstractCodeMiningProvider {
 
-	private IDebugContextListener contextListener;
+	private IDebugContextListener fContextListener;
 
-	private final Map<RGB, Color> colorTable;
+	private final Map<RGB, Color> fColorTable;
 
-	public AbstractDebugElementCodeMiningProvider() {
-		colorTable = new HashMap<>();
+	public AbstractDebugVariableCodeMiningProvider() {
+		fColorTable = new HashMap<>();
 	}
 
 	@Override
@@ -52,34 +54,39 @@ public abstract class AbstractDebugElementCodeMiningProvider extends AbstractCod
 			IProgressMonitor monitor) {
 		return CompletableFuture.supplyAsync(() -> {
 			monitor.isCanceled();
-			//ITextEditor textEditor = super.getAdapter(ITextEditor.class);
-			//getFrame(textEditor);
 			addDebugListener(viewer);
-			return doProvideCodeMinings(viewer, monitor);
+			ITextEditor textEditor = super.getAdapter(ITextEditor.class);
+			T stackFrame = getStackFrame(viewer, textEditor);
+			if (stackFrame == null) {
+				return Collections.emptyList();
+			}
+			return provideCodeMinings(viewer, stackFrame, monitor);
 		});
 	}
 
 	private void addDebugListener(ITextViewer viewer) {
-		if (contextListener == null) {
+		if (fContextListener == null) {
 			addSynchronizedDebugListener(viewer);
 		}
 	}
 
 	private synchronized void addSynchronizedDebugListener(ITextViewer viewer) {
-		if (contextListener != null) {
+		if (fContextListener != null) {
 			return;
 		}
-		contextListener = event -> {
-			if ((event.getFlags() & DebugContextEvent.ACTIVATED) > 0 && viewer != null) {				
+		// When debug context changed, debug variable minings of the current stack frame
+		// must be updated.
+		fContextListener = event -> {
+			if ((event.getFlags() & DebugContextEvent.ACTIVATED) > 0 && viewer != null) {
 				((ISourceViewerExtension5) viewer).updateCodeMinings();
 			}
 		};
-		DebugUITools.addPartDebugContextListener(getSite(), contextListener);
+		DebugUITools.addPartDebugContextListener(getSite(), fContextListener);
 	}
 
 	private void removeDebugListener() {
-		if (contextListener != null) {
-			DebugUITools.removePartDebugContextListener(getSite(), contextListener);
+		if (fContextListener != null) {
+			DebugUITools.removePartDebugContextListener(getSite(), fContextListener);
 		}
 	}
 
@@ -92,32 +99,44 @@ public abstract class AbstractDebugElementCodeMiningProvider extends AbstractCod
 	public void dispose() {
 		removeDebugListener();
 		super.dispose();
-		colorTable.values().forEach(Color::dispose);
+		fColorTable.values().forEach(Color::dispose);
 	}
 
+	/**
+	 * Returns the color from the given rgb.
+	 *
+	 * @param rgb     the rgb values
+	 * @param display the display.
+	 * @return the color from the given rgb.
+	 */
 	public Color getColor(RGB rgb, Display display) {
-		Color color = colorTable.get(rgb);
+		Color color = fColorTable.get(rgb);
 		if (color == null) {
 			color = new Color(display, rgb);
-			colorTable.put(rgb, color);
+			fColorTable.put(rgb, color);
 		}
 		return color;
 	}
-	
-	protected abstract List<? extends ICodeMining> doProvideCodeMinings(ITextViewer viewer, IProgressMonitor monitor);
 
 	/**
 	 * Returns the stack frame in which to search for variables, or
 	 * <code>null</code> if none.
 	 *
-	 * @return the stack frame in which to search for variables, or
-	 *         <code>null</code> if none
+	 * @param viewer
+	 * @param stackFrame
+	 * @param monitor
+	 * @return
 	 */
-	private IJavaStackFrame getFrame(ITextEditor textEditor) {
-		IAdaptable adaptable = DebugUITools.getPartDebugContext(textEditor.getSite());
-		if (adaptable != null) {
-			return adaptable.getAdapter(IJavaStackFrame.class);
-		}
-		return null;
-	}
+	protected abstract T getStackFrame(ITextViewer viewer, ITextEditor textEditor);
+
+	/**
+	 * Collection minings included inside variables of the given stack frame.
+	 *
+	 * @param viewer
+	 * @param stackFrame
+	 * @param monitor
+	 * @return
+	 */
+	protected abstract List<? extends ICodeMining> provideCodeMinings(ITextViewer viewer, T stackFrame,
+			IProgressMonitor monitor);
 }
