@@ -14,7 +14,7 @@ public class MyPreferenceConstants {
 	 *
 	 * @since 3.14
 	 */
-	public static final String EDITOR_JAVA_CODEMINING_SHOW_REFERENCES = "java.codemining.experimental.experimental.references"; //$NON-NLS-1$
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_REFERENCES = "java.codemining.experimental.references"; //$NON-NLS-1$
 
 	/**
 	 * A named preference that stores the value for "Show references" only if there
