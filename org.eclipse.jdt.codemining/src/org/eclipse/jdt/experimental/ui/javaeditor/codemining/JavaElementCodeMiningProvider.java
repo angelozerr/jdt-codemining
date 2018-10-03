@@ -64,6 +64,10 @@ public class JavaElementCodeMiningProvider extends AbstractCodeMiningProvider im
 
 	private final boolean showReferences;
 
+	private final boolean showReferencesOnClass;
+
+	private final boolean showReferencesOnMethod;
+
 	private final boolean showReferencesAtLeastOne;
 
 	private final boolean showImplementations;
@@ -73,6 +77,10 @@ public class JavaElementCodeMiningProvider extends AbstractCodeMiningProvider im
 	public JavaElementCodeMiningProvider() {
 		showReferences = JavaPreferencesPropertyTester
 				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REFERENCES);
+		showReferencesOnClass = JavaPreferencesPropertyTester
+				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_CLASS_REFERENCES);
+		showReferencesOnMethod = JavaPreferencesPropertyTester
+				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_METHOD_REFERENCES);
 		showReferencesAtLeastOne = JavaPreferencesPropertyTester
 				.isEnabled(MyPreferenceConstants.EDITOR_JAVA_CODEMINING_SHOW_REFERENCES_AT_LEAST_ONE);
 		showImplementations = JavaPreferencesPropertyTester
@@ -129,8 +137,11 @@ public class JavaElementCodeMiningProvider extends AbstractCodeMiningProvider im
 			}
 			if (showReferences) {
 				try {
-					minings.add(new JavaReferenceCodeMining(element, (JavaEditor) textEditor, viewer.getDocument(),
-							this, showReferencesAtLeastOne));
+					if ((showReferencesOnClass && (element.getElementType() == IJavaElement.TYPE))
+							|| (showReferencesOnMethod && (element.getElementType() == IJavaElement.METHOD))) {
+						minings.add(new JavaReferenceCodeMining(element, (JavaEditor) textEditor, viewer.getDocument(),
+								this, showReferencesAtLeastOne));
+					}
 				} catch (BadLocationException e) {
 					// Should never occur
 				}
