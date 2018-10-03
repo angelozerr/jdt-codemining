@@ -17,6 +17,26 @@ public class MyPreferenceConstants {
 	public static final String EDITOR_JAVA_CODEMINING_SHOW_REFERENCES = "java.codemining.experimental.references"; //$NON-NLS-1$
 
 	/**
+	 * A named preference that stores the value for "Show references > Class" codemining.
+	 * <p>
+	 * Value is of type <code>Boolean</code>.
+	 * </p>
+	 *
+	 * @since 3.14
+	 */
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_CLASS_REFERENCES = "java.codemining.experimental.references.classes"; //$NON-NLS-1$
+
+	/**
+	 * A named preference that stores the value for "Show references > Method" codemining.
+	 * <p>
+	 * Value is of type <code>Boolean</code>.
+	 * </p>
+	 *
+	 * @since 3.14
+	 */
+	public static final String EDITOR_JAVA_CODEMINING_SHOW_METHOD_REFERENCES = "java.codemining.experimental.references.method"; //$NON-NLS-1$
+	
+	/**
 	 * A named preference that stores the value for "Show references" only if there
 	 * is at least one reference.
 	 * <p>
