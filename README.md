@@ -10,6 +10,13 @@ JDT CodeMining is a an Eclipse plugin which requires `Eclipse Photon` based on J
 
 ![JUnit CodeMining Demo](images/JUnitCodeMiningDemo.gif)
 
+
+## Requirements
+
+`JDT Java CodeMining` requires `Eclipse Photon` (4.8) or above.
+
+It is compatible with `Eclipse 2018-12` (4.10) in which [basic CodeMining features](https://www.eclipse.org/eclipse/news/4.10/jdt.php#jdt-codemining) are provided and enriched by `JDT Java CodeMining`.
+
 # Install and activation
 
 To install `JDT Java CodeMining`:
