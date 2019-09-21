@@ -69,7 +69,7 @@ jdt-codemining provides several JDT Java CodeMining:
  * Show authors
 
 
-# Help us to get his into the Eclipse standard
+# Help us to get this into the Eclipse standard
 
 Please `star this project if you want to have those CodeMinings inside JDT`. After discussing with JDT Team, this CodeMining support will not included for Photon release in June but perhaps in september if jdt-codemining receives good feedback. Indeed as CodeMining is a new feature which could cause some trouble (like performance) and JDT Team are very busy, they prefer not include my work on Java CodeMining for Photon release in June.  
  
@@ -84,7 +84,7 @@ Issues can be about:
 
 # Demos 
  
-Here several demos with:
+Here are several demos with:
 
  * `References`:
   
