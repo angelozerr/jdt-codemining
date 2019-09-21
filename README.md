@@ -77,14 +77,14 @@ So please star this github project and [create any issues](https://github.com/an
 
 Issues can be about:
 
- * `performance`: indeed StyledText is not performant with big file and variable line height mode. As CodeMining can affect the line height (variable line height) to draw the mining before a line (like references), you could have trouble with performance. StyledText was improved to have better performance with variable line height, but it's not perfect yet. So please fill issues if you have troubles by describing your case (attach the big Java file, describes what you do, which version of Eclipse Photon are you using).
+ * `performance`: indeed StyledText is not performant with big file and variable line height mode. As CodeMining can affect the line height (variable line height) to draw the mining before a line (like references), you could have trouble with performance. StyledText was improved to have better performance with variable line height, but it's not perfect yet. So please fill issues if you have troubles by describing your case (attach the big Java file, describes what you do, which version of Eclipse Photon you are using).
  * `regression`: StyledText was improved to have better performance in variable line height, please fill issue if you find regression (like scrollbar not well computed, focus problem after apply of completion, etc).
  * `new feature`: if you wish more settings to manage Java CodeMining, display other kind of mining, change the behaviour of mining when you click on it, etc, please create issues.
 
 
 # Demos 
  
-Here are several demos with:
+Here several demos with:
 
  * `References`:
   
